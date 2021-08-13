@@ -305,12 +305,12 @@ div.tocify {
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row">
-<div class="col-sm-12 col-md-4 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -340,7 +340,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/NERC-CEH/luct">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
     Source code
   </a>
@@ -512,17 +512,22 @@ makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongNocommitsyet">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreeef110e85c3a429ae2c1f5c3860babd747ee195dctargetblankef110e8a">
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> No commits yet
+<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/ef110e85c3a429ae2c1f5c3860babd747ee195dc" target="_blank">ef110e8</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongNocommitsyet" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreeef110e85c3a429ae2c1f5c3860babd747ee195dctargetblankef110e8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and
 connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/ef110e85c3a429ae2c1f5c3860babd747ee195dc" target="_blank">ef110e8</a>.
+See the <em>Past versions</em> tab to see a history of the changes made to the
+R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the
@@ -535,27 +540,14 @@ results were generated:
 <pre><code>
 Ignored files:
     Ignored:    _targets/
+    Ignored:    data-raw
+    Ignored:    output/
+    Ignored:    renv/library/
+    Ignored:    renv/local/
+    Ignored:    renv/staging/
 
-Untracked files:
-    Untracked:  .Rprofile
-    Untracked:  .gitattributes
-    Untracked:  .gitignore
-    Untracked:  CITATION
-    Untracked:  LICENSE.md
-    Untracked:  R/
-    Untracked:  README.md
-    Untracked:  UK_LUC_matrices_2018i.csv
-    Untracked:  _targets.R
-    Untracked:  _targets_packages.R
-    Untracked:  _workflowr.yml
-    Untracked:  analysis/
-    Untracked:  data-raw
-    Untracked:  data/
-    Untracked:  luct.Rproj
-    Untracked:  manuscripts/
-    Untracked:  output/
-    Untracked:  renv.lock
-    Untracked:  renv/
+Unstaged changes:
+    Modified:   README.md
 
 </code></pre>
 <p>
@@ -570,10 +562,73 @@ changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were made
+to the R Markdown (<code>analysis/notes.Rmd</code>) and HTML (<code>docs/notes.html</code>)
+files. If you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table below to
+view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/29587c398396839877ce69bf140dcaac85505a15/analysis/notes.Rmd" target="_blank">29587c3</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-13
+</td>
+<td>
+Initial commission
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/29587c398396839877ce69bf140dcaac85505a15/docs/notes.html" target="_blank">29587c3</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-13
+</td>
+<td>
+Initial commission
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -608,16 +663,16 @@ attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.7        knitr_1.31        magrittr_2.0.1    workflowr_1.6.2  
- [5] R6_2.5.0          rlang_0.4.11      fansi_0.4.2       stringr_1.4.0    
- [9] tools_4.0.4       xfun_0.22         utf8_1.1.4        git2r_0.28.0     
-[13] jquerylib_0.1.3   htmltools_0.5.1.1 ellipsis_0.3.2    rprojroot_2.0.2  
-[17] yaml_2.2.1        digest_0.6.27     tibble_3.1.0      lifecycle_1.0.0  
-[21] bookdown_0.21     crayon_1.4.1      later_1.1.0.1     sass_0.3.1       
-[25] vctrs_0.3.8       fs_1.5.0          promises_1.2.0.1  glue_1.4.2       
-[29] evaluate_0.14     rmarkdown_2.7     stringi_1.5.3     bslib_0.2.4      
-[33] compiler_4.0.4    pillar_1.6.1      jsonlite_1.7.2    httpuv_1.5.5     
-[37] renv_0.14.0       pkgconfig_2.0.3  </code></pre>
+ [1] Rcpp_1.0.7        whisker_0.4       knitr_1.33        magrittr_2.0.1   
+ [5] workflowr_1.6.2   R6_2.5.0          rlang_0.4.11      fansi_0.5.0      
+ [9] stringr_1.4.0     tools_4.0.4       xfun_0.25         utf8_1.2.2       
+[13] git2r_0.28.0      jquerylib_0.1.4   htmltools_0.5.1.1 ellipsis_0.3.2   
+[17] rprojroot_2.0.2   yaml_2.2.1        digest_0.6.27     tibble_3.1.3     
+[21] lifecycle_1.0.0   bookdown_0.23     crayon_1.4.1      later_1.2.0      
+[25] sass_0.4.0        vctrs_0.3.8       fs_1.5.0          promises_1.2.0.1 
+[29] glue_1.4.2        evaluate_0.14     rmarkdown_2.10    stringi_1.7.3    
+[33] bslib_0.2.5.1     compiler_4.0.4    pillar_1.6.2      jsonlite_1.7.2   
+[37] httpuv_1.6.1      renv_0.14.0       pkgconfig_2.0.3  </code></pre>
 </div>
 </div>
 
@@ -671,6 +726,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
