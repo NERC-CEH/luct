@@ -13,7 +13,6 @@ navbar:
   - icon: fa-github
     text: Source code
     href: https://github.com/NERC-CEH/luct
-# use output: bookdown::html_document2: to enable cross-references in notebooks
 output:
   bookdown::html_document2:
     base_format: workflowr::wflow_html
@@ -22,4 +21,3 @@ output:
     toc_depth: 5
     theme: cosmo
     highlight: textmate
-    # mathjax: "local"
