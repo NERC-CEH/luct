@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Peter Levy" />
+
+
+<title>[meta] Project Workflow Status</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="site_libs/vis-4.20.1/vis.css" rel="stylesheet" />
+<script src="site_libs/vis-4.20.1/vis.min.js"></script>
+<script src="site_libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Tracking Land-Use Change</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/NERC-CEH/luct">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">[meta] Project Workflow Status</h1>
+<h3 class="subtitle">m_00_status</h3>
+<h4 class="author">Peter Levy</h4>
+<h4 class="date">Fri Aug 13 16:13:05 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks">
+Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-08-13
+</p>
+<p>
+<strong>Checks:</strong>
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+7
+<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+0
+</p>
+<p>
+<strong>Knit directory:</strong>
+<code>luct/</code>
+<span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
+1.6.2). The <em>Checks</em> tab describes the
+reproducibility checks that were applied when the results were created.
+The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you
+know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Environment:</strong> empty
+</a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global
+environment can affect the analysis in your R Markdown file in unknown ways.
+For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201104code">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Seed:</strong> <code>set.seed(20201104)</code>
+</a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20201104code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20201104)</code> was run prior to running the code in the R Markdown file.
+Setting a seed ensures that any results that rely on randomness, e.g.
+subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Session information:</strong> recorded
+</a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is
+critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Cache:</strong> none
+</a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident
+that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>File paths:</strong> relative
+</a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project
+makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongNocommitsyet">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Repository version:</strong> No commits yet
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongNocommitsyet" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and
+connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the
+analysis have been committed to Git prior to generating the results (you can
+use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only
+checks the R Markdown file, but you know if there are other scripts or data
+files that it depends on. Below is the status of the Git repository when the
+results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    _targets/
+
+Untracked files:
+    Untracked:  .Rprofile
+    Untracked:  .gitattributes
+    Untracked:  .gitignore
+    Untracked:  CITATION
+    Untracked:  LICENSE.md
+    Untracked:  R/
+    Untracked:  README.md
+    Untracked:  UK_LUC_matrices_2018i.csv
+    Untracked:  _targets.R
+    Untracked:  _targets_packages.R
+    Untracked:  _workflowr.yml
+    Untracked:  analysis/
+    Untracked:  data-raw
+    Untracked:  data/
+    Untracked:  luct.Rproj
+    Untracked:  manuscripts/
+    Untracked:  output/
+    Untracked:  renv.lock
+    Untracked:  renv/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in
+this status report because it is ok for generated content to have uncommitted
+changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(rmarkdown)
+system.time(render(&quot;m_00_status.Rmd&quot;))</code></pre>
+<pre><code>Warning: package &#39;targets&#39; was built under R version 4.0.5</code></pre>
+<p>This notebook displays the status of the project workflow, that is,
+whether everything is computationally up to date. It displays the status
+as at the time the notebook is executed, so if the status has changed
+since this notebook was last executed that fact will not be reflected in
+this rendered notebook.</p>
+<p>This notebook is currently intended to be run manually when you feel the
+need, for example, when returning to the project.</p>
+<div id="renv-status" class="section level1">
+<h1><span class="header-section-number">1</span> <code>{renv}</code> status</h1>
+<p><code>{renv}</code> tracks the used <code>R</code> packages and their versions.</p>
+<pre class="r"><code># Get {targets} to tell {renv} which packages it uses
+targets::tar_renv() </code></pre>
+<pre><code>here() starts at C:/Users/plevy/Documents/luct
+Warning messages:
+1: package &#39;targets&#39; was built under R version 4.0.5 
+2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
+3: package &#39;here&#39; was built under R version 4.0.5 
+4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
+<pre class="r"><code>renv::status()</code></pre>
+<pre><code>* The project is already synchronized with the lockfile.</code></pre>
+</div>
+<div id="targets-status" class="section level1">
+<h1><span class="header-section-number">2</span> <code>{targets}</code> status</h1>
+<p><code>{targets}</code> is used to track the computational dependencies between the
+project components and orchestrate recalculation when any components are
+changed.</p>
+<ul>
+<li><code>c_*</code> components are in the core pipeline</li>
+<li><code>p_*</code> components are in the publications pipelines</li>
+<li><code>m_*</code> components are in the meta pipelines</li>
+</ul>
+<p>Functions may be used across multiple pipeline categories, so function
+names are not prefixed.</p>
+<p>Meta pipelines generally originate from a target on the core pipeline.
+Each meta pipeline generally explores some aspect of that source target
+which informs the design of the next stage of processing on the core
+pipeline.</p>
+<p>Each of the meta pipelines has leaves that are reports rendered from
+<code>Rmd</code> files that are managed jointly by <code>{targets}</code> and <code>{workflowr}</code>.
+<code>{targets}</code> is aware of the upstream dependencies (data and functions)
+and the <code>Rmd</code> file itself. If any of these is invalidated <code>tar_make()</code>
+will rebuild the report using <code>wflow_build()</code>.</p>
+<p><code>{targets}</code> is <em>not</em> aware of the rendered meta report files. The
+rendered report files are managed exclusively by <code>{workflowr}</code>. This
+means that you can use <code>{workflowr}</code> to build and publish the report
+without making <code>{targets}</code> think that the report is out of date because
+<code>{workflowr}</code> has re-rendered it.</p>
+<pre class="r"><code># outline
+targets::tar_glimpse()</code></pre>
+<pre><code>here() starts at C:/Users/plevy/Documents/luct
+Warning messages:
+1: package &#39;targets&#39; was built under R version 4.0.5 
+2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
+3: package &#39;here&#39; was built under R version 4.0.5 
+4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
+<div id="htmlwidget-077b82c2ba0350ee4d39" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-077b82c2ba0350ee4d39">{"x":{"nodes":{"name":["c_clean_data"],"type":["stem"],"status":["none"],"seconds":[null],"bytes":[null],"branches":[null],"id":["c_clean_data"],"label":["c_clean_data"],"level":[0],"color":["#94a4ac"],"shape":["dot"]},"edges":{"from":[],"to":[],"arrows":[]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Stem"],"shape":["dot"],"color":["#899DA4"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code># core detail
+targets::tar_visnetwork(allow = starts_with(&quot;c_&quot;))</code></pre>
+<pre><code>here() starts at C:/Users/plevy/Documents/luct
+Warning messages:
+1: package &#39;targets&#39; was built under R version 4.0.5 
+2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
+3: package &#39;here&#39; was built under R version 4.0.5 
+4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
+<div id="htmlwidget-5fad116a4b0a5a169349" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5fad116a4b0a5a169349">{"x":{"nodes":{"name":["c_clean_data"],"type":["stem"],"status":["uptodate"],"seconds":[1.78],"bytes":[4504],"branches":[null],"id":["c_clean_data"],"label":["c_clean_data"],"level":[0],"color":["#354823"],"shape":["dot"]},"edges":{"from":[],"to":[],"arrows":[]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem"],"color":["#354823","#899DA4"],"shape":["dot","dot"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code># meta detail
+targets::tar_visnetwork(allow = starts_with(&quot;m_&quot;))</code></pre>
+<pre><code>here() starts at C:/Users/plevy/Documents/luct
+Warning messages:
+1: package &#39;targets&#39; was built under R version 4.0.5 
+2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
+3: package &#39;here&#39; was built under R version 4.0.5 
+4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
+<div id="htmlwidget-e00783be6aa58034eabb" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e00783be6aa58034eabb">{"x":{"nodes":{"name":[],"type":[],"status":[],"seconds":[],"bytes":[],"branches":[],"id":[],"label":[],"color":[],"shape":[]},"edges":{"from":[],"to":[],"arrows":[]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":[],"color":[],"shape":[]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code># excruciating detail
+targets::tar_visnetwork()</code></pre>
+<pre><code>here() starts at C:/Users/plevy/Documents/luct
+Warning messages:
+1: package &#39;targets&#39; was built under R version 4.0.5 
+2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
+3: package &#39;here&#39; was built under R version 4.0.5 
+4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
+<div id="htmlwidget-29781fadc608d841074b" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-29781fadc608d841074b">{"x":{"nodes":{"name":["c_clean_data","colour_u","names_u_chess","getAreaGrossGain_fromBeta","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","names_u","remove_units","readCS"],"type":["stem","object","object","function","function","function","object","function","function"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[1.78,null,null,null,null,null,null,null,null],"bytes":[4504,null,null,null,null,null,null,null,null],"branches":[null,null,null,null,null,null,null,null,null],"id":["c_clean_data","colour_u","names_u_chess","getAreaGrossGain_fromBeta","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","names_u","remove_units","readCS"],"label":["c_clean_data","colour_u","names_u_chess","getAreaGrossGain_fromBeta","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","names_u","remove_units","readCS"],"level":[3,0,0,1,1,1,1,1,2],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"shape":["dot","triangleDown","triangleDown","triangle","triangle","triangle","triangleDown","triangle","triangle"]},"edges":{"from":["getAreaGrossGain_fromBeta","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","names_u","remove_units","readCS"],"to":["readCS","readCS","readCS","readCS","readCS","c_clean_data"],"arrows":["to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Object","Function"],"color":["#354823","#899DA4","#899DA4","#899DA4"],"shape":["dot","dot","triangleDown","triangle"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="workflowr-status" class="section level1">
+<h1><span class="header-section-number">3</span> <code>{workflowr}</code> status</h1>
+<p><code>{workflowr}</code> is used to render the <em>meta</em> documents
+(<code>analysis/m_*.Rmd</code>) and build the project website.</p>
+<p><code>{workflowr}</code> is only concerned with the modification and <code>git</code> commit
+dates of the <code>Rmd</code> and <code>HTML</code> files, whereas <code>{targets}</code> is concerned
+with the computational dependencies. Thus, you should rely on the
+<code>{targets}</code> status to ensure the meta reports are computationally up to
+date, then rely on the <code>{workflowr}</code> status to manage the building and
+publication of the entire website.</p>
+<pre class="r"><code>workflowr::wflow_status()</code></pre>
+<pre><code>Status of 6 Rmd files
+
+Totals:
+ 6 Unpublished
+
+The following Rmd files require attention:
+
+Unp analysis/about.Rmd
+Unp analysis/index.Rmd
+Unp analysis/license.Rmd
+Unp analysis/m_00_status.Rmd
+Unp analysis/notes.Rmd
+Unp analysis/proposal.Rmd
+
+Key: Unp = Unpublished
+
+The current Git status is:
+
+    status substatus                      file
+ untracked untracked                 .Rprofile
+ untracked untracked            .gitattributes
+ untracked untracked                .gitignore
+ untracked untracked                  CITATION
+ untracked untracked                LICENSE.md
+ untracked untracked                         R
+ untracked untracked                 README.md
+ untracked untracked UK_LUC_matrices_2018i.csv
+ untracked untracked                _targets.R
+ untracked untracked       _targets_packages.R
+ untracked untracked            _workflowr.yml
+ untracked untracked                  analysis
+ untracked untracked     ../luc_track/data-raw
+ untracked untracked                      data
+ untracked untracked                luct.Rproj
+ untracked untracked               manuscripts
+ untracked untracked                    output
+ untracked untracked                 renv.lock
+ untracked untracked                      renv
+
+To publish your changes as part of your website, use `wflow_publish()`.
+To commit your changes without publishing them yet, use
+`wflow_git_commit()`.
+
+The config file _workflowr.yml has been edited.</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.4 (2021-02-15)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 17763)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United Kingdom.1252 
+[2] LC_CTYPE=English_United Kingdom.1252   
+[3] LC_MONETARY=English_United Kingdom.1252
+[4] LC_NUMERIC=C                           
+[5] LC_TIME=English_United Kingdom.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] targets_0.6.0
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        pillar_1.6.2      compiler_4.0.4    bslib_0.2.5.1    
+ [5] later_1.2.0       jquerylib_0.1.4   git2r_0.28.0      workflowr_1.6.2  
+ [9] tools_4.0.4       digest_0.6.27     jsonlite_1.7.2    evaluate_0.14    
+[13] lifecycle_1.0.0   tibble_3.1.3      pkgconfig_2.0.3   rlang_0.4.11     
+[17] igraph_1.2.6      rstudioapi_0.13   cli_3.0.1         yaml_2.2.1       
+[21] xfun_0.25         withr_2.4.2       stringr_1.4.0     knitr_1.33       
+[25] htmlwidgets_1.5.3 fs_1.5.0          vctrs_0.3.8       sass_0.4.0       
+[29] tidyselect_1.1.1  rprojroot_2.0.2   data.table_1.14.0 glue_1.4.2       
+[33] R6_2.5.0          processx_3.5.2    fansi_0.5.0       rmarkdown_2.10   
+[37] bookdown_0.23     purrr_0.3.4       callr_3.7.0       magrittr_2.0.1   
+[41] codetools_0.2-18  promises_1.2.0.1  ps_1.6.0          ellipsis_0.3.2   
+[45] htmltools_0.5.1.1 renv_0.14.0       httpuv_1.6.1      utf8_1.2.2       
+[49] stringi_1.7.3     visNetwork_2.0.9  crayon_1.4.1     </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

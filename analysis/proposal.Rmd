@@ -1,0 +1,32 @@
+---
+title: "Proposal"
+author: "Peter Levy"
+date: "2021-08-13"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+bibliography: references.bib
+csl: apa-single-spaced.csl
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE #,
+	# message = FALSE,
+	# warning = FALSE
+)
+
+# load libraries - maybe move these into a central location (use targets?)
+# library(bookdown)
+
+library(magrittr)
+library(ggplot2)
+```
+
+This document explains the central ideas behind the project.
+
+# Problem description
+
+# Approach
+
+# References {.unnumbered}

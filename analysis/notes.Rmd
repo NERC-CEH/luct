@@ -1,0 +1,21 @@
+---
+title: "Notes"
+author: "Peter Levy"
+# date: "2021-08-13"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, echo = FALSE}
+# Don't echo the chunk code in these notes
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+This document is for keeping notes of any points that may be useful for
+later project or manuscript development and which are not covered in the
+analysis notebooks or are at risk of getting lost in the notebooks.
+
+# Entity data

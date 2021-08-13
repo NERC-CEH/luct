@@ -1,0 +1,25 @@
+name: Tracking Land-Use Change
+output_dir: ../docs
+navbar:
+  title: Tracking Land-Use Change
+  left:
+  - text: Home
+    href: index.html
+  - text: About
+    href: about.html
+  - text: License
+    href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/NERC-CEH/luct
+# use output: bookdown::html_document2: to enable cross-references in notebooks
+output:
+  bookdown::html_document2:
+    base_format: workflowr::wflow_html
+    toc: yes
+    toc_float: yes
+    toc_depth: 5
+    theme: cosmo
+    highlight: textmate
+    # mathjax: "local"

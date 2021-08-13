@@ -1,0 +1,37 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+.DS_Store
+
+### ./_targets
+
+# {targets} cache
+_targets/
+
+### ./data-raw and ./data
+
+# Keep data off GitHub here
+data-raw
+data
+
+### ./analysis
+
+# output from directly knitting Rmd file in analysis/
+analysis/figure
+analysis/*png
+analysis/*html
+analysis/*_cache
+analysis/site_libs
+
+
+### ./output
+
+# Keep tentative documents off GitHub
+output*
+
+# Keep large data files off GitHub
+# This assumes all large R objects are in QS format
+*qs
+

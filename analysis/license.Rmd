@@ -1,0 +1,19 @@
+---
+title: "License"
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+**Code** is released under the [MIT license][mit].
+
+**Text** is released under the [Creative Commons Attribution 4.0 International License][cc].
+
+[mit]: https://choosealicense.com/licenses/mit/
+[cc]: https://creativecommons.org/licenses/by/4.0/
+
+The project is currently work-in-progress
+so please contact us first if you wish to cite it.
+As work is finalised we will add preferred citations.

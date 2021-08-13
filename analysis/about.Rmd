@@ -1,0 +1,23 @@
+---
+title: "About"
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+This is an open, reproducible, computational research project on land-use change in the UK.
+
+The website is developed by:
+
+* [Peter Levy][]
+
+based on a combination targets and workflowr packages by of [Ross W. Gayler][].
+
+More details to go in here about land use, land-use change and its [estimation][].
+
+[Peter Levy]: https://github.com/peterlevy
+[Ross W. Gayler]: https://www.rossgayler.com/
+
+[estimation]: https://doi.org/10.5194/bg-15-1497-2018
