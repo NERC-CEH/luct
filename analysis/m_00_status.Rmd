@@ -12,7 +12,7 @@ editor_options:
 
 ```{r, eval = FALSE}
 library(rmarkdown)
-system.time(render("m_00_status.Rmd"))
+system.time(render("./analysis/m_00_status.Rmd"))
 ```
 
 ```{r, echo = FALSE}
