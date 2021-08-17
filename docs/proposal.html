@@ -366,7 +366,7 @@ div.tocify {
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
 workflowr
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -376,7 +376,7 @@ workflowr
 </li>
 <li>
 <a data-toggle="tab" href="#checks">
-Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </a>
 </li>
 <li>
@@ -386,14 +386,14 @@ Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></sp
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-08-13
+<strong>Last updated:</strong> 2021-08-17
 </p>
 <p>
 <strong>Checks:</strong>
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-7
+6
 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-0
+1
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -416,16 +416,21 @@ The <em>Past versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>R Markdown file:</strong> up-to-date
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<strong>R Markdown file:</strong> uncommitted changes
 </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you
-know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes.
+To know which version of the R Markdown file created these
+results, you’ll want to first commit it to the Git repo. If
+you’re still working on the analysis, you can ignore this
+warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and
+build the HTML.</p>
 </div>
 </div>
 </div>
@@ -514,20 +519,20 @@ makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreeef110e85c3a429ae2c1f5c3860babd747ee195dctargetblankef110e8a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreeb00311d7523b23faa72f96c57dc2b19eae6881c9targetblankb00311da">
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/ef110e85c3a429ae2c1f5c3860babd747ee195dc" target="_blank">ef110e8</a>
+<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/b00311d7523b23faa72f96c57dc2b19eae6881c9" target="_blank">b00311d</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreeef110e85c3a429ae2c1f5c3860babd747ee195dctargetblankef110e8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreeb00311d7523b23faa72f96c57dc2b19eae6881c9targetblankb00311da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and
 connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/ef110e85c3a429ae2c1f5c3860babd747ee195dc" target="_blank">ef110e8</a>.
+The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/b00311d7523b23faa72f96c57dc2b19eae6881c9" target="_blank">b00311d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made to the
 R Markdown and HTML files.
 </p>
@@ -548,8 +553,11 @@ Ignored files:
     Ignored:    renv/local/
     Ignored:    renv/staging/
 
+Untracked files:
+    Untracked:  update.R
+
 Unstaged changes:
-    Modified:   README.md
+    Modified:   analysis/proposal.Rmd
 
 </code></pre>
 <p>
@@ -594,6 +602,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/1d208e14cee870915a75c23bab0ef2ba36682f1a/docs/proposal.html" target="_blank">1d208e1</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -671,22 +696,17 @@ locale:
 attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
 
-other attached packages:
-[1] ggplot2_3.3.5  magrittr_2.0.1
-
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.7        pillar_1.6.2      compiler_4.0.4    bslib_0.2.5.1    
- [5] later_1.2.0       jquerylib_0.1.4   git2r_0.28.0      workflowr_1.6.2  
- [9] tools_4.0.4       digest_0.6.27     jsonlite_1.7.2    evaluate_0.14    
-[13] lifecycle_1.0.0   tibble_3.1.3      gtable_0.3.0      pkgconfig_2.0.3  
-[17] rlang_0.4.11      yaml_2.2.1        xfun_0.25         withr_2.4.2      
-[21] dplyr_1.0.7       stringr_1.4.0     knitr_1.33        generics_0.1.0   
-[25] fs_1.5.0          vctrs_0.3.8       sass_0.4.0        tidyselect_1.1.1 
-[29] rprojroot_2.0.2   grid_4.0.4        glue_1.4.2        R6_2.5.0         
-[33] fansi_0.5.0       rmarkdown_2.10    bookdown_0.23     purrr_0.3.4      
-[37] whisker_0.4       scales_1.1.1      promises_1.2.0.1  ellipsis_0.3.2   
-[41] htmltools_0.5.1.1 colorspace_2.0-2  renv_0.14.0       httpuv_1.6.1     
-[45] utf8_1.2.2        stringi_1.7.3     munsell_0.5.0     crayon_1.4.1     </code></pre>
+ [1] Rcpp_1.0.7        whisker_0.4       knitr_1.33        magrittr_2.0.1   
+ [5] workflowr_1.6.2   R6_2.5.0          rlang_0.4.11      fansi_0.5.0      
+ [9] stringr_1.4.0     tools_4.0.4       xfun_0.25         utf8_1.2.2       
+[13] git2r_0.28.0      jquerylib_0.1.4   htmltools_0.5.1.1 ellipsis_0.3.2   
+[17] rprojroot_2.0.2   yaml_2.2.1        digest_0.6.27     tibble_3.1.3     
+[21] lifecycle_1.0.0   bookdown_0.23     crayon_1.4.1      later_1.2.0      
+[25] sass_0.4.0        vctrs_0.3.8       fs_1.5.0          promises_1.2.0.1 
+[29] glue_1.4.2        evaluate_0.14     rmarkdown_2.10    stringi_1.7.3    
+[33] bslib_0.2.5.1     compiler_4.0.4    pillar_1.6.2      jsonlite_1.7.2   
+[37] httpuv_1.6.1      renv_0.14.0       pkgconfig_2.0.3  </code></pre>
 </div>
 </div>
 

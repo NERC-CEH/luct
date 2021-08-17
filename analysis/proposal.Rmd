@@ -15,12 +15,6 @@ knitr::opts_chunk$set(
 	# message = FALSE,
 	# warning = FALSE
 )
-
-# load libraries - maybe move these into a central location (use targets?)
-# library(bookdown)
-
-library(magrittr)
-library(ggplot2)
 ```
 
 This document explains the central ideas behind the project.
