@@ -1,0 +1,135 @@
+---
+title: "[meta] Quantifying Uncertainty in Land-Use Data Sources"
+subtitle: "m_uqdata"
+author: "Peter Levy"
+date: "2021-08-18"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+  markdown: 
+    wrap: 72
+---
+
+```{r render, eval = FALSE, echo = FALSE}
+library(rmarkdown)
+render("analysis/m_uqdata.Rmd", html_document())
+render("analysis/m_uqdata.Rmd", pdf_document())
+```
+
+```{r setup, echo = FALSE, include = FALSE}
+# NOTE this notebook can be run manually or automatically by {targets}
+# So load the packages required by this notebook here
+# rather than relying on _targets.R to load them.
+
+# Set up the project environment, because {workflowr} knits each Rmd file 
+# in a new R session, and doesn't execute the project .Rprofile
+
+library(targets) # access data from the targets cache
+
+library(tictoc) # capture execution time
+library(here) # construct file paths relative to project root
+library(fs) # file system operations
+library(dplyr) # data wrangling
+# install.packages("sn") # skewed normal distribution
+library(sn) # skewed normal distribution
+
+# start the execution time clock
+tictoc::tic("Computation time (excl. render)")
+```
+
+# Introduction
+
+The Tracking Land-Use Change project uses a data assimilation approach to combining different data sources. Several different data sources provide observations of the transition matrix $B$, as well as net and gross change in area of each land use ($dA, G, L$). The current (WP-A) method treats all data sources as equally uncertain, and assumes the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these.  We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but potentially complicated in practice, for the following reasons.
+
+1. We can consider increasing levels of detail:
+
+    -   variable-specific uncertainties (i.e. different for $B, G, L$ & $dA$)
+
+    -   data source type-specific uncertainties (i.e. different for ground-based vs EO data)
+
+    -   data set-specific uncertainties (i.e. different for CS, IACS, LCM etc.)
+
+    -   land-use type-specific uncertainties (i.e. different for woods, crops, grass etc.)
+
+    -   time-specific uncertainties (i.e. different for 1990, 2000 ... 2019)
+
+2. Rather than continuous data with a simple $\sigma$ error term, the $B$ observations are count data in a 6 x 6-way classification. When considering land-use *change*, we need to compare the 36 elements of this classification from one data source with another (or the truth), so we have a 36 x 36 error matrix (or "confusion" matrix). This matrix has two distinct types of errors that we ideally want to distinguish: false positives and false negatives, or "user"/"commission" and "producer"/"omission" error/accuracy, in the EO terminology.
+
+3. We can specify uncertainty greater or lesser rigour: there are several possibilities for how we represent "uncertainty" in the mathematical model. 
+4. We can estimate uncertainty subjectively, or base it more closely on data. There are also several possibilities for how we translate measures of uncertainty in the data in to the mathematical model.
+5. None of the data sources represents absolute truth, and we have no clear reference data set against which to calibrate.
+
+# Representation of uncertainty in the likelihood function
+For each observation, a likelihood is calculated, assuming that measurement errors show a Gaussian distribution and are independent of each other.
+To put this in mathematical notation, the likelihood of observing the area changing from land use $i$ to land use $j$, $\beta_{ij}^{\mathrm{obs}}$, is
+
+\begin{equation} \label{eq:likBeta}
+ \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\beta_{ij}^{\mathrm{obs}} - \beta_{ij}^{\mathrm{pred}})^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
+\end{equation}
+
+where $\beta_{ij}^{\mathrm{pred}}$ is the corresponding prediction, and given the uncertainty $\sigma_{ij}^\mathrm{obs}$ in the observation. There are analagous terms for $G, L$ and $\Delta A$ which can all be multiplied. For example, the term for the likelihood of observing the net change in land use $u$, $\Delta A_{u}^{\mathrm{obs}}$, is
+ 
+\begin{equation} \label{eq:likNet}
+ \mathcal{L} = \frac{1}{\sigma_{u}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\Delta A_{u}^{\mathrm{obs}} - \Delta A_{u}^{\mathrm{pred}})^2/2 {\sigma_{u}^\mathrm{obs}}^2)
+\end{equation}
+ 
+
+We currently assume that *relative* measurement uncertainty is the same for all observations, i.e. a constant proportion of the observed $y$ value. Thus, observations of large areas come with larger absolute uncertainty. The question now is how to estimate more specific uncertainties $\sigma^\mathrm{obs}$ for the different data sources, if not specific for each individual observation.
+We thus need to examine the basis for specifing these uncertainties, based on a proper quantitative analysis.
+
+# Options for improvement
+We consider here some options for improving the representation of data set-specific uncertainty in the methodology. These are in increasing order of complexity, and are not necessarily mutually exclusive.
+
+A pre-cursor step is to define a reference data set which we compare each data source, in the absence of ground-truth data.
+We could subjectively decide on a reference data set which we believe to be the most plausible or closest to the truth, based judgement and prior knowledge. Some subjectivity is inevitable here, and would need to be justified and explicit.
+An alternative would be a version of the leave-one-out cross-validation idea: each data set is tested against all the other remaining data sets, and possibly in summarised form. With some subjective weighting on the data sets, the two ideas could be combined.
+
+1. Most simply, we could base all $\sigma^\mathrm{obs}$ on the "lowest common denominator" data set, the time series of net area change $\Delta A$.
+Irrespective of higher levels of detail, all data sources produce estimates of $\Delta A$.
+If we define a reference data set, we can calculate a metric of agreement with this for all other data sets. Suitable metrics would be root-mean-square error (RMSE), mean-absolute error (MAE) and/or the correlation coefficient.
+We can use this metric as a scaling factor in estimating $\sigma^\mathrm{obs}$, such that data sources with poor agreement receive high $\sigma^\mathrm{obs}$ (high uncertainty). 
+Some subjectivity would come into deciding on the reference data set and the absolute values of $\sigma^\mathrm{obs}$, but the relative uncertainties (and therefore weighting) would be based quantitatively on data.
+
+2a. Similarily, but focussing on the $B$ data, if we define a reference data set, we can calculate confusion matrices. We can then calculate metrics of overall agreement, and there are many such metrics - accuracy, precision, prevalence, misclassification rate, etc.  One commonly-used metric is the $\kappa$ statistic:
+\begin{equation} \label{eq:kappa}
+\kappa = 1-{\frac {1-p_{o}}{1-p_{e}}}
+\end{equation}
+where $p_{o}$ is the relative observed agreement with the reference data (the number of grid cells correctly classified), and $p_{e}$ is the hypothetical probability of chance agreement (calculated from the products of the confusion matrix row sums and columns sums). With perfect agreement,$\kappa = 1$; with no agreement beyond what would be expected by chance, $\kappa = 0$. This gives a more robust measure than simple percentage agreement, with a convenient scaling, although there is much debate about these metrics.
+$\kappa$ does not translate into an exact value for $\sigma^\mathrm{obs}$, but is clearly related. We can therefore use $\kappa$ as a scaling factor in estimating $\sigma^\mathrm{obs}$, such that data sources with low $\kappa$ values (poor agreement) receive high $\sigma^\mathrm{obs}$ (high uncertainty).
+The same elements of subjectivity come into this approach, but the quantity of data and level of detail used is greater.
+
+2b. If we have the predictive probabilities associated with each prediction, we can plot the "Receiver operating characteristics" graph or ROC, and also the Area Under the Curve (AUC).  This metric has several theoretical advantages.
+
+3. As an alternative to the above, we can explictly represent the false positive and false negative error terms in the likelihood function. False positives cause observations to over-estimate change, whilst false negatives produce an under-estimate. The estimated bias in the observation, $\delta$, is a simple function of the false positive and false negative error rates and the number of grid cells in which the positive and negative errors can occur. The likelihood equation becomes:
+
+\begin{equation} \label{eq:likBetaDelta}
+ \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\beta_{ij}^{\mathrm{obs}} - \beta_{ij}^{\mathrm{pred}} + \delta)^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
+\end{equation}
+
+where $\delta$ is the calculated bias in the observation based on the false positive and false negative errors.
+This then calculates the likelihood of the observed change from land use $i$ to land use $j$, given that the true value is $\beta_{ij}^{\mathrm{pred}}$, and with given false positive and false negative rates and uncertainty $\sigma_{ij}^\mathrm{obs}$ in the observation. This approach can be implemented in increasingly complex ways:
+
+3a. estimating the false positive and false negative error rates based on some set of confusion matrices, and thereafter assuming them to be fixed and constant for a given data source;
+
+3b. as above, but calculating false positive and false negative error rates specific to each type of land-use change, and potentially vaying in time;
+
+3c. including the false positive and false negative error rates as unknown parameters to be calibrated, along with the $B$ and $\sigma^{\mathrm{obs}}$ values. This is the most sophisticated solution, as it properly represents the fact that these are not truly known, and allows the values to be an emergent property of the data, rather than imposing our guesses.  The exact number of these parameters to estimate could vary as above, whether specific to each data source, type of land-use change, and point in time.
+    
+
+```{r, eval = FALSE, echo = FALSE}
+x <- seq(0, 100, by=1)
+bias <- -10
+d_norm <- dsn(x, xi = 50, omega = 25, alpha=0)
+d_bias <- dsn(x, xi = 50 + bias, omega = 25, alpha=0)
+d_skew <- dsn(x, xi = 50, omega = 25, alpha=-3)
+plot(d_skew, type = "l", col = 2)
+lines(d_norm, col = 1)
+lines(d_bias, col = 3)
+```
+
+
+# Timing {.unnumbered}
+
+```{r echo=FALSE}
+tictoc::toc()
+```
