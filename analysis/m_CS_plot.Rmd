@@ -1,0 +1,99 @@
+---
+title: "[meta] Plot CS data"
+subtitle: "m_CS_plot"
+author: "Peter Levy"
+date: "2021-08-20"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+  markdown: 
+    wrap: 72
+---
+
+```{r setup}
+# NOTE this notebook can be run manually or automatically by {targets}
+# So load the packages required by this notebook here
+# rather than relying on _targets.R to load them.
+
+# Set up the project environment, because {workflowr} knits each Rmd file 
+# in a new R session, and doesn't execute the project .Rprofile
+
+library(targets) # access data from the targets cache
+library(tictoc) # capture execution time
+library(here) # construct file paths relative to project root
+library(ggplot2) # data wrangling
+
+# start the execution time clock
+tictoc::tic("Computation time (excl. render)")
+
+# Get the path to the raw entity data file
+# This is a target managed by {targets}
+blag <- tar_read(c_blag_CS)
+```
+
+```{r, include = FALSE, cache = FALSE}
+# Get all the functions used by {targets} 
+# so we can display and use them in this notebook
+# with a guarantee that they will be identical
+# here and when used by {targets}.
+
+# This is  work-around because tarchetypes::tar_knitr_deps()
+# fails if a call to here::here() is embedded in 
+# a call to knitr::read_chunk()
+knitr::read_chunk("R/luct.R")
+```
+
+# Introduction
+
+```{r}
+p <- ggplot(data = subset(blag$dt_B, time == 1991), aes(u_to, u_from)) 
+p <- p + geom_raster(aes(fill = area))
+p <- p + geom_text(aes(label = floor(area)), colour = "blue")
+p <- p + ylab("Land use in 1990")
+p <- p + xlab("Land use in 1991")
+p <- p + facet_wrap(~ time)
+p + scico::scale_fill_scico(palette = "lajolla")
+
+
+## ----CSplotB, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of $\\mathbf{B}$ matrix, showing the areas changing land use over time. The layout of panels follows the matrix itself, so rows represent the starting land use, columns represent the end land use. We assumed that the rates of change were constant during the period between surveys."----
+p <- ggplot(blag$dt_B, aes(time, area))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + facet_grid(u_from ~ u_to, scales = "fixed")
+p <- p + scale_x_continuous(limits = c(1970, 2020), breaks=c(1980, 2010))
+p
+
+p <- ggplot(blag$dt_G, aes(time, area))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + ggtitle("Gross Gains")
+p <- p + xlim(1970, 2020)
+p <- p + facet_wrap(~ u, scales = "fixed")
+p
+
+p <- ggplot(blag$dt_L, aes(time, area))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ggtitle("Gross Losses")
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + xlim(1970, 2020)
+p <- p + facet_wrap(~ u, scales = "fixed")
+p
+
+p <- ggplot(blag$dt_dA, aes(time, area))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + ggtitle("Net Change")
+p <- p + xlim(1970, 2020)
+p <- p + facet_wrap(~ u, scales = "fixed")
+p
+```
+
+# Timing {.unnumbered}
+
+```{r echo=FALSE}
+tictoc::toc()
+```
