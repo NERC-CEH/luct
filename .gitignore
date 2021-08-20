@@ -4,6 +4,7 @@
 .Ruserdata
 .Rapp.history
 .DS_Store
+update.R
 
 ### ./_targets
 
@@ -22,6 +23,7 @@ data
 analysis/figure
 analysis/*png
 analysis/*html
+analysis/*pdf
 analysis/*_cache
 analysis/site_libs
 

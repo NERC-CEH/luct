@@ -87,10 +87,10 @@ way that may be helpful for guiding the development of future core
 stages, but not immediately resulting in the development of functions
 for the core pipeline.
 
-## 01 Read, check, and standardise the entity data {.unnumbered}
+## 01 Ideas for Developments {.unnumbered}
 
-Determine the initial data preparation of the imported entity records.
+Examines ideas for developing work, beyond what was dome in WP-A.
 
-### [m_01_1\_read_raw_data](m_01_1_read_raw_data.html) {.unnumbered}
+### [m_uqdata](m_uqdata.html) {.unnumbered}
 
-Read the raw data.
+Examines options for quantifying the uncertainty in the different input data sources.

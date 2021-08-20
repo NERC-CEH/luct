@@ -1,8 +1,8 @@
 ---
 title: "[meta] Quantifying Uncertainty in Land-Use Data Sources"
 subtitle: "m_uqdata"
-author: "Peter Levy"
-date: "2021-08-18"
+author: "Peter Levy and Beth Raine"
+date: "2021-08-19"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -31,7 +31,11 @@ library(here) # construct file paths relative to project root
 library(fs) # file system operations
 library(dplyr) # data wrangling
 # install.packages("sn") # skewed normal distribution
-library(sn) # skewed normal distribution
+#library(sn) # skewed normal distribution
+library(tidyr)
+library(units)
+#library(ggplot2)
+#library(ggforce)
 
 # start the execution time clock
 tictoc::tic("Computation time (excl. render)")
@@ -59,15 +63,16 @@ The Tracking Land-Use Change project uses a data assimilation approach to combin
 4. We can estimate uncertainty subjectively, or base it more closely on data. There are also several possibilities for how we translate measures of uncertainty in the data in to the mathematical model.
 5. None of the data sources represents absolute truth, and we have no clear reference data set against which to calibrate.
 
-# Representation of uncertainty in the likelihood function
+# Representation of uncertainty
+The data sources are assimilated in the Bayesian method in the likelihood function, which includes a term $\sigma^{obs}$, representing the standard deviatation in the probability density function for the observation. The observation is thus not assumed to be the true value, but subject to errors which make it deviate from this. Uncertainty is thus represented by the magnitude of $\sigma^{obs}$ - large values of $\sigma^{obs}$ represent high uncertainty.
 For each observation, a likelihood is calculated, assuming that measurement errors show a Gaussian distribution and are independent of each other.
-To put this in mathematical notation, the likelihood of observing the area changing from land use $i$ to land use $j$, $\beta_{ij}^{\mathrm{obs}}$, is
+In mathematical notation, the likelihood of observing the area changing from land use $i$ to land use $j$, $\beta_{ij}^{\mathrm{obs}}$, is
 
 \begin{equation} \label{eq:likBeta}
  \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\beta_{ij}^{\mathrm{obs}} - \beta_{ij}^{\mathrm{pred}})^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
 \end{equation}
 
-where $\beta_{ij}^{\mathrm{pred}}$ is the corresponding prediction, and given the uncertainty $\sigma_{ij}^\mathrm{obs}$ in the observation. There are analagous terms for $G, L$ and $\Delta A$ which can all be multiplied. For example, the term for the likelihood of observing the net change in land use $u$, $\Delta A_{u}^{\mathrm{obs}}$, is
+where $\beta_{ij}^{\mathrm{pred}}$ is the corresponding prediction, and $\sigma_{ij}^\mathrm{obs}$ is the uncertainty in the observation. There are analagous terms for $G, L$ and $\Delta A$ which can all be multiplied. For example, the term for the likelihood of observing the net change in land use $u$, $\Delta A_{u}^{\mathrm{obs}}$, is
  
 \begin{equation} \label{eq:likNet}
  \mathcal{L} = \frac{1}{\sigma_{u}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\Delta A_{u}^{\mathrm{obs}} - \Delta A_{u}^{\mathrm{pred}})^2/2 {\sigma_{u}^\mathrm{obs}}^2)
@@ -77,43 +82,41 @@ where $\beta_{ij}^{\mathrm{pred}}$ is the corresponding prediction, and given th
 We currently assume that *relative* measurement uncertainty is the same for all observations, i.e. a constant proportion of the observed $y$ value. Thus, observations of large areas come with larger absolute uncertainty. The question now is how to estimate more specific uncertainties $\sigma^\mathrm{obs}$ for the different data sources, if not specific for each individual observation.
 We thus need to examine the basis for specifing these uncertainties, based on a proper quantitative analysis.
 
-# Options for improvement
-We consider here some options for improving the representation of data set-specific uncertainty in the methodology. These are in increasing order of complexity, and are not necessarily mutually exclusive.
+# Defining reference data
+A pre-cursor step is to define a reference data set with which we compare each data source, in the absence of ground-truth data.
+We could subjectively decide on a reference data set which we believe to be the most plausible or closest to the truth, based on judgement and prior knowledge. Some subjectivity is inevitable here, and would need to be justified and explicit.
+An alternative would be a version of the "leave-one-out" cross-validation idea: each data source is tested against all the other remaining data sources. With some subjective weighting applied to the data sources, the two ideas could be combined.
 
-A pre-cursor step is to define a reference data set which we compare each data source, in the absence of ground-truth data.
-We could subjectively decide on a reference data set which we believe to be the most plausible or closest to the truth, based judgement and prior knowledge. Some subjectivity is inevitable here, and would need to be justified and explicit.
-An alternative would be a version of the leave-one-out cross-validation idea: each data set is tested against all the other remaining data sets, and possibly in summarised form. With some subjective weighting on the data sets, the two ideas could be combined.
+# Options for improvement
+We consider here some options for improving the representation of data set-specific uncertainty in the methodology. These are in increasing order of complexity, and are not mutually exclusive.
 
 1. Most simply, we could base all $\sigma^\mathrm{obs}$ on the "lowest common denominator" data set, the time series of net area change $\Delta A$.
 Irrespective of higher levels of detail, all data sources produce estimates of $\Delta A$.
 If we define a reference data set, we can calculate a metric of agreement with this for all other data sets. Suitable metrics would be root-mean-square error (RMSE), mean-absolute error (MAE) and/or the correlation coefficient.
 We can use this metric as a scaling factor in estimating $\sigma^\mathrm{obs}$, such that data sources with poor agreement receive high $\sigma^\mathrm{obs}$ (high uncertainty). 
-Some subjectivity would come into deciding on the reference data set and the absolute values of $\sigma^\mathrm{obs}$, but the relative uncertainties (and therefore weighting) would be based quantitatively on data.
+Some subjectivity would come into deciding on the reference data set, which metrics to use, and the absolute values of $\sigma^\mathrm{obs}$, but the relative uncertainties (and therefore weighting) would be based quantitatively on data.
+Extending this approach to $G$ and $L$ data would be straightforward.
 
-2a. Similarily, but focussing on the $B$ data, if we define a reference data set, we can calculate confusion matrices. We can then calculate metrics of overall agreement, and there are many such metrics - accuracy, precision, prevalence, misclassification rate, etc.  One commonly-used metric is the $\kappa$ statistic:
+2. Similarily, but focussing on the $B$ data, if we define a reference data set, we can calculate confusion matrices. We can then calculate metrics of overall agreement, and there are many such metrics - accuracy, precision, prevalence, misclassification rate, etc. There is much debate about these metrics, but a reasonable choice in our case would be the $\kappa$ statistic:
 \begin{equation} \label{eq:kappa}
 \kappa = 1-{\frac {1-p_{o}}{1-p_{e}}}
 \end{equation}
-where $p_{o}$ is the relative observed agreement with the reference data (the number of grid cells correctly classified), and $p_{e}$ is the hypothetical probability of chance agreement (calculated from the products of the confusion matrix row sums and columns sums). With perfect agreement,$\kappa = 1$; with no agreement beyond what would be expected by chance, $\kappa = 0$. This gives a more robust measure than simple percentage agreement, with a convenient scaling, although there is much debate about these metrics.
+where $p_{o}$ is the relative observed agreement with the reference data (the number of grid cells correctly classified), and $p_{e}$ is the hypothetical probability of chance agreement (calculated from the products of the confusion matrix row sums and columns sums). With perfect agreement,$\kappa = 1$; with no agreement beyond what would be expected by chance, $\kappa = 0$. This gives a more robust measure than simple percentage agreement, with a convenient scaling.
 $\kappa$ does not translate into an exact value for $\sigma^\mathrm{obs}$, but is clearly related. We can therefore use $\kappa$ as a scaling factor in estimating $\sigma^\mathrm{obs}$, such that data sources with low $\kappa$ values (poor agreement) receive high $\sigma^\mathrm{obs}$ (high uncertainty).
 The same elements of subjectivity come into this approach, but the quantity of data and level of detail used is greater.
+If we have the predictive probabilities associated with each prediction, we can plot the "receiver operating characteristics" graph or ROC, and also the Area Under the Curve (AUC).  This metric has several theoretical advantages, but is more complex to calculate.
 
-2b. If we have the predictive probabilities associated with each prediction, we can plot the "Receiver operating characteristics" graph or ROC, and also the Area Under the Curve (AUC).  This metric has several theoretical advantages.
-
-3. As an alternative to the above, we can explictly represent the false positive and false negative error terms in the likelihood function. False positives cause observations to over-estimate change, whilst false negatives produce an under-estimate. The estimated bias in the observation, $\delta$, is a simple function of the false positive and false negative error rates and the number of grid cells in which the positive and negative errors can occur. The likelihood equation becomes:
-
+3. A fundamentally different approach is to explictly represent the false positive and false negative error terms in the likelihood function. False positives cause observations to over-estimate change, whilst false negatives produce an under-estimate. The estimated bias in the observation is a simple function of the false positive and false negative error rates ($F_P$ and $F_N$) and the area (and number of grid cells) in which the false negative errors can occur, $A_N$. The likelihood equation becomes:
 \begin{equation} \label{eq:likBetaDelta}
- \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\beta_{ij}^{\mathrm{obs}} - \beta_{ij}^{\mathrm{pred}} + \delta)^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
+ \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-((1-F_P) \beta_{ij}^{\mathrm{obs}} + A_N F_N - \beta_{ij}^{\mathrm{pred}})^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
 \end{equation}
+This then calculates the likelihood of the observed change from land use $i$ to land use $j$, given that the true value is $\beta_{ij}^{\mathrm{pred}}$, and with given false positive and false negative rates $F_P$ and $F_N$, and uncertainty $\sigma_{ij}^\mathrm{obs}$ in the observation. This approach can be implemented in increasingly complex ways:
 
-where $\delta$ is the calculated bias in the observation based on the false positive and false negative errors.
-This then calculates the likelihood of the observed change from land use $i$ to land use $j$, given that the true value is $\beta_{ij}^{\mathrm{pred}}$, and with given false positive and false negative rates and uncertainty $\sigma_{ij}^\mathrm{obs}$ in the observation. This approach can be implemented in increasingly complex ways:
+    - estimating the false positive and false negative error rates based on some set of confusion matrices, and thereafter assuming them to be fixed and constant for a given data source;
 
-3a. estimating the false positive and false negative error rates based on some set of confusion matrices, and thereafter assuming them to be fixed and constant for a given data source;
+    - as above, but calculating false positive and false negative error rates specific to each type of land-use change (i.e. $F_{Pij}$ and $F_{Nij}$), and potentially vaying in time;
 
-3b. as above, but calculating false positive and false negative error rates specific to each type of land-use change, and potentially vaying in time;
-
-3c. including the false positive and false negative error rates as unknown parameters to be calibrated, along with the $B$ and $\sigma^{\mathrm{obs}}$ values. This is the most sophisticated solution, as it properly represents the fact that these are not truly known, and allows the values to be an emergent property of the data, rather than imposing our guesses.  The exact number of these parameters to estimate could vary as above, whether specific to each data source, type of land-use change, and point in time.
+    - including the false positive and false negative error rates as unknown parameters to be calibrated, along with the $B$ and $\sigma^{\mathrm{obs}}$ values. This is the most sophisticated solution, as it properly represents the fact that these are not truly known, and allows the values to be an emergent property of the data, given prior information, rather than imposing our guesses.  The exact number of these parameters to estimate could vary as above, whether specific to each data source, type of land-use change, and point in time.
     
 
 ```{r, eval = FALSE, echo = FALSE}
@@ -127,8 +130,81 @@ lines(d_norm, col = 1)
 lines(d_bias, col = 3)
 ```
 
+# Example
+We can apply option 1 in its simplest form by basing the scaling factor for $\sigma^\mathrm{obs}$ on the net area change $\Delta A$.
+We define the reference data set as the June Agricultural Census data for crops, grass and rough, and the FC data for forests.
+The table below shows two metrics, the RMSE and the correlation coefficient.
+We combine these in a multiplicative way (using $1/(r^2+1)$) to give a single scaling factor for $\sigma^\mathrm{obs}$ ("sigma_scaling" in the table). 
+The ranking shows that IACS has the lowest uncertainty and the Land Cover Crop Maps has the highest (bearing in mind all the imperfections in the reference data). This produces a quantitative means of accounting for the different relative uncertainties in these data sources. 
 
-# Timing {.unnumbered}
+```{r, functions, eval = TRUE, echo = FALSE}
+getRMSE <- function(df = df, v, v_ref = "Ref"){
+  v     <- df[[v]]
+  v_ref <- df[[v_ref]]
+  resid <- v - v_ref
+  RMSE <- sqrt(mean(resid^2, na.rm = TRUE))
+  # if no data, these will be NaN, which need to be NA
+  RMSE[is.nan(RMSE)] <- NA
+  return(RMSE)
+}
+
+get_cor <- function(df = df, v = "CS", v_ref = "Ref"){
+  v     <- df[[v]]
+  v_ref <- df[[v_ref]]
+  r2 <- cor(v, v_ref, use = "pairwise.complete.obs")
+  # if no data, these will be NaN, which need to be NA
+  #RMSE[is.nan(RMSE)] <- NA
+  return(r2)
+}
+```
+
+```{r, loading, eval = TRUE, echo = FALSE}
+load(file = here::here("data-raw", "blags_1km.RData"), verbose = FALSE)
+```
+
+```{r, plotting, eval = FALSE, echo = FALSE}
+# dA time series
+p <- ggplot(dt_dA_obs[time > 1990 & time < 2020 & area != set_units(0, km^2)], 
+  aes(time, area, colour = data_source))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ggtitle("Net Change in Area in UK")
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + geom_hline(yintercept = 0)
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+```
+
+```{r, metrics, eval = TRUE, echo = FALSE}
+df <- pivot_wider(dt_dA_obs, names_from = data_source, values_from = area)
+df <- subset(df, time >= 1990 & time <= 2020)
+df$Ref <- df$AgCensus
+df$Ref[df$u == "woods"] <- df$FC[df$u == "woods"]
+v_names_sources = c("AgCensus", "CS", "LCM", "CORINE", "LCC", "IACS")
+v_rmse <- sapply(v_names_sources, getRMSE, df = df, v_ref = "Ref")
+v_r2 <- sapply(v_names_sources, get_cor,     df = df, v_ref = "Ref")
+# df_scaled <- data.frame(RMSE = v_rmse, invr2 = 1/(v_r2+1))
+# df_scaled <- as.data.frame(scale(df_scaled))
+# df_scaled$sigma_scaling <-  df_scaled$RMSE * df_scaled$invr2
+# df_scaled$sigma_scaling <-  df_scaled$sigma_scaling
+
+df_scaled <- data.frame(RMSE = v_rmse, invr2 = 1/(v_r2+1))
+
+df_out <- data.frame(RMSE = v_rmse, r2 = v_r2, 
+  sigma_scaling = v_rmse * 1/(v_r2+1))
+
+df_out <- df_out[order(df_out$sigma_scaling),]
+df_out <- df_out[-1,] # remove AgCensus, as most of ref data
+knitr::kable(df_out)
+```
+
+
+# Conclusions
+* Representing data source-specific uncertainty is relatively straightforward in principle. We need to estimate appropriate $\sigma$ values for each data source and use these in the likelihood function.
+* The most fundamental problem is accurately estimating $\sigma$ in the absence of any data which we regard as "true", particularly for the $B$ matrices which are key. There is no immediate solution to this, and a pragmatic approach is to define a reference data set, with more or less subjectivity/expert judgement, and principles from cross-validation.
+* A starting point would be to implement a simple method, whereby $\sigma$ for each data set is scaled according to metrics measuring its correspondence with reference data. This could be based on any or all of $\Delta A, G, L$ and $B$.
+* A better method is to estimate the biases and uncertainties as part of the data assimilation.  With confusion matrices, we have a clear method for doing this, by explicitly representing the false positive and false negative error rates.  The downside of this approach is that it is more complicated, involves estimating more parameters, and will have greater computation time. Pragmatically, we would propose starting with the simple method, and implementing and testing the more complex approach as time allows.
+
 
 ```{r echo=FALSE}
 tictoc::toc()

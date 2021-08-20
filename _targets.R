@@ -48,7 +48,7 @@ list(
   # Clean entity data
   tar_target(
     c_clean_data,
-    readCS(here::here("data-raw/CS", "UK_LUC_matrices_2018i.csv"))
+    wrangle_CS(fpath = here::here("data-raw/CS", "UK_LUC_matrices_2018i.csv"))
     #readCS(fpath = "UK_LUC_matrices_2018i.csv")
   )
 )
