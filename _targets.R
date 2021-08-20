@@ -39,17 +39,16 @@ list(
   # CORE pipeline targets ----
 
   # # Path to raw entity data file
-  # tar_target(
-    # c_raw_data_file,
-    # here::here("data/CS", "UK_LUC_matrices_2018i.csv"),
-    # format = "file"
-  # ),
+  tar_target(
+    c_file_CS,
+    here::here("data-raw/CS", "UK_LUC_matrices_2018i.csv"),
+    format = "file"
+  ),
 
   # Clean entity data
   tar_target(
-    c_clean_data,
-    wrangle_CS(fpath = here::here("data-raw/CS", "UK_LUC_matrices_2018i.csv"))
-    #readCS(fpath = "UK_LUC_matrices_2018i.csv")
+    c_blag_CS,
+    wrangle_CS(fpath = c_file_CS)
   )
 )
   # Parked for later stages of the pipeline
