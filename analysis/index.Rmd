@@ -94,3 +94,7 @@ Examines ideas for developing work, beyond what was dome in WP-A.
 ### [m_uqdata](m_uqdata.html) {.unnumbered}
 
 Examines options for quantifying the uncertainty in the different input data sources.
+
+### [m_lifetables](m_lifetables.html) {.unnumbered}
+
+Explains the idea of using life tables from population modelling in the land-use change context.

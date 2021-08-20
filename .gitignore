@@ -26,6 +26,7 @@ analysis/*html
 analysis/*pdf
 analysis/*_cache
 analysis/site_libs
+analysis/life_tables.xlsx
 
 
 ### ./output
