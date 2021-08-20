@@ -367,7 +367,7 @@ div.tocify {
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
 workflowr
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -377,7 +377,7 @@ workflowr
 </li>
 <li>
 <a data-toggle="tab" href="#checks">
-Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </a>
 </li>
 <li>
@@ -392,9 +392,9 @@ Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidde
 <p>
 <strong>Checks:</strong>
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-6
+7
 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-1
+0
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -417,21 +417,16 @@ The <em>Past versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-<strong>R Markdown file:</strong> uncommitted changes
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>R Markdown file:</strong> up-to-date
 </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes.
-To know which version of the R Markdown file created these
-results, you’ll want to first commit it to the Git repo. If
-you’re still working on the analysis, you can ignore this
-warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and
-build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you
+know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -520,20 +515,20 @@ makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree9a3642a8ce5900cbdc81be3784038a9d0050f6e0targetblank9a3642aa">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree1ea3ad7e11cb8afbc6375303b769c71395be3cfdtargetblank1ea3ad7a">
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/9a3642a8ce5900cbdc81be3784038a9d0050f6e0" target="_blank">9a3642a</a>
+<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/1ea3ad7e11cb8afbc6375303b769c71395be3cfd" target="_blank">1ea3ad7</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree9a3642a8ce5900cbdc81be3784038a9d0050f6e0targetblank9a3642aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree1ea3ad7e11cb8afbc6375303b769c71395be3cfdtargetblank1ea3ad7a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and
 connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/9a3642a8ce5900cbdc81be3784038a9d0050f6e0" target="_blank">9a3642a</a>.
+The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/1ea3ad7e11cb8afbc6375303b769c71395be3cfd" target="_blank">1ea3ad7</a>.
 See the <em>Past versions</em> tab to see a history of the changes made to the
 R Markdown and HTML files.
 </p>
@@ -554,14 +549,7 @@ Ignored files:
     Ignored:    renv/library/
     Ignored:    renv/local/
     Ignored:    renv/staging/
-
-Untracked files:
-    Untracked:  update.R
-
-Unstaged changes:
-    Modified:   .gitignore
-    Modified:   R/luct.R
-    Modified:   analysis/m_uqdata.Rmd
+    Ignored:    update.R
 
 </code></pre>
 <p>
@@ -606,6 +594,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/analysis/m_uqdata.Rmd" target="_blank">1ea3ad7</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-20
+</td>
+<td>
+Updating index
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/docs/m_uqdata.html" target="_blank">1ea3ad7</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-20
+</td>
+<td>
+Updating index
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -774,7 +796,7 @@ The ranking shows that IACS has the lowest uncertainty and the Land Cover Crop M
 <li>A starting point would be to implement a simple method, whereby <span class="math inline">\(\sigma\)</span> for each data set is scaled according to metrics measuring its correspondence with reference data. This could be based on any or all of <span class="math inline">\(\Delta A, G, L\)</span> and <span class="math inline">\(B\)</span>.</li>
 <li>A better method is to estimate the biases and uncertainties as part of the data assimilation. With confusion matrices, we have a clear method for doing this, by explicitly representing the false positive and false negative error rates. The downside of this approach is that it is more complicated, involves estimating more parameters, and will have greater computation time. Pragmatically, we would propose starting with the simple method, and implementing and testing the more complex approach as time allows.</li>
 </ul>
-<pre><code>Computation time (excl. render): 0.77 sec elapsed</code></pre>
+<pre><code>Computation time (excl. render): 0.72 sec elapsed</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
