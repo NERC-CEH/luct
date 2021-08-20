@@ -1,0 +1,105 @@
+---
+title: "Using life tables in modelling land-use change"
+author: "plevy"
+date: "2021-07-22"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Introduction
+
+This notebooks document the development of using the concept of life tables in modelling land-use change. In the current procedure, we firstly estimate the $B$ matrix each year by MCMC, then estimate where these land-use changes take place in a separate step. This second step uses static maps of likelihood for each land use. That is, for each year, we have a raster containing the likelihood of a given land-use occuring in each cell. This is based on observed data; if several data sets agree that a given cell is used for crops in a given year, there is a high likelihood of any new cropland being placed there by the algorithm (if it is not already cropland). However, these likelihood maps are static: they vary over time according to the data, but they are the same in every simulation. What this misses is the dependence of land-use change on prior history in the grid cell. There are a few cases where this is important. Most importantly, there is rotational grassland, which is used for arable crops for a number of years, before being returned to grassland on a repeating cycle. Thus, the likelihood of grassland changing to cropland is higher for a four-year old grassland than a 50-year old grassland. This phenomenon is not well captured in the current method. For forests, deforestation may be more likely to occur where the trees are at a commercially harvestable age, so the likelihood of transition is not constant, but peaks at around 40-60 years. More generally, land use shows inertia, and change is less likely where no change has happened before.
+
+To capture such "memory" effects (i.e. that the time since past land-use change affects the likelihood of current land-use change), we can use an approach borrowed from population modelling based on "life tables". In the population modelling context, life tables are a set of age-specific mortality rates. The same idea is referred to as survival analysis, reliability analysis, ot time-to-event analysis in various domains. Here, we are modelling the "survival" of land under a given continuous usage. Using the population analogy, a forest is "born" when a grid cell is afforested (from any other previous land use), and "dies" when it is deforested (converted to any other previous land use). Similarily, the same applies when areas of other land uses are created or destroyed.
+We can think of this as six populations (woods, cropland, grassland, rough grazing, urban or other land uses), each of which has a specific life table. In this context, rather than mortality rates, the life table is the set of age-specific probabilities of conversion to other uses. So rather than a single dimension, each life table has six columns, for the probabilities to conversion to each of the five other land uses, plus the probability of remaining unchanged.
+
+# Illustration with dummy data
+To illustrate the idea, we can make up some dummy data which shows how this might work.
+
+```{r setup, include = FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(abind) # for array handling
+library(readxl) # reading excel
+library(tictoc) # capture execution time
+library(here) # construct file paths relative to project root
+
+# start the execution time clock
+tictoc::tic("Computation time (excl. render)")
+```
+
+```{r, include = FALSE}
+n_u <- 6
+fname <- here::here("analysis", "life_tables.xlsx")
+df1 <- read_excel(fname, sheet = "woods")
+df2 <- read_excel(fname, sheet = "crops")
+df3 <- read_excel(fname, sheet = "grass")
+df4 <- read_excel(fname, sheet = "rough")
+df5 <- read_excel(fname, sheet = "urban")
+df6 <- read_excel(fname, sheet = "other")
+df1$u <- 1
+df2$u <- 2
+df3$u <- 3
+df4$u <- 4
+df5$u <- 5
+df6$u <- 6
+df_lamda <- bind_rows(df1, df2, df3, df4, df5, df6)
+a_lamda <- abind(split(df_lamda, df_lamda$u), along=3)
+a_lamda <- a_lamda[, 1:n_u,] # remove u, a redundant grouping variable
+a_lamda <- a_lamda / 100 # convert percent to fraction
+# reorder dims to time, u_from, u_to
+a_lamda <- aperm(a_lamda, c(1, 3, 2))
+
+class(a_lamda)
+str(a_lamda)
+# if we want to know the prob of 4-y old grass turning to crop
+t = 4; u_from = 3; u_to = 2
+a_lamda[t, u_from, u_to]
+a_lamda[1:5, 2, 1:6]
+```
+
+The life table for grassland over the first ten years might look like the below. The mortality/transition probabilities are usually denoted $\lambda$.
+
+```{r, tab.cap = "Caption test"}
+knitr::kable(data.frame(time = 1:10, a_lamda[1:10, u_from, 1:n_u]))
+```
+
+This shows that grassland will typically remain grassland, but that it has a higher chance of being converted to cropland in years 2-5. The chance of other conversions remains constant. For efficient computation, we can store the $\lambda$ values in a three-dimensional array, which allows us to access the values, referencing by index. 
+
+```{r}
+# e.g. if we want to know the prob of 4-y old grass turning to crop
+t = 4; u_from = 3; u_to = 2
+a_lamda[t, u_from, u_to]
+```
+
+We can plot the grassland dummy data as an example.
+
+```{r}
+df <- df3
+df$u <- NULL
+df$t <- as.numeric(rownames(df))
+df <- pivot_longer(df,
+  cols = woods:other,
+  names_to = "u",
+  values_to = "lamda")
+  
+p <- ggplot(df, aes(t, lamda, colour = u))
+p <- p + geom_line()
+#p <- p + facet_wrap(~ u, scale = "fixed")
+p
+```
+
+# Next steps
+To use this idea in the LUC Tracking project, there are several steps required.
+
+1. Establish the life tables, based on observed data. This requires writing functions to extract and analyse all the "life spans" in a set of vectors or $U$ stack object. This means counting frequency distribution of all the length of all contiguous land uses.
+
+2. Establishing the age-of-land-use for the starting point map (2019).
+
+3. Adapting the code in DA4_SampleU.Rmd to use the life tables dynamically to calculate the likelihoods $\mathcal{L}$ in sampling $U$, going back in time from 2019. Previously, this was done in a single step in DA3_LikelihoodU.Rmd, to calculate a number of static maps. This would now need to be done dynamically, muliplying the spatial likelihood term $\mathcal{L}_\mathrm{static}$ with the dynamic likelihood term $\mathcal{L}_\mathrm{dynamic}$ (depending on the age of the current land use). Because $\mathcal{L}_\mathrm{dynamic}$ depends only on the age (and not the whole previous history), we simply need to update a raster containing the age of each land use each year. This will start with the estimate from step 2 and work backwards.
+
+```{r echo=FALSE}
+tictoc::toc()
+```
