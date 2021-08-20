@@ -362,7 +362,7 @@ div.tocify {
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
 workflowr
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -372,7 +372,7 @@ workflowr
 </li>
 <li>
 <a data-toggle="tab" href="#checks">
-Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </a>
 </li>
 <li>
@@ -387,9 +387,9 @@ Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidde
 <p>
 <strong>Checks:</strong>
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-1
+2
 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-1
+0
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -412,41 +412,36 @@ The <em>Past versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-<strong>R Markdown file:</strong> uncommitted changes
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>R Markdown file:</strong> up-to-date
 </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes.
-To know which version of the R Markdown file created these
-results, you’ll want to first commit it to the Git repo. If
-you’re still working on the analysis, you can ignore this
-warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and
-build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you
+know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree260a9ce464dfc6e64933896b544ae394a1327230targetblank260a9cea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree1233f070eeb35c200691f68239856b167964876dtargetblank1233f07a">
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/260a9ce464dfc6e64933896b544ae394a1327230" target="_blank">260a9ce</a>
+<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/1233f070eeb35c200691f68239856b167964876d" target="_blank">1233f07</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree260a9ce464dfc6e64933896b544ae394a1327230targetblank260a9cea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree1233f070eeb35c200691f68239856b167964876dtargetblank1233f07a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and
 connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/260a9ce464dfc6e64933896b544ae394a1327230" target="_blank">260a9ce</a>.
+The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/1233f070eeb35c200691f68239856b167964876d" target="_blank">1233f07</a>.
 See the <em>Past versions</em> tab to see a history of the changes made to the
 R Markdown and HTML files.
 </p>
@@ -472,14 +467,6 @@ Ignored files:
     Ignored:    renv/local/
     Ignored:    renv/staging/
     Ignored:    update.R
-
-Untracked files:
-    Untracked:  analysis/m_CS_plot.Rmd
-
-Unstaged changes:
-    Modified:   R/luct.R
-    Modified:   _targets.R
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -524,6 +511,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/1233f070eeb35c200691f68239856b167964876d/analysis/index.Rmd" target="_blank">1233f07</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-20
+</td>
+<td>
+Adding CS plots
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/1233f070eeb35c200691f68239856b167964876d/docs/index.html" target="_blank">1233f07</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-20
+</td>
+<td>
+Adding CS plots
+</td>
+</tr>
 <tr>
 <td>
 html
