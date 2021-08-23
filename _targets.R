@@ -28,8 +28,8 @@ source(here::here("R", "luct.R"))
 options(tidyverse.quiet = TRUE)
 tar_option_set(
   packages = c(
-    "dplyr", "purrr", "units", "data.table", "ggplot2"
-  ),
+    "dplyr", "purrr", "units", "data.table", "ggplot2",
+    "zoo", "mgcv", "reshape2"),
   format = "qs"
 )
 
@@ -38,23 +38,89 @@ list(
 
   # CORE pipeline targets ----
 
-  # # Path to raw entity data file
+  # Path to raw AgCensus_Eng data file
+  tar_target(
+    c_file_AgCensus_Eng,
+    c(here::here("data-raw/AgCensus/England", 
+        "AgCensus_England_ha_1900-2010.csv"),
+      here::here("data-raw/AgCensus/England", 
+        "AgCensus_England_ha_1983-2019.csv")),
+    format = "file"
+  ),
+
+  # Path to raw AgCensus_Sco data file
+  tar_target(
+    c_file_AgCensus_Sco,
+    c(here::here("data-raw/AgCensus/Scotland", 
+        "AgCensus_Scotland_ha_1883-2014.csv"),
+      here::here("data-raw/AgCensus/Scotland", 
+        "AgCensus_Scotland_ha_2009-2019.csv")),
+    format = "file"
+  ),
+
+  # Path to raw AgCensus_Wal data file
+  tar_target(
+    c_file_AgCensus_Wal,
+    c(here::here("data-raw/AgCensus/Wales", 
+        "AgCensus_Wales_ha_1867-2012.csv"),
+      here::here("data-raw/AgCensus/Wales", 
+        "AgCensus_Wales_ha_1998-2019.csv")),
+    format = "file"
+  ),
+
+  # Path to raw AgCensus_NIr data file
+  tar_target(
+    c_file_AgCensus_NIr,
+    here::here("data-raw/AgCensus/NIreland", 
+        "AgCensus_NIreland_ha_1981-2019.csv"),
+    format = "file"
+  ),
+
+  # Wrangle AgCensus_Eng data
+  tar_target(
+    c_df_A_AgCensus_Eng,
+    wrangle_AgCensus_Eng(c_file_AgCensus_Eng)
+  ),
+
+  # Wrangle AgCensus_Sco data
+  tar_target(
+    c_df_A_AgCensus_Sco,
+    wrangle_AgCensus_Sco(c_file_AgCensus_Sco)
+  ),
+
+  # Wrangle AgCensus_Wal data
+  tar_target(
+    c_df_A_AgCensus_Wal,
+    wrangle_AgCensus_Wal(c_file_AgCensus_Wal)
+  ),
+
+  # Wrangle AgCensus_NIr data
+  tar_target(
+    c_df_A_AgCensus_NIr,
+    wrangle_AgCensus_NIr(c_file_AgCensus_NIr)
+  ),
+
+  # Combine AgCensus data
+  tar_target(
+    c_dA_AgCensus,
+    combine_AgCensus(l_df = list(c_df_A_AgCensus_Eng$df_A, 
+                                 c_df_A_AgCensus_Sco$df_A, 
+                                 c_df_A_AgCensus_Wal$df_A, 
+                                 c_df_A_AgCensus_NIr$df_A))
+  ),
+
+  # Path to raw CS data file
   tar_target(
     c_file_CS,
     here::here("data-raw/CS", "UK_LUC_matrices_2018i.csv"),
     format = "file"
   ),
 
-  # Clean entity data
+  # Wrangle CS data
   tar_target(
     c_blag_CS,
     wrangle_CS(fpath = c_file_CS)
-  )
-)
-  # Parked for later stages of the pipeline
-  # # arbitrary lower and upper bound on useful block size
-  # blk_sz_min <- 50
-  # blk_sz_max <- 50e3
+  ),
 
 
   # # META pipeline targets ----
@@ -102,31 +168,50 @@ list(
   # # because they don't generally have any upstream dependencies.
   # # I am relying entirely on {workflowr} to track these files.
 
-  # ## m_01 Read the raw entity data and clean it ----
+  ## m_01 Plot the AgCensus data ----
 
-  # # Report investigating how to read the raw entity data
-  # tar_target(
-    # m_01_1_read_raw_entity_data,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_1_read_raw_entity_data.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read
-      # )
+  # Report plotting the AgCensus data
+  tar_target(
+    m_AgCensus_plot,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("analysis", "m_AgCensus_plot.Rmd"))
 
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_1_read_raw_entity_data.Rmd")
-      # )
+      # Build the report
+      workflowr::wflow_build(
+        here("analysis", "m_AgCensus_plot.Rmd")
+      )
 
-      # # Track the input Rmd file (and not the rendered HTML file).
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_1_read_raw_entity_data.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # ),
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("analysis", "m_CS_plot.Rmd"))
+    },
+    # Track the files returned by the command
+    format = "file"
+  ),   # end m_AgCensus_plot
+  
+  ## m_02 Plot the CS data ----
+
+  # Report investigating how to read the raw CS data
+  tar_target(
+    m_CS_plot,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("analysis", "m_CS_plot.Rmd"))
+
+      # Build the report
+      workflowr::wflow_build(
+        here("analysis", "m_CS_plot.Rmd")
+      )
+
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("analysis", "m_CS_plot.Rmd"))
+    },
+    # Track the files returned by the command
+    format = "file"
+  )   # end m_CS_plot
+)     # end target list
 
   # # Report investigating how to exclude unwanted rows
   # tar_target(
