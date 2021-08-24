@@ -534,6 +534,13 @@
       "Repository": "CRAN",
       "Hash": "01f28d4278f15c76cddbea05899c5d6f"
     },
+    "plyr": {
+      "Package": "plyr",
+      "Version": "1.8.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ec0e5ab4e5f851f6ef32cd1d1984957f"
+    },
     "prettyunits": {
       "Package": "prettyunits",
       "Version": "1.1.1",
@@ -610,6 +617,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "30e5eba91b67f7f4d75d31de14bbfbdc"
+    },
+    "reshape2": {
+      "Package": "reshape2",
+      "Version": "1.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bb5996d0bd962d214a11140d77589917"
     },
     "rlang": {
       "Package": "rlang",
@@ -848,6 +862,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "2826c5d9efb0a88f657c7a679c7106db"
+    },
+    "zoo": {
+      "Package": "zoo",
+      "Version": "1.8-9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "035d1c7c12593038c26fb1c2fd40c4d2"
     }
   }
 }

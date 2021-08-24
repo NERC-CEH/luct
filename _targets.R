@@ -29,7 +29,7 @@ options(tidyverse.quiet = TRUE)
 tar_option_set(
   packages = c(
     "dplyr", "purrr", "units", "data.table", "ggplot2",
-    "zoo", "mgcv", "reshape2"),
+    "zoo", "mgcv", "reshape2", "readxl"),
   format = "qs"
 )
 
@@ -120,6 +120,22 @@ list(
   tar_target(
     c_blag_CS,
     wrangle_CS(fpath = c_file_CS)
+  ),
+
+  # Path to raw FC data fileS
+  tar_target(
+    c_file_FC,
+    c(here::here("data-raw/FC/timeSeries", 
+        "forest_planting_byYear_UK.csv"),
+      here::here("data-raw/FC/timeSeries", 
+        "Deforestation_Areas_for_CEH_1990-2019.xlsx")),
+    format = "file"
+  ),
+
+  # Wrangle FC data
+  tar_target(
+    c_GL_FC,
+    wrangle_FC(c_file_FC)
   ),
 
 

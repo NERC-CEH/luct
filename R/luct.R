@@ -81,7 +81,7 @@ getAreaNetChange_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
 #' Function to wrangle AgCensus data 
 #'  from text files to R objects
 #'
-#' @param fpath Filepath to text file
+#' @param v_fpath Vector of filepaths to data files
 #' @return A BLAG object
 #' @export
 #' @examples
@@ -219,7 +219,7 @@ wrangle_AgCensus_Eng <- function(v_fpath =
 #' Function to wrangle AgCensus data 
 #'  from text files to R objects
 #'
-#' @param fpath Filepath to text file
+#' @param v_fpath Vector of filepaths to data files
 #' @return A BLAG object
 #' @export
 #' @examples
@@ -337,7 +337,7 @@ wrangle_AgCensus_Sco <- function(v_fpath =
 #' Function to wrangle AgCensus data 
 #'  from text files to R objects
 #'
-#' @param fpath Filepath to text file
+#' @param v_fpath Vector of filepaths to data files
 #' @return A BLAG object
 #' @export
 #' @examples
@@ -451,7 +451,7 @@ wrangle_AgCensus_NIr <- function(
 #' Function to wrangle AgCensus data 
 #'  from text files to R objects
 #'
-#' @param fpath Filepath to text file
+#' @param l_df A list of data frames to combine
 #' @return A BLAG object
 #' @export
 #' @examples
@@ -622,4 +622,46 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   dt_G_cs <- dt_G
   dt_L_cs <- dt_L 
   return(list(dt_B = dt_B, dt_L = dt_L, dt_dA = dt_dA, dt_G = dt_G))
+}
+
+## ---- wrangle_FC
+
+#' Function to wrangle FC time series data 
+#'  from text files to R objects
+#'
+#' @param v_fpath Vector of filepaths to data files
+#' @return A list of data frames for affn and defn i.e. gross gains and losses
+#' @export
+#' @examples
+#' fpath1 = "./data-raw/FC/timeSeries/forest_planting_byYear_UK.csv"
+#' fpath2 = "./data-raw/FC/timeSeries/Deforestation_Areas_for_CEH_1990-2019.xlsx"
+#' x <- wrangle_FC(c(fpath1, fpath2))
+wrangle_FC <- function(v_fpath = 
+  c("./data-raw/FC/timeSeries/forest_planting_byYear_UK.csv",
+    "./data-raw/FC/timeSeries/Deforestation_Areas_for_CEH_1990-2019.xlsx")){
+
+  # read data on afforestation
+  df_affn <- read.csv(v_fpath[1])
+  names(df_affn)
+  names(df_affn) <- c("time", "area")
+  df_affn$area <- set_units(df_affn$area, km^2)
+  summary(df_affn)
+  # plot(df_affn$time, cumsum(df_affn$area))
+  df_affn$u <- "woods"
+  df_affn$data_source <- "FC"
+  df_G <- as.data.table(df_affn)
+
+  # read data on deforestation
+  df_defn <- read_excel(v_fpath[2],
+    sheet  = "Def Time series 1990-2019i", skip = 3)
+  df_defn <- with(df_defn[1:30,], data.frame(time = as.numeric(Year), area = Total))
+  df_defn$area <- set_units(df_defn$area, ha)
+  df_defn$area <- set_units(df_defn$area, km^2)
+  df_defn$u <- "woods"
+  df_defn$data_source <- "FC"
+  names(df_defn)
+  summary(df_defn)
+  df_L <- as.data.table(df_defn)
+
+  return(list(df_G = df_G, df_L = df_L))
 }
