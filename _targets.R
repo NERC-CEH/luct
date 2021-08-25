@@ -41,38 +41,38 @@ list(
   # Path to raw AgCensus_Eng data file
   tar_target(
     c_file_AgCensus_Eng,
-    c(here::here("data-raw/AgCensus/England", 
-        "AgCensus_England_ha_1900-2010.csv"),
-      here::here("data-raw/AgCensus/England", 
-        "AgCensus_England_ha_1983-2019.csv")),
+    c(fs::path_rel(here("data-raw/AgCensus/England", 
+        "AgCensus_England_ha_1900-2010.csv")),
+      fs::path_rel(here("data-raw/AgCensus/England", 
+        "AgCensus_England_ha_1983-2019.csv"))),
     format = "file"
   ),
 
   # Path to raw AgCensus_Sco data file
   tar_target(
     c_file_AgCensus_Sco,
-    c(here::here("data-raw/AgCensus/Scotland", 
-        "AgCensus_Scotland_ha_1883-2014.csv"),
-      here::here("data-raw/AgCensus/Scotland", 
-        "AgCensus_Scotland_ha_2009-2019.csv")),
+    c(fs::path_rel(here("data-raw/AgCensus/Scotland", 
+        "AgCensus_Scotland_ha_1883-2014.csv")),
+      fs::path_rel(here("data-raw/AgCensus/Scotland", 
+        "AgCensus_Scotland_ha_2009-2019.csv"))),
     format = "file"
   ),
 
   # Path to raw AgCensus_Wal data file
   tar_target(
     c_file_AgCensus_Wal,
-    c(here::here("data-raw/AgCensus/Wales", 
-        "AgCensus_Wales_ha_1867-2012.csv"),
-      here::here("data-raw/AgCensus/Wales", 
-        "AgCensus_Wales_ha_1998-2019.csv")),
+    c(fs::path_rel(here("data-raw/AgCensus/Wales", 
+        "AgCensus_Wales_ha_1867-2012.csv")),
+      fs::path_rel(here("data-raw/AgCensus/Wales", 
+        "AgCensus_Wales_ha_1998-2019.csv"))),
     format = "file"
   ),
 
   # Path to raw AgCensus_NIr data file
   tar_target(
     c_file_AgCensus_NIr,
-    here::here("data-raw/AgCensus/NIreland", 
-        "AgCensus_NIreland_ha_1981-2019.csv"),
+    fs::path_rel(here("data-raw/AgCensus/NIreland", 
+        "AgCensus_NIreland_ha_1981-2019.csv")),
     format = "file"
   ),
 
@@ -112,7 +112,7 @@ list(
   # Path to raw CS data file
   tar_target(
     c_file_CS,
-    here::here("data-raw/CS", "UK_LUC_matrices_2018i.csv"),
+    fs::path_rel(here("data-raw/CS", "UK_LUC_matrices_2018i.csv")),
     format = "file"
   ),
 
@@ -125,10 +125,10 @@ list(
   # Path to raw FC data fileS
   tar_target(
     c_file_FC,
-    c(here::here("data-raw/FC/timeSeries", 
-        "forest_planting_byYear_UK.csv"),
-      here::here("data-raw/FC/timeSeries", 
-        "Deforestation_Areas_for_CEH_1990-2019.xlsx")),
+    c(fs::path_rel(here("data-raw/FC/timeSeries", 
+        "forest_planting_byYear_UK.csv")),
+      fs::path_rel(here("data-raw/FC/timeSeries", 
+        "Deforestation_Areas_for_CEH_1990-2019.xlsx"))),
     format = "file"
   ),
 
