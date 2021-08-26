@@ -30,7 +30,14 @@ tar_option_set(
   packages = c(
     "dplyr", "purrr", "units", "data.table", "ggplot2",
     "zoo", "mgcv", "reshape2", "readxl"),
-  format = "qs"
+  format = "qs",
+  cue = tar_cue(
+      mode = "thorough", #c("thorough", "always", "never"),
+      command   = TRUE,
+      depend    = TRUE,
+      format    = TRUE,
+      iteration = TRUE,
+      file      = TRUE)
 )
 
 # list of target objects
