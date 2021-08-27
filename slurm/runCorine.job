@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH -p high-mem
+#SBATCH --job-name=runCor 
+#SBATCH -o CorHM_%A_%a.out
+#SBATCH -e CorHM_%A_%a.err
+#SBATCH -t 01:00:00
+#SBATCH --mem=48000
+#SBATCH --array=1-5
+module add jaspy/3.7/r20200606
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID}" process_CORINE.R "console${SLURM_ARRAY_TASK_ID}.Rout"

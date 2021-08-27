@@ -665,3 +665,29 @@ wrangle_FC <- function(v_fpath =
 
   return(list(df_G = df_G, df_L = df_L))
 }
+
+
+## ---- run_corine_job
+
+#' Function to wrangle FC time series data 
+#'  from text files to R objects
+#'
+#' @param fname_job File path to SLURM job file for CORINE processing
+#' @return A job object
+#' @export
+#' @examples
+#' fname_job = "./slurm/runCorine.job"
+#' x <- run_corine_job(fname_job)
+run_corine_job <- function(fname_job = "./slurm/runCorine.job"){
+  # initialise an empty job object
+  job <- list()
+  job$fname_job <- fname_job
+  job$jobName <- "runCorine"
+  cmd <- paste0("sbatch ", job$fname_job)
+  # submit the jobs and get the time to identify the output files from this batch
+  job$err <- system(cmd); job$job_startTime <- Sys.time()
+  # dummy values for end time, to be calculated later
+  job$job_endTime <- job$job_startTime
+  job$user_email <- Sys.info()[["user"]]
+  return(job)  
+}

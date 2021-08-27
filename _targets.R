@@ -145,6 +145,32 @@ list(
     wrangle_FC(c_file_FC)
   ),
 
+  # # Path to test SLURM job file
+  # tar_target(
+    # c_cor_fname_job,
+    # fs::path_rel(here("slurm", "runTest.job")),
+    # format = "file"
+  # ),
+
+  # # Process test data
+  # tar_target(
+    # c_cor_job,
+    # run_corine_job(c_cor_fname_job)
+  # ),
+  
+  # Path to CORINE SLURM job file
+  tar_target(
+    c_cor_fname_job,
+    fs::path_rel(here("slurm", "runCorine.job")),
+    format = "file"
+  ),
+
+  # Process CORINE data
+  tar_target(
+    c_cor_job,
+    run_corine_job(c_cor_fname_job)
+  ),
+
 
   # # META pipeline targets ----
 
