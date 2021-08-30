@@ -1,9 +1,16 @@
 ## ----start_up, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE------------
 # For serial run without SLURM
 # R CMD BATCH --no-restore --no-save process_CORINE.R console.Rout &
-####### BE SURE TO SET THIS CORRECTLY #########
-USE_SLURM <- TRUE
-####### BE SURE TO SET THIS CORRECTLY #########
+# C:/Progra~1/R/R-4.0.4/bin/R CMD BATCH --no-restore --no-save "--args 1 10000" slurm/process_CORINE.R console.Rout
+
+# read arguments
+# which year in v_times to process
+i   <- as.numeric(commandArgs(trailingOnly = TRUE))[1]
+# resolution of the output
+res <- as.numeric(commandArgs(trailingOnly = TRUE))[2]
+print(i)
+print(res)
+#res <- 10000
 
 here::i_am("slurm/process_CORINE.R")
 library(spCEH)
@@ -26,7 +33,7 @@ reclassify_CORINE <- function(year, fname_cor, dt_u_corine_lulucf, r_100m_laea, 
   
   # read in CORINE data
   r_U_cor_laea <- raster(fname_cor)
-  
+
   # CORINE needs clipping to reprojected UK extent
   r_U_cor_laea <- crop(r_U_cor_laea, extent(r_100m_laea))
   r_U_cor <- projectRaster(from = r_U_cor_laea, to = r_100m, res = res(r_100m), method = "ngb")
@@ -52,8 +59,10 @@ reclassify_CORINE <- function(year, fname_cor, dt_u_corine_lulucf, r_100m_laea, 
 ## ----process, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE-------------
 # set projections and template rasters
 projLAEA <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs"
-r_100m <- getRasterTemplate(domain = "UK", res = 100)
-r_100m_laea <- projectRaster(from = r_100m, crs=projLAEA, res=c(100,100))
+projLAEA <- CRS(SRS_string='EPSG:3035')
+
+r_100m <- getRasterTemplate(domain = "UK", res = res, crs = crs_OSGB)
+r_100m_laea <- projectRaster(from = r_100m, crs=projLAEA, res=c(res, res))
 
 # read the CORINE_to_LULUCF lookup into a data table
 fname <- here("data-raw/CORINE", "CORINE_to_LULUCF.csv")
@@ -75,26 +84,15 @@ v_fname <- paste0("u",dt_cor_dates[clc_year == v_times, update],
 v_fname_cor <- here("data-raw/CORINE", v_fname)
 file.exists(v_fname_cor)
 
-if (USE_SLURM){
-  # parallel version for SLURM
-  # Get job index = i in v_times
-  i <- as.numeric(commandArgs(trailingOnly = TRUE))[1]
-  year <- v_times[i]
-  r_U_cor_100m <- reclassify_CORINE(year = year, v_fname_cor[i], dt_u_corine_lulucf, r_100m_laea, r_100m)
-  ## write out re-classified UK raster
-  fname <- paste0("r_U_cor_100m_", year, ".tif")
-  fname <- here("data/CORINE/Level1", fname)
-  writeRaster(r_U_cor_100m, fname, overwrite=T)   
-} else {
-  # serial version
-  b_U_cor <- list()
-  for(i in 1:nYears){
-    b_U_cor[[i]] <- reclassify_CORINE(year = v_times[i], v_fname_cor[i], dt_u_corine_lulucf, r_100m_laea, r_100m)
-  }
-  ## write out re-classified UK brick
-  fname <- here("data/CORINE/Level1", "b_U_cor_100m.tif")
-  writeRaster(b_U_cor, fname, overwrite=T)
-}
+# Get job index = i in v_times
+#i = 1
+year      <- v_times[i]
+fname_cor <- v_fname_cor[i]
+r_U_cor_100m <- reclassify_CORINE(year = year, fname_cor, dt_u_corine_lulucf, r_100m_laea, r_100m)
+## write out re-classified UK raster
+fname <- paste0("r_U_cor_100m_", year, ".tif")
+fname <- here("data/CORINE/Level1", fname)
+writeRaster(r_U_cor_100m, fname, overwrite=T)   
 
 ## ----agg_disagg, eval=TRUE, echo=FALSE----------------------------------------
 

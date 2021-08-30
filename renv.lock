@@ -149,13 +149,6 @@
       "Repository": "CRAN",
       "Hash": "e3ae5d68dea0c55a12ea12a9fda02e61"
     },
-    "clustermq": {
-      "Package": "clustermq",
-      "Version": "0.8.95.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "385cd5623e6f8f27dc79437398dceed1"
-    },
     "codetools": {
       "Package": "codetools",
       "Version": "0.2-18",
@@ -268,13 +261,6 @@
       "Repository": "CRAN",
       "Hash": "44594a07a42e5f91fac9f93fda6d0109"
     },
-    "future": {
-      "Package": "future",
-      "Version": "1.21.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f25fad6bee82b7ab01f055e2d813b96f"
-    },
     "generics": {
       "Package": "generics",
       "Version": "0.1.0",
@@ -302,13 +288,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f64fd34026f6025de71a4354800e6d79"
-    },
-    "globals": {
-      "Package": "globals",
-      "Version": "0.14.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "eca8023ed5ca6372479ebb9b3207f5ae"
     },
     "glue": {
       "Package": "glue",
@@ -443,13 +422,6 @@
       "Repository": "CRAN",
       "Hash": "3471fb65971f1a7b2d4ae7848cf2db8d"
     },
-    "listenv": {
-      "Package": "listenv",
-      "Version": "0.8.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "0bde42ee282efb18c7c4e63822f5b4f7"
-    },
     "magrittr": {
       "Package": "magrittr",
       "Version": "2.0.1",
@@ -485,13 +457,6 @@
       "Repository": "CRAN",
       "Hash": "6dfe8bf774944bd5595785e3229d8771"
     },
-    "narray": {
-      "Package": "narray",
-      "Version": "0.4.1.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c64865aba235f36a49d798613cbfccf7"
-    },
     "nlme": {
       "Package": "nlme",
       "Version": "3.1-152",
@@ -505,13 +470,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f4dbc5a47fd93d3415249884d31d6791"
-    },
-    "parallelly": {
-      "Package": "parallelly",
-      "Version": "1.27.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e38aabb0dde91e5622b83747b559bfc2"
     },
     "pillar": {
       "Package": "pillar",
@@ -597,6 +555,13 @@
       "Repository": "CRAN",
       "Hash": "5e3c5dc0b071b21fa128676560dbe94d"
     },
+    "raster": {
+      "Package": "raster",
+      "Version": "3.4-13",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4543b272b756a4ff0f80370c886ef90a"
+    },
     "readxl": {
       "Package": "readxl",
       "Version": "1.3.1",
@@ -624,6 +589,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "bb5996d0bd962d214a11140d77589917"
+    },
+    "rgdal": {
+      "Package": "rgdal",
+      "Version": "1.5-23",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bb6f643247d35c947e9f113567e2bf7a"
     },
     "rlang": {
       "Package": "rlang",
@@ -701,6 +673,25 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "947e4e02a79effa5d512473e10f41797"
+    },
+    "sp": {
+      "Package": "sp",
+      "Version": "1.4-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "dfd843ee98246cf932823acf613b05dd"
+    },
+    "spCEH": {
+      "Package": "spCEH",
+      "Version": "0.3",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "spCEH",
+      "RemoteUsername": "NERC-CEH",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "6a0ddc86c0afbdaccfe7552101073efe06eff313",
+      "Hash": "64d357c331eb2293e728d2b9eb86961d"
     },
     "stringfish": {
       "Package": "stringfish",
