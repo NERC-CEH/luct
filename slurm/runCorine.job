@@ -1,9 +1,0 @@
-#!/bin/bash
-#SBATCH -p high-mem
-#SBATCH --job-name=runCor 
-#SBATCH -o CorHM_%A_%a.out
-#SBATCH -e CorHM_%A_%a.err
-#SBATCH -t 01:00:00
-#SBATCH --mem=48000
-#SBATCH --array=1-5
-R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 10000" slurm/process_CORINE.R "log/console${SLURM_ARRAY_TASK_ID}.Rout"

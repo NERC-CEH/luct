@@ -1,9 +1,0 @@
-#!/bin/bash
-#SBATCH -p 6hour
-#SBATCH --job-name=runLCC 
-#SBATCH -o runLCC_%A_%a.out
-#SBATCH -e runLCC_%A_%a.err
-#SBATCH -t 03:00:00
-#SBATCH --mem=28000
-#SBATCH --array=1-5
-R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID}" slurm/process_LCC.R "log/console_LCC_${SLURM_ARRAY_TASK_ID}.Rout"
