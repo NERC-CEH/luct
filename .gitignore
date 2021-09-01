@@ -32,6 +32,7 @@ analysis/life_tables.xlsx
 
 # Keep tentative documents off GitHub
 output*
+log
 
 # Keep large data files off GitHub
 # This assumes all large R objects are in QS format

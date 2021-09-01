@@ -20,13 +20,13 @@ library(here)
 # pkgs <- c("units", "tidyr", "sp", "sf", "raster", "rgeos", "rgdal", "grid", "data.table", "spCEH", "scico", "ggplot2", "ggforce", "plyr", "dplyr", "stars", "BayesianTools", "ggthemes")
 # pkgs_available <- sapply(pkgs, require, character.only = TRUE)
 # if (!all(pkgs_available)) stop(paste("Not all packages available - check: ", which(!pkgs_available)))
-rasterOptions(tmpdir = "/work/scratch-nopw/bkruijt/raster")
+#rasterOptions(tmpdir = "/work/scratch-nopw/bkruijt/raster")
 
 
 ## ----Reclassify, eval=TRUE, echo=FALSE----------------------------------------
 # Reclassify CORINE LAND COVER
 # define the function to reclassify LCm data to required classification and extent
-reclassify_CORINE <- function(year, fname_cor, dt_u_corine_lulucf, r_100m_laea, r_100m){
+reclassify_CORINE <- function(year, fname_cor, dt_u_corine_lulucf, r_tmpl_laea, r_tmpl){
   
   print(paste0(Sys.time(),": Processing CORINE", year,"..."))
   print(paste0(Sys.time(),":     Extracting and reprojecting CORINE data for UK..."))
@@ -35,9 +35,9 @@ reclassify_CORINE <- function(year, fname_cor, dt_u_corine_lulucf, r_100m_laea, 
   r_U_cor_laea <- raster(fname_cor)
 
   # CORINE needs clipping to reprojected UK extent
-  r_U_cor_laea <- crop(r_U_cor_laea, extent(r_100m_laea))
-  r_U_cor <- projectRaster(from = r_U_cor_laea, to = r_100m, res = res(r_100m), method = "ngb")
-  # fname <- paste0("../data-raw/CORINE/r_Ucor_cor_100m_",year,".tif")
+  r_U_cor_laea <- crop(r_U_cor_laea, extent(r_tmpl_laea))
+  r_U_cor <- projectRaster(from = r_U_cor_laea, to = r_tmpl, res = res(r_tmpl), method = "ngb")
+  # fname <- paste0("../data-raw/CORINE/r_Ucor_cor_tmpl_",year,".tif")
   # writeRaster(r_U_cor, fname, overwrite=T)   
   # }
   
@@ -61,8 +61,8 @@ reclassify_CORINE <- function(year, fname_cor, dt_u_corine_lulucf, r_100m_laea, 
 projLAEA <- "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs"
 projLAEA <- CRS(SRS_string='EPSG:3035')
 
-r_100m <- getRasterTemplate(domain = "UK", res = res, crs = crs_OSGB)
-r_100m_laea <- projectRaster(from = r_100m, crs=projLAEA, res=c(res, res))
+r_tmpl <- getRasterTemplate(domain = "UK", res = res, crs = crs_OSGB)
+r_tmpl_laea <- projectRaster(from = r_tmpl, crs=projLAEA, res=c(res, res))
 
 # read the CORINE_to_LULUCF lookup into a data table
 fname <- here("data-raw/CORINE", "CORINE_to_LULUCF.csv")
@@ -88,11 +88,11 @@ file.exists(v_fname_cor)
 #i = 1
 year      <- v_times[i]
 fname_cor <- v_fname_cor[i]
-r_U_cor_100m <- reclassify_CORINE(year = year, fname_cor, dt_u_corine_lulucf, r_100m_laea, r_100m)
+r_U_cor <- reclassify_CORINE(year = year, fname_cor, dt_u_corine_lulucf, r_tmpl_laea, r_tmpl)
 ## write out re-classified UK raster
-fname <- paste0("r_U_cor_100m_", year, ".tif")
+fname <- paste0("r_U_cor_", res, "m_", year, ".tif")
 fname <- here("data/CORINE/Level1", fname)
-writeRaster(r_U_cor_100m, fname, overwrite=T)   
+writeRaster(r_U_cor, fname, overwrite=T)   
 
 ## ----agg_disagg, eval=TRUE, echo=FALSE----------------------------------------
 

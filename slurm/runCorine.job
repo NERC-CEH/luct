@@ -6,5 +6,4 @@
 #SBATCH -t 01:00:00
 #SBATCH --mem=48000
 #SBATCH --array=1-5
-module add jaspy/3.7/r20200606
-R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 10000" process_CORINE.R "console${SLURM_ARRAY_TASK_ID}.Rout"
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 10000" slurm/process_CORINE.R "log/console${SLURM_ARRAY_TASK_ID}.Rout"
