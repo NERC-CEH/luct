@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH -p 6hour
+#SBATCH --job-name=runIACS 
+#SBATCH -o data/IACS/log/runIACS_%A_%a.out
+#SBATCH -e data/IACS/log/runIACS_%A_%a.err
+#SBATCH -t 03:00:00
+#SBATCH --array=1-15
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID}" slurm/process_IACS.R "data/IACS/log/console${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}.Rout"
