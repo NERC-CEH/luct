@@ -4,6 +4,8 @@ library(targets)
 library(tarchetypes)
 
 # renv
+renv::install("sf")
+renv::install("fasterize")
 renv::status()
 renv::dependencies()
 # writes _targets_packages.R
@@ -19,6 +21,7 @@ renv::status()
 tar_manifest(fields = c("format", "memory", "storage", "retrieval"))
 tar_manifest(names = starts_with("c_cor"), fields = c("format", "memory", "storage"))
 tar_outdated()
+
 # may need to convert files to unix line endings e.g. 
 # find ./analysis/ -name "*.Rmd" -type f -exec dos2unix {} \;
 # dos2unix *.R
@@ -63,6 +66,7 @@ wflow_status()
 wflow_build() # default is make = TRUE, only where .html doesn't match .Rmd
 wflow_build("analysis/index.Rmd")
 wflow_build("analysis/m_uqdata.Rmd")
+wflow_build("analysis/m_CS_plot.Rmd")
 wflow_build("analysis/m_AgCensus_plot.Rmd")
 wflow_build("analysis/m_00_status.Rmd") # force the status file to be rendered
 # All tracked files that have been modified

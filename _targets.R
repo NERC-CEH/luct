@@ -2,6 +2,7 @@ library(targets)
 library(tarchetypes) # for tar_knitr_deps_expr()
 library(here) # construct file paths relative to project root
 library(fs) # file system operations
+options(bitmapType='cairo')
 
 # My main computer supports 32 threads, so why not use them?
 #
@@ -161,7 +162,7 @@ list(
   # Path to CORINE SLURM job file
   tar_target(
     c_cor_fname_job,
-    fs::path_rel(here("slurm", "runCorine.job")),
+    fs::path_rel(here("slurm", "process_CORINE.job")),
     format = "file"
   ),
 
@@ -169,6 +170,12 @@ list(
   tar_target(
     c_cor_job,
     run_corine_job(c_cor_fname_job)
+  ),
+  
+  # Process FC data
+  tar_target(
+    c_fc_log,
+    run_FC_job()
   ),
 
 

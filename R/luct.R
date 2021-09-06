@@ -669,8 +669,8 @@ wrangle_FC <- function(v_fpath =
 
 ## ---- run_corine_job
 
-#' Function to wrangle FC time series data 
-#'  from text files to R objects
+#' Function to run Corine processing job 
+#'  from raw tif files to R objects
 #'
 #' @param fname_job File path to SLURM job file for CORINE processing
 #' @return A job object
@@ -690,4 +690,23 @@ run_corine_job <- function(fname_job = "./slurm/runCorine.job"){
   job$job_endTime <- job$job_startTime
   job$user_email <- Sys.info()[["user"]]
   return(job)  
+}
+
+## ---- run_FC_job
+
+#' Function to run FC processing job 
+#'  from raw shp files to R objects
+#'
+#' @return A log file path
+#' @export
+#' @examples
+#' fname_log <- run_FC_job()
+run_FC_job <- function(){
+  # initialise an empty job object
+  cmd <- "R CMD BATCH --no-restore --no-save slurm/process_FC.R data/FC/log/console.Rout &"
+  # submit the jobs and get the time to identify the output files from this batch
+  err <- system(cmd)
+  # return log file path?
+  fname_log <- "data/FC/log/console.Rout"
+  return(fname_log = fname_log)  
 }
