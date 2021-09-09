@@ -471,6 +471,13 @@
       "Repository": "CRAN",
       "Hash": "3471fb65971f1a7b2d4ae7848cf2db8d"
     },
+    "lwgeom": {
+      "Package": "lwgeom",
+      "Version": "0.2-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c7d964d354dd2261b2863bbc5c4d3915"
+    },
     "magrittr": {
       "Package": "magrittr",
       "Version": "2.0.1",
@@ -762,6 +769,13 @@
       "RemoteRef": "HEAD",
       "RemoteSha": "6a0ddc86c0afbdaccfe7552101073efe06eff313",
       "Hash": "64d357c331eb2293e728d2b9eb86961d"
+    },
+    "stars": {
+      "Package": "stars",
+      "Version": "0.5-3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "15a997ae176b92af20b3516ff69f07be"
     },
     "stringfish": {
       "Package": "stringfish",

@@ -2,7 +2,6 @@ library(targets)
 library(tarchetypes) # for tar_knitr_deps_expr()
 library(here) # construct file paths relative to project root
 library(fs) # file system operations
-options(bitmapType='cairo')
 
 # My main computer supports 32 threads, so why not use them?
 #
@@ -19,6 +18,7 @@ options(bitmapType='cairo')
 
 # Define custom functions and other global objects in `R/functions.R`.
 # All the functions to calculate the targets are defined here.
+source(here::here("R", "luc_track.R"))
 source(here::here("R", "luct.R"))
 
 
@@ -27,10 +27,12 @@ source(here::here("R", "luct.R"))
 # Packages required by {workflowr} notebooks should be loaded in those notebooks
 # so they can be run manually (rather than exclusively by {targets}).
 options(tidyverse.quiet = TRUE)
+options(bitmapType='cairo')
 tar_option_set(
   packages = c(
     "dplyr", "purrr", "units", "data.table", "ggplot2",
-    "zoo", "mgcv", "reshape2", "readxl"),
+    "zoo", "mgcv", "reshape2", "readxl", "tidyr", "sp", "sf", "raster", #"rgeos", "ggforce", "plyr", 
+    "rgdal", "grid", "spCEH", "scico", "stars"),
   format = "qs",
   cue = tar_cue(
       mode = "thorough", #c("thorough", "always", "never"),
@@ -158,7 +160,22 @@ list(
     # c_cor_job,
     # run_corine_job(c_cor_fname_job)
   # ),
+      
+  # Path to FC R code file
+  tar_target(
+    c_fc_fname_code,
+    fs::path_rel(here("slurm", "process_FC.R")),
+    format = "file"
+  ),  
   
+  # Run a SLURM job to process FC data
+  tar_target(
+    c_fc_fname_out,
+    run_FC_job(c_fc_fname_code),
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  ),
+
   # Path to CORINE SLURM job file
   tar_target(
     c_cor_fname_job,
@@ -166,19 +183,95 @@ list(
     format = "file"
   ),
 
-  # Process CORINE data
+  # Run a SLURM job to process CORINE data
   tar_target(
-    c_cor_job,
-    run_corine_job(c_cor_fname_job)
+    c_level1_cor,
+    run_corine_job(c_cor_fname_job),
+    cue = tar_cue(mode = "thorough")
   ),
   
-  # Process FC data
+  # Get BLAG from CORINE Level1 output
   tar_target(
-    c_fc_log,
-    run_FC_job()
+    c_blag_corine,
+    getBLAG_fromU(
+      v_times  = c_level1_cor$v_times,
+      v_fnames = c_level1_cor$v_fnames,
+      name_data_source = "CORINE",
+      names_u),
   ),
 
+  # Path to IACS SLURM job file
+  tar_target(
+    c_iacs_fname_job,
+    fs::path_rel(here("slurm", "process_IACS.job")),
+    format = "file"
+  ),
 
+  # Run a SLURM job to process IACS data
+  tar_target(
+    c_level1_iacs,
+    run_iacs_job(c_iacs_fname_job),
+    cue = tar_cue(mode = "thorough")
+  ),
+    
+  # Get BLAG from IACS Level1 output
+  tar_target(
+    c_blag_iacs,
+    getBLAG_fromU(
+      v_times  = c_level1_iacs$v_times,
+      v_fnames = c_level1_iacs$v_fnames,
+      name_data_source = "IACS",
+      names_u),
+  ),
+  
+  # Path to LCC SLURM job file
+  tar_target(
+    c_lcc_fname_job,
+    fs::path_rel(here("slurm", "process_LCC.job")),
+    format = "file"
+  ),
+
+  # Run a SLURM job to process LCC data
+  tar_target(
+    c_level1_lcc,
+    run_lcc_job(c_lcc_fname_job),
+    cue = tar_cue(mode = "thorough")
+  ),
+    
+  # Get BLAG from LCC Level1 output
+  tar_target(
+    c_blag_lcc,
+    getBLAG_fromU(
+      v_times  = c_level1_lcc$v_times,
+      v_fnames = c_level1_lcc$v_fnames,
+      name_data_source = "LCC",
+      names_u),
+  ),
+  
+  # Path to LCM SLURM job file
+  tar_target(
+    c_lcm_fname_job,
+    fs::path_rel(here("slurm", "process_LCM.job")),
+    format = "file"
+  ),
+
+  # Run a SLURM job to process LCM data
+  tar_target(
+    c_level1_lcm,
+    run_lcm_job(c_lcm_fname_job),
+    cue = tar_cue(mode = "thorough")
+  ),
+    
+  # Get BLAG from LCM Level1 output
+  tar_target(
+    c_blag_lcm,
+    getBLAG_fromU(
+      v_times  = c_level1_lcm$v_times,
+      v_fnames = c_level1_lcm$v_fnames,
+      name_data_source = "LCM",
+      names_u),
+  ),
+    
   # # META pipeline targets ----
 
   # # Any META steps that are straight computation (not Rmd notebooks)

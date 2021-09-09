@@ -361,215 +361,178 @@ div.tocify {
 <h1 class="title toc-ignore">[meta] Project Workflow Status</h1>
 <h3 class="subtitle">m_00_status</h3>
 <h4 class="author">Peter Levy</h4>
-<h4 class="date">Tue Aug 24 12:49:07 2021</h4>
+<h4 class="date">Thu Sep 9 10:06:56 2021</h4>
 
 </div>
 
 
 <p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report"
+  data-toggle="collapse" data-target="#workflowr-report">
+  
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
+
 <div id="workflowr-report" class="collapse">
 <ul class="nav nav-tabs">
-<li class="active">
+  <li class="active">
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
-<li>
-<a data-toggle="tab" href="#checks">
-Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+  <li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
-<li>
+  <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
 </li>
 </ul>
+
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
-<p>
-<strong>Last updated:</strong> 2021-08-24
+  <p>
+<strong>Last updated:</strong> 2021-09-09
 </p>
-<p>
-<strong>Checks:</strong>
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-7
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-0
+  <p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
-<p>
-<strong>Knit directory:</strong>
-<code>luct/</code>
-<span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed.">
-</span>
+  <p>
+<strong>Knit directory:</strong> <code>luct/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
 </p>
-<p>
-This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
-analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
-1.6.2). The <em>Checks</em> tab describes the
-reproducibility checks that were applied when the results were created.
-The <em>Past versions</em> tab lists the development history.
+  <p>
+  
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
 <div id="checks" class="tab-pane fade">
-<div id="workflowr-checks" class="panel-group">
-<div class="panel panel-default">
+  <div class="panel-group" id="workflowr-checks">
+  <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you
-know the exact version of the code that produced these results.</p>
+  
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you'll want to first commit it to the Git repo. If you're still working on the analysis, you can ignore this warning. When you're finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Environment:</strong> empty
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global
-environment can affect the analysis in your R Markdown file in unknown ways.
-For reproduciblity it’s best to always run the code in an empty environment.</p>
+  
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it's best to always run the code in an empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201104code">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Seed:</strong> <code>set.seed(20201104)</code>
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201104code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20201104)</code> </a>
 </p>
 </div>
 <div id="strongSeedstrongcodesetseed20201104code" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20201104)</code> was run prior to running the code in the R Markdown file.
-Setting a seed ensures that any results that rely on randomness, e.g.
-subsampling or permutations, are reproducible.</p>
+  
+<p>The command <code>set.seed(20201104)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Session information:</strong> recorded
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
 </p>
 </div>
 <div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is
-critical for reproducibility.</p>
+  
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Cache:</strong> none
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident
-that you successfully produced the results during this run.</p>
+  
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>File paths:</strong> relative
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
 <div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project
-makes it easier to run your code on other machines.</p>
+  
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreee98cc46b990483233f91e059e87f71e2f7c3cf6ctargetblanke98cc46a">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/e98cc46b990483233f91e059e87f71e2f7c3cf6c" target="_blank">e98cc46</a>
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttree033199356c23e860d7e6db4ef97b889f87ab0ee4targetblank0331993a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="ssh://git@github.com/NERC-CEH/luct/tree/033199356c23e860d7e6db4ef97b889f87ab0ee4" target="_blank">0331993</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreee98cc46b990483233f91e059e87f71e2f7c3cf6ctargetblanke98cc46a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttree033199356c23e860d7e6db4ef97b889f87ab0ee4targetblank0331993a" class="panel-collapse collapse">
 <div class="panel-body">
+  
 <p>
-Great! You are using Git for version control. Tracking code development and
-connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
+
 <p>
-The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/e98cc46b990483233f91e059e87f71e2f7c3cf6c" target="_blank">e98cc46</a>.
-See the <em>Past versions</em> tab to see a history of the changes made to the
-R Markdown and HTML files.
+The results in this page were generated with repository version <a href="ssh://git@github.com/NERC-CEH/luct/tree/033199356c23e860d7e6db4ef97b889f87ab0ee4" target="_blank">0331993</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
+
 <p>
-Note that you need to be careful to ensure that all relevant files for the
-analysis have been committed to Git prior to generating the results (you can
-use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only
-checks the R Markdown file, but you know if there are other scripts or data
-files that it depends on. Below is the status of the Git repository when the
-results were generated:
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
+
 <pre><code>
 Ignored files:
     Ignored:    _targets/
-    Ignored:    analysis/life_tables.xlsx
-    Ignored:    analysis/m_lifetables.html
-    Ignored:    analysis/m_lifetables.pdf
-    Ignored:    analysis/m_uqdata.html
-    Ignored:    analysis/m_uqdata.pdf
     Ignored:    data-raw
-    Ignored:    output/
+    Ignored:    data/
+    Ignored:    log/
     Ignored:    renv/library/
-    Ignored:    renv/local/
     Ignored:    renv/staging/
-    Ignored:    update.R
+
+Untracked files:
+    Untracked:  R/luc_track.R
+    Untracked:  Rplots.pdf
+    Untracked:  r_PlYear_1000m.pdf
 
 Unstaged changes:
     Modified:   R/luct.R
     Modified:   _targets.R
     Modified:   _targets_packages.R
+    Modified:   analysis/m_00_status.Rmd
     Modified:   renv.lock
 
 </code></pre>
+
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in
-this status report because it is ok for generated content to have uncommitted
-changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
 </p>
+
 </div>
 </div>
 </div>
@@ -577,13 +540,9 @@ changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
+  
 <p>
-These are the previous versions of the repository in which changes were made
-to the R Markdown (<code>analysis/m_00_status.Rmd</code>) and HTML (<code>docs/m_00_status.html</code>)
-files. If you’ve configured a remote Git repository (see
-<code>?wflow_git_remote</code>), click on the hyperlinks in the table below to
-view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/m_00_status.Rmd</code>) and HTML (<code>docs/m_00_status.html</code>) files. If you've configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -612,7 +571,24 @@ Message
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/d209f1e41449f695cec97db37554bcc2ead3e05f/docs/m_00_status.html" target="_blank">d209f1e</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/cc5848f9d37c39033b97689ad0dfbde28d1d8b97/docs/m_00_status.html" target="_blank">cc5848f</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/d209f1e41449f695cec97db37554bcc2ead3e05f/docs/m_00_status.html" target="_blank">d209f1e</a>
 </td>
 <td>
 ADCEH
@@ -629,7 +605,7 @@ Adding AgCensus plots
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/1233f070eeb35c200691f68239856b167964876d/docs/m_00_status.html" target="_blank">1233f07</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/1233f070eeb35c200691f68239856b167964876d/docs/m_00_status.html" target="_blank">1233f07</a>
 </td>
 <td>
 ADCEH
@@ -646,7 +622,7 @@ Adding CS plots
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/260a9ce464dfc6e64933896b544ae394a1327230/docs/m_00_status.html" target="_blank">260a9ce</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/260a9ce464dfc6e64933896b544ae394a1327230/docs/m_00_status.html" target="_blank">260a9ce</a>
 </td>
 <td>
 ADCEH
@@ -663,7 +639,7 @@ Build site.
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/80d2610ee04ae8680b8f522bbc4ebacd2ac39c0c/docs/m_00_status.html" target="_blank">80d2610</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/80d2610ee04ae8680b8f522bbc4ebacd2ac39c0c/docs/m_00_status.html" target="_blank">80d2610</a>
 </td>
 <td>
 ADCEH
@@ -680,7 +656,7 @@ Updating index
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/docs/m_00_status.html" target="_blank">1ea3ad7</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/docs/m_00_status.html" target="_blank">1ea3ad7</a>
 </td>
 <td>
 ADCEH
@@ -697,7 +673,7 @@ Updating index
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/ed062d3a292e9ce827eef6d8a30466bc820742c8/docs/m_00_status.html" target="_blank">ed062d3</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/ed062d3a292e9ce827eef6d8a30466bc820742c8/docs/m_00_status.html" target="_blank">ed062d3</a>
 </td>
 <td>
 ADCEH
@@ -714,7 +690,7 @@ Testing workflowr
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/b00311d7523b23faa72f96c57dc2b19eae6881c9/docs/m_00_status.html" target="_blank">b00311d</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/b00311d7523b23faa72f96c57dc2b19eae6881c9/docs/m_00_status.html" target="_blank">b00311d</a>
 </td>
 <td>
 ADCEH
@@ -731,7 +707,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/NERC-CEH/luct/blob/fa20b567d84ad5f43239e8b3f4f7d36bf0ba9b5b/analysis/m_00_status.Rmd" target="_blank">fa20b56</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/fa20b567d84ad5f43239e8b3f4f7d36bf0ba9b5b/analysis/m_00_status.Rmd" target="_blank">fa20b56</a>
 </td>
 <td>
 ADCEH
@@ -748,7 +724,7 @@ Checking wflow workings
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/fa20b567d84ad5f43239e8b3f4f7d36bf0ba9b5b/docs/m_00_status.html" target="_blank">fa20b56</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/fa20b567d84ad5f43239e8b3f4f7d36bf0ba9b5b/docs/m_00_status.html" target="_blank">fa20b56</a>
 </td>
 <td>
 ADCEH
@@ -765,7 +741,7 @@ Checking wflow workings
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/1d208e14cee870915a75c23bab0ef2ba36682f1a/docs/m_00_status.html" target="_blank">1d208e1</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/1d208e14cee870915a75c23bab0ef2ba36682f1a/docs/m_00_status.html" target="_blank">1d208e1</a>
 </td>
 <td>
 ADCEH
@@ -782,7 +758,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/NERC-CEH/luct/blob/29587c398396839877ce69bf140dcaac85505a15/analysis/m_00_status.Rmd" target="_blank">29587c3</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/29587c398396839877ce69bf140dcaac85505a15/analysis/m_00_status.Rmd" target="_blank">29587c3</a>
 </td>
 <td>
 ADCEH
@@ -799,7 +775,7 @@ Initial commission
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/29587c398396839877ce69bf140dcaac85505a15/docs/m_00_status.html" target="_blank">29587c3</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/29587c398396839877ce69bf140dcaac85505a15/docs/m_00_status.html" target="_blank">29587c3</a>
 </td>
 <td>
 ADCEH
@@ -814,147 +790,118 @@ Initial commission
 </tbody>
 </table>
 </div>
+
 <hr>
 </div>
 </div>
 </div>
+
+
+
+
+
+
+
 <pre class="r"><code>library(rmarkdown)
 system.time(render(&quot;./analysis/m_00_status.Rmd&quot;))</code></pre>
-<pre><code>Warning: package &#39;targets&#39; was built under R version 4.0.5</code></pre>
-<p>This notebook displays the status of the project workflow, that is,
-whether everything is computationally up to date. It displays the status
-as at the time the notebook is executed, so if the status has changed
-since this notebook was last executed that fact will not be reflected in
-this rendered notebook.</p>
-<p>This notebook is currently intended to be run manually when you feel the
-need, for example, when returning to the project.</p>
+<p>This notebook displays the status of the project workflow, that is, whether everything is computationally up to date. It displays the status as at the time the notebook is executed, so if the status has changed since this notebook was last executed that fact will not be reflected in this rendered notebook.</p>
+<p>This notebook is currently intended to be run manually when you feel the need, for example, when returning to the project.</p>
 <div id="renv-status" class="section level1">
 <h1><span class="header-section-number">1</span> <code>{renv}</code> status</h1>
 <p><code>{renv}</code> tracks the used <code>R</code> packages and their versions.</p>
 <pre class="r"><code># Get {targets} to tell {renv} which packages it uses
-targets::tar_renv() </code></pre>
-<pre><code>here() starts at C:/Users/plevy/Documents/luct
-Warning messages:
-1: package &#39;targets&#39; was built under R version 4.0.5 
-2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
-3: package &#39;here&#39; was built under R version 4.0.5 
-4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
+# expurgated version - without clustermq or future, former won&#39;t install on POLAR
+targets::tar_renv(extras = c(&quot;bs4Dash&quot;, &quot;gt&quot;, &quot;markdown&quot;, &quot;pingr&quot;, &quot;rstudioapi&quot;, &quot;shiny&quot;, &quot;shinybusy&quot;, &quot;shinyWidgets&quot;, &quot;visNetwork&quot;))</code></pre>
+<pre><code>here() starts at /gpfs01/home/plevy/luct</code></pre>
 <pre class="r"><code>renv::status()</code></pre>
 <pre><code>* The project is already synchronized with the lockfile.</code></pre>
 </div>
 <div id="targets-status" class="section level1">
 <h1><span class="header-section-number">2</span> <code>{targets}</code> status</h1>
-<p><code>{targets}</code> is used to track the computational dependencies between the
-project components and orchestrate recalculation when any components are
-changed.</p>
+<p><code>{targets}</code> is used to track the computational dependencies between the project components and orchestrate recalculation when any components are changed.</p>
 <ul>
 <li><code>c_*</code> components are in the core pipeline</li>
 <li><code>p_*</code> components are in the publications pipelines</li>
 <li><code>m_*</code> components are in the meta pipelines</li>
 </ul>
-<p>Functions may be used across multiple pipeline categories, so function
-names are not prefixed.</p>
-<p>Meta pipelines generally originate from a target on the core pipeline.
-Each meta pipeline generally explores some aspect of that source target
-which informs the design of the next stage of processing on the core
-pipeline.</p>
-<p>Each of the meta pipelines has leaves that are reports rendered from
-<code>Rmd</code> files that are managed jointly by <code>{targets}</code> and <code>{workflowr}</code>.
-<code>{targets}</code> is aware of the upstream dependencies (data and functions)
-and the <code>Rmd</code> file itself. If any of these is invalidated <code>tar_make()</code>
-will rebuild the report using <code>wflow_build()</code>.</p>
-<p><code>{targets}</code> is <em>not</em> aware of the rendered meta report files. The
-rendered report files are managed exclusively by <code>{workflowr}</code>. This
-means that you can use <code>{workflowr}</code> to build and publish the report
-without making <code>{targets}</code> think that the report is out of date because
-<code>{workflowr}</code> has re-rendered it.</p>
+<p>Functions may be used across multiple pipeline categories, so function names are not prefixed.</p>
+<p>Meta pipelines generally originate from a target on the core pipeline. Each meta pipeline generally explores some aspect of that source target which informs the design of the next stage of processing on the core pipeline.</p>
+<p>Each of the meta pipelines has leaves that are reports rendered from <code>Rmd</code> files that are managed jointly by <code>{targets}</code> and <code>{workflowr}</code>. <code>{targets}</code> is aware of the upstream dependencies (data and functions) and the <code>Rmd</code> file itself. If any of these is invalidated <code>tar_make()</code> will rebuild the report using <code>wflow_build()</code>.</p>
+<p><code>{targets}</code> is <em>not</em> aware of the rendered meta report files. The rendered report files are managed exclusively by <code>{workflowr}</code>. This means that you can use <code>{workflowr}</code> to build and publish the report without making <code>{targets}</code> think that the report is out of date because <code>{workflowr}</code> has re-rendered it.</p>
 <pre class="r"><code># outline
 targets::tar_glimpse()</code></pre>
-<pre><code>here() starts at C:/Users/plevy/Documents/luct
-Warning messages:
-1: package &#39;targets&#39; was built under R version 4.0.5 
-2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
-3: package &#39;here&#39; was built under R version 4.0.5 
-4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
-<div id="htmlwidget-077b82c2ba0350ee4d39" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-077b82c2ba0350ee4d39">{"x":{"nodes":{"name":["c_blag_CS","m_AgCensus_plot","c_df_A_AgCensus_Wal","c_file_CS","c_file_FC","c_dA_AgCensus","c_GL_FC","c_df_A_AgCensus_NIr","c_file_AgCensus_NIr","c_df_A_AgCensus_Sco","c_file_AgCensus_Wal","c_file_AgCensus_Sco","m_CS_plot","c_df_A_AgCensus_Eng","c_file_AgCensus_Eng"],"type":["stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem"],"status":["none","none","none","none","none","none","none","none","none","none","none","none","none","none","none"],"seconds":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"bytes":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"branches":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"id":["c_blag_CS","m_AgCensus_plot","c_df_A_AgCensus_Wal","c_file_CS","c_file_FC","c_dA_AgCensus","c_GL_FC","c_df_A_AgCensus_NIr","c_file_AgCensus_NIr","c_df_A_AgCensus_Sco","c_file_AgCensus_Wal","c_file_AgCensus_Sco","m_CS_plot","c_df_A_AgCensus_Eng","c_file_AgCensus_Eng"],"label":["c_blag_CS","m_AgCensus_plot","c_df_A_AgCensus_Wal","c_file_CS","c_file_FC","c_dA_AgCensus","c_GL_FC","c_df_A_AgCensus_NIr","c_file_AgCensus_NIr","c_df_A_AgCensus_Sco","c_file_AgCensus_Wal","c_file_AgCensus_Sco","m_CS_plot","c_df_A_AgCensus_Eng","c_file_AgCensus_Eng"],"level":[2,4,2,1,1,3,2,2,1,2,1,1,3,2,1],"color":["#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac"],"shape":["dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot"]},"edges":{"from":["c_file_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_AgCensus_Wal","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_FC","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_blag_CS","c_file_AgCensus_Eng"],"to":["c_blag_CS","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","c_df_A_AgCensus_Wal","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_GL_FC","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","m_CS_plot","c_df_A_AgCensus_Eng"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Stem"],"shape":["dot"],"color":["#899DA4"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre><code>here() starts at /gpfs01/home/plevy/luct</code></pre>
+<div id="htmlwidget-de5f4fc1077b82c2ba03" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-de5f4fc1077b82c2ba03">{"x":{"nodes":{"name":["c_lcm_fname_job","c_blag_corine","c_blag_lcc","c_blag_CS","m_CS_plot","m_AgCensus_plot","c_iacs_fname_job","c_level1_lcm","c_file_AgCensus_Eng","c_file_AgCensus_Sco","c_blag_iacs","c_df_A_AgCensus_Wal","c_cor_fname_job","c_file_AgCensus_NIr","c_lcc_fname_job","c_blag_lcm","c_level1_cor","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Eng","c_file_FC","c_file_CS","c_fc_fname_out","c_dA_AgCensus","c_file_AgCensus_Wal","c_GL_FC","c_level1_lcc","c_fc_fname_code","c_df_A_AgCensus_Sco","c_level1_iacs"],"type":["stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem"],"status":["none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none"],"seconds":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"bytes":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"branches":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"id":["c_lcm_fname_job","c_blag_corine","c_blag_lcc","c_blag_CS","m_CS_plot","m_AgCensus_plot","c_iacs_fname_job","c_level1_lcm","c_file_AgCensus_Eng","c_file_AgCensus_Sco","c_blag_iacs","c_df_A_AgCensus_Wal","c_cor_fname_job","c_file_AgCensus_NIr","c_lcc_fname_job","c_blag_lcm","c_level1_cor","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Eng","c_file_FC","c_file_CS","c_fc_fname_out","c_dA_AgCensus","c_file_AgCensus_Wal","c_GL_FC","c_level1_lcc","c_fc_fname_code","c_df_A_AgCensus_Sco","c_level1_iacs"],"label":["c_lcm_fname_job","c_blag_corine","c_blag_lcc","c_blag_CS","m_CS_plot","m_AgCensus_plot","c_iacs_fname_job","c_level1_lcm","c_file_AgCensus_Eng","c_file_AgCensus_Sco","c_blag_iacs","c_df_A_AgCensus_Wal","c_cor_fname_job","c_file_AgCensus_NIr","c_lcc_fname_job","c_blag_lcm","c_level1_cor","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Eng","c_file_FC","c_file_CS","c_fc_fname_out","c_dA_AgCensus","c_file_AgCensus_Wal","c_GL_FC","c_level1_lcc","c_fc_fname_code","c_df_A_AgCensus_Sco","c_level1_iacs"],"level":[1,3,3,2,3,4,1,2,1,1,3,2,1,1,1,3,2,2,2,1,1,2,3,1,2,2,1,2,2],"color":["#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac","#94a4ac"],"shape":["dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot"]},"edges":{"from":["c_level1_cor","c_level1_lcc","c_file_CS","c_blag_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_lcm_fname_job","c_level1_iacs","c_file_AgCensus_Wal","c_level1_lcm","c_cor_fname_job","c_file_AgCensus_NIr","c_file_AgCensus_Eng","c_fc_fname_code","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_FC","c_lcc_fname_job","c_file_AgCensus_Sco","c_iacs_fname_job"],"to":["c_blag_corine","c_blag_lcc","c_blag_CS","m_CS_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","c_level1_lcm","c_blag_iacs","c_df_A_AgCensus_Wal","c_blag_lcm","c_level1_cor","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Eng","c_fc_fname_out","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_GL_FC","c_level1_lcc","c_df_A_AgCensus_Sco","c_level1_iacs"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Stem"],"shape":["dot"],"color":["#899DA4"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code># core detail
 targets::tar_visnetwork(allow = starts_with(&quot;c_&quot;))</code></pre>
-<pre><code>here() starts at C:/Users/plevy/Documents/luct
-Warning messages:
-1: package &#39;targets&#39; was built under R version 4.0.5 
-2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
-3: package &#39;here&#39; was built under R version 4.0.5 
-4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
-<div id="htmlwidget-5fad116a4b0a5a169349" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5fad116a4b0a5a169349">{"x":{"nodes":{"name":["c_blag_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_GL_FC"],"type":["stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.9,0.04,0.44,0.03,0.2,2.28,0,0.01,0.01,0,2.25,3.24,2.33],"bytes":[4517,6054,5556,1371,6595,3196,11046,8563,7238,9499,127349,35472,4438],"branches":[null,null,null,null,null,null,null,null,null,null,null,null,null],"id":["c_blag_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_GL_FC"],"label":["c_blag_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_GL_FC"],"level":[2,3,2,2,2,2,1,1,1,1,1,1,2],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"shape":["dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot"]},"edges":{"from":["c_file_CS","c_file_AgCensus_Wal","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_FC","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Eng"],"to":["c_blag_CS","c_df_A_AgCensus_Wal","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_GL_FC","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Eng"],"arrows":["to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem"],"color":["#354823","#899DA4"],"shape":["dot","dot"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre><code>here() starts at /gpfs01/home/plevy/luct</code></pre>
+<div id="htmlwidget-50ee4d395fad116a4b0a" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-50ee4d395fad116a4b0a">{"x":{"nodes":{"name":["c_GL_FC","c_blag_CS","c_blag_corine","c_blag_iacs","c_blag_lcc","c_blag_lcm","c_cor_fname_job","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_fc_fname_code","c_fc_fname_out","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_iacs_fname_job","c_lcc_fname_job","c_lcm_fname_job","c_level1_cor","c_level1_iacs","c_level1_lcc","c_level1_lcm"],"type":["stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.072,0.559,128.126,346.807,184.105,200.303,0.003,0.023,0.285,0.038,0.113,0.037,0.002,0.017,0.004,0.002,0.003,0.004,2.331,0.004,0.002,2.32,0.01,0.045,0.047,0.047,5.699],"bytes":[4438,4519,2576,4991,1210,2739,355,6074,5561,1371,6595,3191,8692,15843299,11046,8563,7238,9499,127349,35472,345,357,357,142,182,137,143],"branches":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"id":["c_GL_FC","c_blag_CS","c_blag_corine","c_blag_iacs","c_blag_lcc","c_blag_lcm","c_cor_fname_job","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_fc_fname_code","c_fc_fname_out","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_iacs_fname_job","c_lcc_fname_job","c_lcm_fname_job","c_level1_cor","c_level1_iacs","c_level1_lcc","c_level1_lcm"],"label":["c_GL_FC","c_blag_CS","c_blag_corine","c_blag_iacs","c_blag_lcc","c_blag_lcm","c_cor_fname_job","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_fc_fname_code","c_fc_fname_out","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_iacs_fname_job","c_lcc_fname_job","c_lcm_fname_job","c_level1_cor","c_level1_iacs","c_level1_lcc","c_level1_lcm"],"level":[2,2,3,3,3,3,1,3,2,2,2,2,1,2,1,1,1,1,1,1,1,1,1,2,2,2,2],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"shape":["dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot"]},"edges":{"from":["c_level1_cor","c_level1_lcc","c_file_CS","c_lcm_fname_job","c_level1_iacs","c_file_AgCensus_Wal","c_level1_lcm","c_cor_fname_job","c_file_AgCensus_NIr","c_file_AgCensus_Eng","c_fc_fname_code","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_FC","c_lcc_fname_job","c_file_AgCensus_Sco","c_iacs_fname_job"],"to":["c_blag_corine","c_blag_lcc","c_blag_CS","c_level1_lcm","c_blag_iacs","c_df_A_AgCensus_Wal","c_blag_lcm","c_level1_cor","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Eng","c_fc_fname_out","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_GL_FC","c_level1_lcc","c_df_A_AgCensus_Sco","c_level1_iacs"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem"],"color":["#354823","#899DA4"],"shape":["dot","dot"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code># meta detail
 targets::tar_visnetwork(allow = starts_with(&quot;m_&quot;))</code></pre>
-<pre><code>here() starts at C:/Users/plevy/Documents/luct
-Warning messages:
-1: package &#39;targets&#39; was built under R version 4.0.5 
-2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
-3: package &#39;here&#39; was built under R version 4.0.5 
-4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
-<div id="htmlwidget-e00783be6aa58034eabb" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e00783be6aa58034eabb">{"x":{"nodes":{"name":["m_AgCensus_plot","m_CS_plot"],"type":["stem","stem"],"status":["uptodate","uptodate"],"seconds":[34.36,36.19],"bytes":[3180,3180],"branches":[null,null],"id":["m_AgCensus_plot","m_CS_plot"],"label":["m_AgCensus_plot","m_CS_plot"],"level":[0,0],"color":["#354823","#354823"],"shape":["dot","dot"]},"edges":{"from":[],"to":[],"arrows":[]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem"],"color":["#354823","#899DA4"],"shape":["dot","dot"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre><code>here() starts at /gpfs01/home/plevy/luct</code></pre>
+<div id="htmlwidget-5a169349e00783be6aa5" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5a169349e00783be6aa5">{"x":{"nodes":{"name":["m_AgCensus_plot","m_CS_plot"],"type":["stem","stem"],"status":["uptodate","uptodate"],"seconds":[25.671,16.164],"bytes":[3081,3081],"branches":[null,null],"id":["m_AgCensus_plot","m_CS_plot"],"label":["m_AgCensus_plot","m_CS_plot"],"level":[0,0],"color":["#354823","#354823"],"shape":["dot","dot"]},"edges":{"from":[],"to":[],"arrows":[]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem"],"color":["#354823","#899DA4"],"shape":["dot","dot"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code># excruciating detail
 targets::tar_visnetwork()</code></pre>
-<pre><code>here() starts at C:/Users/plevy/Documents/luct
-Warning messages:
-1: package &#39;targets&#39; was built under R version 4.0.5 
-2: package &#39;tarchetypes&#39; was built under R version 4.0.5 
-3: package &#39;here&#39; was built under R version 4.0.5 
-4: package &#39;fs&#39; was built under R version 4.0.5 </code></pre>
-<div id="htmlwidget-29781fadc608d841074b" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-29781fadc608d841074b">{"x":{"nodes":{"name":["c_blag_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_GL_FC","m_AgCensus_plot","m_CS_plot","colour_u","combine_AgCensus","names_u_chess","wrangle_AgCensus_Sco","getAreaGrossGain_fromBeta","getAreaGrossLoss_fromBeta","wrangle_AgCensus_Eng","getAreaNetChange_fromBeta","names_u","remove_units","wrangle_AgCensus_Wal","wrangle_FC","wrangle_AgCensus_NIr","wrangle_CS"],"type":["stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","object","function","object","function","function","function","function","function","object","function","function","function","function","function"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.9,0.04,0.44,0.03,0.2,2.28,0,0.01,0.01,0,2.25,3.24,2.33,34.36,36.19,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"bytes":[4517,6054,5556,1371,6595,3196,11046,8563,7238,9499,127349,35472,4438,3180,3180,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"branches":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"id":["c_blag_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_GL_FC","m_AgCensus_plot","m_CS_plot","colour_u","combine_AgCensus","names_u_chess","wrangle_AgCensus_Sco","getAreaGrossGain_fromBeta","getAreaGrossLoss_fromBeta","wrangle_AgCensus_Eng","getAreaNetChange_fromBeta","names_u","remove_units","wrangle_AgCensus_Wal","wrangle_FC","wrangle_AgCensus_NIr","wrangle_CS"],"label":["c_blag_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_GL_FC","m_AgCensus_plot","m_CS_plot","colour_u","combine_AgCensus","names_u_chess","wrangle_AgCensus_Sco","getAreaGrossGain_fromBeta","getAreaGrossLoss_fromBeta","wrangle_AgCensus_Eng","getAreaNetChange_fromBeta","names_u","remove_units","wrangle_AgCensus_Wal","wrangle_FC","wrangle_AgCensus_NIr","wrangle_CS"],"level":[3,3,2,2,2,2,1,1,1,1,1,1,2,4,4,0,1,0,1,1,1,1,1,1,1,1,1,1,2],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"shape":["dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","triangleDown","triangle","triangleDown","triangle","triangle","triangle","triangle","triangle","triangleDown","triangle","triangle","triangle","triangle","triangle"]},"edges":{"from":["getAreaGrossGain_fromBeta","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","names_u","remove_units","c_file_CS","wrangle_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_file_AgCensus_Wal","wrangle_AgCensus_Wal","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","combine_AgCensus","c_file_FC","wrangle_FC","c_file_AgCensus_NIr","wrangle_AgCensus_NIr","c_file_AgCensus_Sco","wrangle_AgCensus_Sco","c_blag_CS","c_file_AgCensus_Eng","wrangle_AgCensus_Eng"],"to":["wrangle_CS","wrangle_CS","wrangle_CS","wrangle_CS","wrangle_CS","c_blag_CS","c_blag_CS","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","c_df_A_AgCensus_Wal","c_df_A_AgCensus_Wal","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_GL_FC","c_GL_FC","c_df_A_AgCensus_NIr","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Sco","m_CS_plot","c_df_A_AgCensus_Eng","c_df_A_AgCensus_Eng"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Object","Function"],"color":["#354823","#899DA4","#899DA4","#899DA4"],"shape":["dot","dot","triangleDown","triangle"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
+<pre><code>here() starts at /gpfs01/home/plevy/luct</code></pre>
+<div id="htmlwidget-8034eabb29781fadc608" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8034eabb29781fadc608">{"x":{"nodes":{"name":["c_GL_FC","c_blag_CS","c_blag_corine","c_blag_iacs","c_blag_lcc","c_blag_lcm","c_cor_fname_job","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_fc_fname_code","c_fc_fname_out","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_iacs_fname_job","c_lcc_fname_job","c_lcm_fname_job","c_level1_cor","c_level1_iacs","c_level1_lcc","c_level1_lcm","m_AgCensus_plot","m_CS_plot","wrangle_AgCensus_NIr","getVectors","getAreaGrossGain_fromBeta","run_corine_job","names_u_chess","getAreaTimeSeries_fromBetaArray","remove_units","getBetaMatrices","colour_u","combine_AgCensus","run_lcm_job","wrangle_AgCensus_Wal","run_FC_job","getAreaTimeSeries","getBetaRateMatrices","wrangle_AgCensus_Sco","names_u","run_lcc_job","wrangle_FC","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","diverge.color","wrangle_AgCensus_Eng","run_iacs_job","getBLAG","wrangle_CS","getBLAG_fromU"],"type":["stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","stem","function","function","function","function","object","function","function","function","object","function","function","function","function","function","function","function","object","function","function","function","function","function","function","function","function","function","function"],"status":["uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate","uptodate"],"seconds":[0.072,0.559,128.126,346.807,184.105,200.303,0.003,0.023,0.285,0.038,0.113,0.037,0.002,0.017,0.004,0.002,0.003,0.004,2.331,0.004,0.002,2.32,0.01,0.045,0.047,0.047,5.699,25.671,16.164,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"bytes":[4438,4519,2576,4991,1210,2739,355,6074,5561,1371,6595,3191,8692,15843299,11046,8563,7238,9499,127349,35472,345,357,357,142,182,137,143,3081,3081,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"branches":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"id":["c_GL_FC","c_blag_CS","c_blag_corine","c_blag_iacs","c_blag_lcc","c_blag_lcm","c_cor_fname_job","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_fc_fname_code","c_fc_fname_out","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_iacs_fname_job","c_lcc_fname_job","c_lcm_fname_job","c_level1_cor","c_level1_iacs","c_level1_lcc","c_level1_lcm","m_AgCensus_plot","m_CS_plot","wrangle_AgCensus_NIr","getVectors","getAreaGrossGain_fromBeta","run_corine_job","names_u_chess","getAreaTimeSeries_fromBetaArray","remove_units","getBetaMatrices","colour_u","combine_AgCensus","run_lcm_job","wrangle_AgCensus_Wal","run_FC_job","getAreaTimeSeries","getBetaRateMatrices","wrangle_AgCensus_Sco","names_u","run_lcc_job","wrangle_FC","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","diverge.color","wrangle_AgCensus_Eng","run_iacs_job","getBLAG","wrangle_CS","getBLAG_fromU"],"label":["c_GL_FC","c_blag_CS","c_blag_corine","c_blag_iacs","c_blag_lcc","c_blag_lcm","c_cor_fname_job","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_fc_fname_code","c_fc_fname_out","c_file_AgCensus_Eng","c_file_AgCensus_NIr","c_file_AgCensus_Sco","c_file_AgCensus_Wal","c_file_CS","c_file_FC","c_iacs_fname_job","c_lcc_fname_job","c_lcm_fname_job","c_level1_cor","c_level1_iacs","c_level1_lcc","c_level1_lcm","m_AgCensus_plot","m_CS_plot","wrangle_AgCensus_NIr","getVectors","getAreaGrossGain_fromBeta","run_corine_job","names_u_chess","getAreaTimeSeries_fromBetaArray","remove_units","getBetaMatrices","colour_u","combine_AgCensus","run_lcm_job","wrangle_AgCensus_Wal","run_FC_job","getAreaTimeSeries","getBetaRateMatrices","wrangle_AgCensus_Sco","names_u","run_lcc_job","wrangle_FC","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","diverge.color","wrangle_AgCensus_Eng","run_iacs_job","getBLAG","wrangle_CS","getBLAG_fromU"],"level":[2,3,4,4,4,4,1,3,2,2,2,2,1,2,1,1,1,1,1,1,1,1,1,2,2,2,2,4,4,1,0,1,1,0,1,1,1,0,1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,2,2,3],"color":["#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823","#354823"],"shape":["dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","dot","triangle","triangle","triangle","triangle","triangleDown","triangle","triangle","triangle","triangleDown","triangle","triangle","triangle","triangle","triangle","triangle","triangle","triangleDown","triangle","triangle","triangle","triangle","triangle","triangle","triangle","triangle","triangle","triangle"]},"edges":{"from":["getAreaGrossGain_fromBeta","getAreaGrossGain_fromBeta","getAreaTimeSeries_fromBetaArray","remove_units","remove_units","getBLAG","getBetaMatrices","getBetaRateMatrices","names_u","getAreaGrossLoss_fromBeta","getAreaGrossLoss_fromBeta","getAreaNetChange_fromBeta","getAreaNetChange_fromBeta","c_level1_cor","getBLAG_fromU","names_u","c_level1_lcc","getBLAG_fromU","names_u","c_file_CS","wrangle_CS","c_blag_CS","c_dA_AgCensus","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","c_lcm_fname_job","run_lcm_job","c_level1_iacs","getBLAG_fromU","names_u","c_file_AgCensus_Wal","wrangle_AgCensus_Wal","c_level1_lcm","getBLAG_fromU","names_u","c_cor_fname_job","run_corine_job","c_file_AgCensus_NIr","wrangle_AgCensus_NIr","c_file_AgCensus_Eng","wrangle_AgCensus_Eng","c_fc_fname_code","run_FC_job","c_df_A_AgCensus_Eng","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Wal","combine_AgCensus","c_file_FC","wrangle_FC","c_lcc_fname_job","run_lcc_job","c_file_AgCensus_Sco","wrangle_AgCensus_Sco","c_iacs_fname_job","run_iacs_job"],"to":["getBLAG","wrangle_CS","getBLAG","getBLAG","wrangle_CS","getBLAG_fromU","getBLAG_fromU","getBLAG","wrangle_CS","getBLAG","wrangle_CS","getBLAG","wrangle_CS","c_blag_corine","c_blag_corine","c_blag_corine","c_blag_lcc","c_blag_lcc","c_blag_lcc","c_blag_CS","c_blag_CS","m_CS_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","m_AgCensus_plot","c_level1_lcm","c_level1_lcm","c_blag_iacs","c_blag_iacs","c_blag_iacs","c_df_A_AgCensus_Wal","c_df_A_AgCensus_Wal","c_blag_lcm","c_blag_lcm","c_blag_lcm","c_level1_cor","c_level1_cor","c_df_A_AgCensus_NIr","c_df_A_AgCensus_NIr","c_df_A_AgCensus_Eng","c_df_A_AgCensus_Eng","c_fc_fname_out","c_fc_fname_out","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_dA_AgCensus","c_GL_FC","c_GL_FC","c_level1_lcc","c_level1_lcc","c_df_A_AgCensus_Sco","c_df_A_AgCensus_Sco","c_level1_iacs","c_level1_iacs"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":{"type":"cubicBezier","forceDirection":"horizontal"}},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"direction":"LR"}}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;"},"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":1,"to":1},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":true,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":false,"position":"right","ncol":1,"stepX":100,"stepY":100,"zoom":true,"nodes":{"label":["Up to date","Stem","Function","Object"],"color":["#354823","#899DA4","#899DA4","#899DA4"],"shape":["dot","dot","triangle","triangleDown"]},"nodesToDataframe":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="workflowr-status" class="section level1">
 <h1><span class="header-section-number">3</span> <code>{workflowr}</code> status</h1>
-<p><code>{workflowr}</code> is used to render the <em>meta</em> documents
-(<code>analysis/m_*.Rmd</code>) and build the project website.</p>
-<p><code>{workflowr}</code> is only concerned with the modification and <code>git</code> commit
-dates of the <code>Rmd</code> and <code>HTML</code> files, whereas <code>{targets}</code> is concerned
-with the computational dependencies. Thus, you should rely on the
-<code>{targets}</code> status to ensure the meta reports are computationally up to
-date, then rely on the <code>{workflowr}</code> status to manage the building and
-publication of the entire website.</p>
+<p><code>{workflowr}</code> is used to render the <em>meta</em> documents (<code>analysis/m_*.Rmd</code>) and build the project website.</p>
+<p><code>{workflowr}</code> is only concerned with the modification and <code>git</code> commit dates of the <code>Rmd</code> and <code>HTML</code> files, whereas <code>{targets}</code> is concerned with the computational dependencies. Thus, you should rely on the <code>{targets}</code> status to ensure the meta reports are computationally up to date, then rely on the <code>{workflowr}</code> status to manage the building and publication of the entire website.</p>
 <pre class="r"><code>workflowr::wflow_status()</code></pre>
 <pre><code>Status of 10 Rmd files
 
 Totals:
- 10 Published
+ 10 Published (1 Modified)
+
+The following Rmd files require attention:
+
+Mod analysis/m_00_status.Rmd
+
+Key: Mod = Modified
 
 The current Git status is:
 
-   status substatus                file
- unstaged  modified            R/luct.R
- unstaged  modified          _targets.R
- unstaged  modified _targets_packages.R
- unstaged  modified           renv.lock
+    status substatus                     file
+  unstaged  modified                 R/luct.R
+  unstaged  modified               _targets.R
+  unstaged  modified      _targets_packages.R
+  unstaged  modified analysis/m_00_status.Rmd
+  unstaged  modified                renv.lock
+ untracked untracked            R/luc_track.R
+ untracked untracked               Rplots.pdf
+ untracked untracked       r_PlYear_1000m.pdf
 
-Rmd files are up-to-date</code></pre>
+To publish your changes as part of your website, use `wflow_publish()`.
+To commit your changes without publishing them yet, use
+`wflow_git_commit()`.</code></pre>
 <br>
 <p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-Session information
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo"
+  data-toggle="collapse" data-target="#workflowr-sessioninfo"
+  style = "display: block;">
+  
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
 </button>
 </p>
+
 <div id="workflowr-sessioninfo" class="collapse">
+
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.4 (2021-02-15)
-Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 17763)
+<pre><code>R version 4.0.0 (2020-04-24)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
 
 Matrix products: default
+BLAS/LAPACK: /gpfs01/apps/eb/software/OpenBLAS/0.3.9-GCC-9.3.0/lib/libopenblas_zenp-r0.3.9.so
 
 locale:
-[1] LC_COLLATE=English_United Kingdom.1252 
-[2] LC_CTYPE=English_United Kingdom.1252   
-[3] LC_MONETARY=English_United Kingdom.1252
-[4] LC_NUMERIC=C                           
-[5] LC_TIME=English_United Kingdom.1252    
+[1] C
 
 attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
@@ -963,9 +910,9 @@ other attached packages:
 [1] targets_0.6.0
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.7        pillar_1.6.2      compiler_4.0.4    bslib_0.2.5.1    
+ [1] Rcpp_1.0.7        pillar_1.6.2      compiler_4.0.0    bslib_0.2.5.1    
  [5] later_1.2.0       jquerylib_0.1.4   git2r_0.28.0      workflowr_1.6.2  
- [9] tools_4.0.4       digest_0.6.27     jsonlite_1.7.2    evaluate_0.14    
+ [9] tools_4.0.0       digest_0.6.27     jsonlite_1.7.2    evaluate_0.14    
 [13] lifecycle_1.0.0   tibble_3.1.3      pkgconfig_2.0.3   rlang_0.4.11     
 [17] igraph_1.2.6      rstudioapi_0.13   cli_3.0.1         yaml_2.2.1       
 [21] xfun_0.25         withr_2.4.2       stringr_1.4.0     knitr_1.33       
@@ -977,6 +924,8 @@ loaded via a namespace (and not attached):
 [45] ellipsis_0.3.2    htmltools_0.5.1.1 renv_0.14.0       httpuv_1.6.1     
 [49] utf8_1.2.2        stringi_1.7.3     visNetwork_2.0.9  crayon_1.4.1     </code></pre>
 </div>
+
+
 </div>
 
 

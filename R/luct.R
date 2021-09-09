@@ -624,6 +624,7 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   return(list(dt_B = dt_B, dt_L = dt_L, dt_dA = dt_dA, dt_G = dt_G))
 }
 
+
 ## ---- wrangle_FC
 
 #' Function to wrangle FC time series data 
@@ -676,21 +677,46 @@ wrangle_FC <- function(v_fpath =
 #' @return A job object
 #' @export
 #' @examples
-#' fname_job = "./slurm/runCorine.job"
+#' fname_job = "./slurm/process_CORINE.job"
 #' x <- run_corine_job(fname_job)
-run_corine_job <- function(fname_job = "./slurm/runCorine.job"){
-  # initialise an empty job object
-  job <- list()
-  job$fname_job <- fname_job
-  job$jobName <- "runCorine"
-  cmd <- paste0("sbatch ", job$fname_job)
-  # submit the jobs and get the time to identify the output files from this batch
-  job$err <- system(cmd); job$job_startTime <- Sys.time()
-  # dummy values for end time, to be calculated later
-  job$job_endTime <- job$job_startTime
-  job$user_email <- Sys.info()[["user"]]
-  return(job)  
+run_corine_job <- function(fname_job = "./slurm/process_CORINE.job"){
+  cmd <- paste0("sbatch ", fname_job)
+  # submit the jobs to the SLURM queue
+  err <- system(cmd)
+  # and return the years and paths of the output files
+  # these need to match slurm/process_CORINE.R - no programmed check they are consistent
+  v_times <- c(2000, 2006, 2012, 2018)
+  return(list(
+    v_times = v_times,
+    v_fnames = paste0("./data/CORINE/Level1/r_U_cor_100m_", v_times, ".tif")
+  ))
 }
+
+
+## ---- run_iacs_job
+
+#' Function to run IACS processing job 
+#'  from raw tif files to R objects
+#'
+#' @param fname_job File path to SLURM job file for IACS processing
+#' @return A job object
+#' @export
+#' @examples
+#' fname_job = "./slurm/process_IACS.job"
+#' x <- run_iacs_job(fname_job)
+run_iacs_job <- function(fname_job = "./slurm/process_IACS.job"){
+  cmd <- paste0("sbatch ", fname_job)
+  # submit the jobs to the SLURM queue
+  err <- system(cmd)
+  # and return the years and paths of the output files
+  # these need to match slurm/process_IACS.R - no programmed check they are consistent
+  v_times <- 2005:2019
+  return(list(
+    v_times = v_times,
+    v_fnames = paste0("./data/IACS/Level1/r_U_iacs_100m_", v_times, ".tif")
+  ))
+}
+
 
 ## ---- run_FC_job
 
@@ -701,12 +727,61 @@ run_corine_job <- function(fname_job = "./slurm/runCorine.job"){
 #' @export
 #' @examples
 #' fname_log <- run_FC_job()
-run_FC_job <- function(){
+run_FC_job <- function(fname_code = "slurm/process_FC.R"){
   # initialise an empty job object
-  cmd <- "R CMD BATCH --no-restore --no-save slurm/process_FC.R data/FC/log/console.Rout &"
+  cmd <- paste0("R CMD BATCH --no-restore --no-save slurm/", fname_code, " data/FC/log/console.Rout &")
   # submit the jobs and get the time to identify the output files from this batch
   err <- system(cmd)
-  # return log file path?
-  fname_log <- "data/FC/log/console.Rout"
-  return(fname_log = fname_log)  
+  # and return the path of the first output file
+  return(fname_out = "data/FC/Level1/r_PlYear_100m.tif")  
+}
+
+
+## ---- run_lcc_job
+
+#' Function to run LCC processing job 
+#'  from raw tif files to R objects
+#'
+#' @param fname_job File path to SLURM job file for LCC processing
+#' @return A job object
+#' @export
+#' @examples
+#' fname_job = "./slurm/process_LCC.job"
+#' x <- run_lcc_job(fname_job)
+run_lcc_job <- function(fname_job = "./slurm/process_LCC.job"){
+  cmd <- paste0("sbatch ", fname_job)
+  # submit the jobs to the SLURM queue
+  err <- system(cmd)
+  # and return the years and paths of the output files
+  # these need to match slurm/process_LCC.R - no programmed check they are consistent
+  v_times <- 2015:2019
+  return(list(
+    v_times = v_times,
+    v_fnames = paste0("./data/LCC/Level1/r_U_lcc_100m_", v_times, ".tif")
+  ))
+}
+
+
+## ---- run_lcm_job
+
+#' Function to run LCM processing job 
+#'  from raw tif files to R objects
+#'
+#' @param fname_job File path to SLURM job file for LCM processing
+#' @return A job object
+#' @export
+#' @examples
+#' fname_job = "./slurm/process_LCM.job"
+#' x <- run_lcm_job(fname_job)
+run_lcm_job <- function(fname_job = "./slurm/process_LCM.job"){
+  cmd <- paste0("sbatch ", fname_job)
+  # submit the jobs to the SLURM queue
+  err <- system(cmd)
+  # and return the years and paths of the output files
+  # these need to match slurm/process_LCM.R - no programmed check they are consistent
+  v_times <- c(1990, 2015, 2017, 2018, 2019)
+  return(list(
+    v_times = v_times,
+    v_fnames = paste0("./data/LCM/Level1/r_U_lcm_100m_", v_times, ".tif")
+  ))
 }
