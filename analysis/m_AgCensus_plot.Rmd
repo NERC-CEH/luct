@@ -33,8 +33,8 @@ l_df_AgCensus_Sco  <- tar_read(c_df_A_AgCensus_Sco)
 l_df_AgCensus_Wal  <- tar_read(c_df_A_AgCensus_Wal)
 l_df_AgCensus_NIr  <- tar_read(c_df_A_AgCensus_NIr)
 
-dt_A_UK  <- tar_read(c_dA_AgCensus)$dt_A_UK
-dt_dA_UK <- tar_read(c_dA_AgCensus)$dt_dA_UK
+dt_A_UK  <- tar_read(c_blag_AgCensus)$dt_A
+dt_dA_UK <- tar_read(c_blag_AgCensus)$dt_dA
 ```
 
 ```{r, include = FALSE, cache = FALSE}

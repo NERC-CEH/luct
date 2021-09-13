@@ -460,14 +460,16 @@ wrangle_AgCensus_NIr <- function(
 combine_AgCensus <- function(l_df = list(df_A_Eng, df_A_Sco, df_A_Wal, df_A_NIr)){
   df <- bind_rows(l_df)
   dt <- as.data.table(df)
-  dt_A_UK <- dt[, .(area = sum(area)), by = .(time, u)]
-  dt_A_UK$data_source <- "AgCensus"
+  dt_A <- dt[, .(area = sum(area)), by = .(time, u)]
+  dt_A$data_source <- "AgCensus"
+  dt_A$area <- set_units(dt_A$area, km^2)
+  dt_A$area <- set_units(dt_A$area, m^2)
+  dt_A$area <- drop_units(dt_A$area)
 
-  dt_dA_UK <- dt_A_UK[, .(time, area = c(0, diff(area)), data_source), by = .(u)]
-  dt_dA_UK <- dt_dA_UK[time >= 1900]
-  dt_dA_UK$area <- set_units(dt_dA_UK$area, km^2)
-
-  return(list(dt_A_UK = dt_A_UK, dt_dA_UK = dt_dA_UK)) #, 
+  dt_dA <- dt_A[, .(time, area = c(0, diff(area)), data_source), by = .(u)]
+  dt_dA <- dt_dA[time >= 1900]
+ 
+  return(list(dt_A = dt_A, dt_dA = dt_dA)) #, 
               # df_A_Eng = l_df$df_A_Eng, df_A_Sco = l_df$df_A_Sco, 
               # df_A_Wal = l_df$df_A_Wal, df_A_NIr = l_df$df_A_NIr))
 }
@@ -621,7 +623,7 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   dt_B_cs <- dt_B
   dt_G_cs <- dt_G
   dt_L_cs <- dt_L 
-  return(list(dt_B = dt_B, dt_L = dt_L, dt_dA = dt_dA, dt_G = dt_G))
+  return(list(dt_dA = dt_dA, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
 }
 
 
@@ -646,25 +648,39 @@ wrangle_FC <- function(v_fpath =
   names(df_affn)
   names(df_affn) <- c("time", "area")
   df_affn$area <- set_units(df_affn$area, km^2)
+  df_affn$area <- set_units(df_affn$area, m^2)
   summary(df_affn)
   # plot(df_affn$time, cumsum(df_affn$area))
   df_affn$u <- "woods"
   df_affn$data_source <- "FC"
-  df_G <- as.data.table(df_affn)
+  dt_G <- as.data.table(df_affn)
+  dt_G$area <- drop_units(dt_G$area)
 
   # read data on deforestation
   df_defn <- read_excel(v_fpath[2],
     sheet  = "Def Time series 1990-2019i", skip = 3)
   df_defn <- with(df_defn[1:30,], data.frame(time = as.numeric(Year), area = Total))
   df_defn$area <- set_units(df_defn$area, ha)
-  df_defn$area <- set_units(df_defn$area, km^2)
+  df_defn$area <- set_units(df_defn$area, m^2)
   df_defn$u <- "woods"
   df_defn$data_source <- "FC"
-  names(df_defn)
-  summary(df_defn)
-  df_L <- as.data.table(df_defn)
+  dt_L <- as.data.table(df_defn)
+  dt_L$area <- drop_units(dt_L$area)
 
-  return(list(df_G = df_G, df_L = df_L))
+  # initialise a copy for net change
+  dt_dA <- dt_L
+  dt <- merge(dt_L, dt_G, all.x = TRUE, by = "time")
+  dt_dA$area <- dt$area.y - dt$area.x
+  dt_dA$area <- set_units(dt_dA$area, m^2)
+  dt_dA$area <- drop_units(dt_dA$area)
+  
+  # initialise a copy for absolute area
+  dt_A  <- dt_dA
+  # assume initial area of forest in 1990 worked out previously - check this
+  initArea <- (36312.07 * 1e6) - sum(dt_dA$area)
+  dt_A$area <- initArea + cumsum(dt_dA$area)
+  
+  return(list(dt_A = dt_A, dt_dA = dt_dA, dt_G = dt_G, dt_L = dt_L))
 }
 
 
@@ -784,4 +800,71 @@ run_lcm_job <- function(fname_job = "./slurm/process_LCM.job"){
     v_times = v_times,
     v_fnames = paste0("./data/LCM/Level1/r_U_lcm_100m_", v_times, ".tif")
   ))
+}
+
+
+## ---- run_lcm_job
+
+#' Function to combine observations
+#'  in BLAG objects to produce a single data table
+#'
+#' @param fname_job File path to SLURM job file for LCM processing
+#' @return A job object
+#' @export
+#' @examples
+#' l_blags = list(c_blag_CS, c_blag_corine, c_blag_iacs, c_blag_lcc, c_blag_lcm)
+#' x <- combine_blags(l_blags)
+combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm)){
+  # B matrix
+  dt <- rbindlist(lapply(l_blags, '[[', "dt_B"), use.names=TRUE)
+  dt$area <-  set_units(dt$area, m^2)
+  dt$area <-  set_units(dt$area, km^2)
+  dt$area <- drop_units(dt$area)
+  dt_B <- dt
+
+  # G time series
+  dt <- rbindlist(lapply(l_blags, '[[', "dt_G"), use.names=TRUE)
+  dt$area <-  set_units(dt$area, m^2)
+  dt$area <-  set_units(dt$area, km^2)
+  dt$area <- drop_units(dt$area)
+  dt_G <- dt
+  
+  # L time series
+  dt <- rbindlist(lapply(l_blags, '[[', "dt_L"), use.names=TRUE)
+  dt$area <-  set_units(dt$area, m^2)
+  dt$area <-  set_units(dt$area, km^2)
+  dt$area <- drop_units(dt$area)
+  dt_L <- dt  
+  
+  # dA time series
+  dt <- rbindlist(lapply(l_blags, '[[', "dt_dA"), use.names=TRUE)
+  dt$area <-  set_units(dt$area, m^2)
+  dt$area <-  set_units(dt$area, km^2)
+  dt$area <- drop_units(dt$area)
+  dt_dA <- dt
+
+
+# #load("dt_A_AgCensus.RData", verbose = TRUE)
+# load("dt_A_HistAC.RData", verbose = TRUE)
+# df <- rbind(dt_dA_UK, df, fill = TRUE)
+# dt_dA <- as.data.table(df)
+
+  # A time series
+  dt <- rbindlist(lapply(l_blags, '[[', "dt_A"), use.names=TRUE)
+  dt$area <-  set_units(dt$area, m^2)
+  dt$area <-  set_units(dt$area, km^2)
+  dt$area <- drop_units(dt$area)
+  dt_A <- dt
+  
+# df$N <- NULL
+# df <- subset(df, area != 0)
+# df <- subset(df, !(data_source == "IACS" & u == "rough"))
+# df$area <- set_units(df$area, m^2)
+# df$area <- set_units(df$area, km^2)
+# #load("dt_A_AgCensus.RData")
+# load("dt_A_HistAC.RData")
+# df <- rbind(dt_A_UK, df, fill = TRUE)
+# dt_A <- as.data.table(df)
+
+  return(list(dt_A = dt_A, dt_dA = dt_dA, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
 }

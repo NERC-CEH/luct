@@ -51,8 +51,17 @@ tar_destroy()
 
 # some debugging
 tar_read(c_file_FC)
-x <- tar_read(c_df_A_AgCensus_NIr)
+
+tar_load(c_df_A_AgCensus_Eng)
+tar_load(c_df_A_AgCensus_Sco)
+tar_load(c_df_A_AgCensus_Wal)
 tar_load(c_df_A_AgCensus_NIr)
+tar_load(c_blag_corine)
+tar_load(c_blag_iacs)
+tar_load(c_blag_lcc)
+tar_load(c_blag_lcm)
+tar_load(c_blag_CS)
+tar_load(c(c_blag_AgCensus, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm))
 
 
 # workflowr

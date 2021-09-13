@@ -112,7 +112,7 @@ list(
 
   # Combine AgCensus data
   tar_target(
-    c_dA_AgCensus,
+    c_blag_AgCensus,
     combine_AgCensus(l_df = list(c_df_A_AgCensus_Eng$df_A, 
                                  c_df_A_AgCensus_Sco$df_A, 
                                  c_df_A_AgCensus_Wal$df_A, 
@@ -134,7 +134,7 @@ list(
 
   # Path to raw FC data fileS
   tar_target(
-    c_file_FC,
+    c_file_fc,
     c(fs::path_rel(here("data-raw/FC/timeSeries", 
         "forest_planting_byYear_UK.csv")),
       fs::path_rel(here("data-raw/FC/timeSeries", 
@@ -144,8 +144,8 @@ list(
 
   # Wrangle FC data
   tar_target(
-    c_GL_FC,
-    wrangle_FC(c_file_FC)
+    c_blag_fc,
+    wrangle_FC(c_file_fc)
   ),
 
   # # Path to test SLURM job file
@@ -196,8 +196,8 @@ list(
     getBLAG_fromU(
       v_times  = c_level1_cor$v_times,
       v_fnames = c_level1_cor$v_fnames,
-      name_data_source = "CORINE",
-      names_u),
+      name_data_source = "CORINE", names_u),
+    cue = tar_cue(mode = "never")
   ),
 
   # Path to IACS SLURM job file
@@ -220,8 +220,8 @@ list(
     getBLAG_fromU(
       v_times  = c_level1_iacs$v_times,
       v_fnames = c_level1_iacs$v_fnames,
-      name_data_source = "IACS",
-      names_u),
+      name_data_source = "IACS", names_u),
+    cue = tar_cue(mode = "never")
   ),
   
   # Path to LCC SLURM job file
@@ -244,8 +244,8 @@ list(
     getBLAG_fromU(
       v_times  = c_level1_lcc$v_times,
       v_fnames = c_level1_lcc$v_fnames,
-      name_data_source = "LCC",
-      names_u),
+      name_data_source = "LCC", names_u),
+    cue = tar_cue(mode = "never", depend = FALSE)
   ),
   
   # Path to LCM SLURM job file
@@ -268,8 +268,15 @@ list(
     getBLAG_fromU(
       v_times  = c_level1_lcm$v_times,
       v_fnames = c_level1_lcm$v_fnames,
-      name_data_source = "LCM",
-      names_u),
+      name_data_source = "LCM", names_u),
+    cue = tar_cue(mode = "never")
+  ),
+        
+  # Combine BLAGs to give list of data tables with all obs
+  tar_target(
+    c_obs,
+    combine_blags(
+      l_blags = list(c_blag_AgCensus, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm))
   ),
     
   # # META pipeline targets ----
