@@ -805,13 +805,13 @@ run_lcm_job <- function(fname_job = "./slurm/process_LCM.job"){
 }
 
 
-## ---- run_lcm_job
+## ---- combine_blags
 
 #' Function to combine observations
 #'  in BLAG objects to produce a single data table
 #'
-#' @param fname_job File path to SLURM job file for LCM processing
-#' @return A job object
+#' @param l_blags List of blag objects to combine
+#' @return A blag object
 #' @export
 #' @examples
 #' l_blags = list(c_blag_CS, c_blag_corine, c_blag_iacs, c_blag_lcc, c_blag_lcm)
@@ -869,4 +869,72 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
 # dt_A <- as.data.table(df)
 
   return(list(dt_A = dt_A, dt_dA = dt_dA, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
+}
+
+
+## ---- set_exclusions
+
+#' Function to combine observations
+#'  in BLAG objects to produce a single data table
+#'
+#' @param l_blags List of blag objects to combine
+#' @return A blag object
+#' @export
+#' @examples
+#' obs <- tar_read(c_obs)
+#' unique(obs$dt_A$data_source[obs$dt_A$u == "other"])
+#' obs <- set_exclusions(obs)
+#' unique(obs$dt_A$data_source[obs$dt_A$u == "other"])
+set_exclusions <- function(obs){
+
+  # zeroes are actually missing values
+  # should remove earlier
+  obs$dt_A$area[obs$dt_A$area == 0]    <- NA
+  obs$dt_dA$area[obs$dt_dA$area == 0]    <- NA
+  obs$dt_dA$area[is.nan(obs$dt_dA$area)] <- NA
+  obs$dt_G$area[obs$dt_G$area == 0]    <- NA
+  obs$dt_G$area[is.nan(obs$dt_G$area)] <- NA
+  obs$dt_L$area[obs$dt_L$area == 0]    <- NA
+  obs$dt_L$area[is.nan(obs$dt_L$area)] <- NA
+  obs$dt_B$area[obs$dt_B$area == 0] <- NA
+
+  unique(obs$dt_dA$data_source); unique(obs$dt_B$data_source)
+
+  obs$dt_A$useData <- TRUE
+  obs$dt_G$useData <- TRUE
+  obs$dt_L$useData <- TRUE
+  obs$dt_dA$useData <- TRUE
+
+  # exclude these data sources for woods
+  data_sources_toExclude <- c("AgCensus", "IACS", "LCC")
+  obs$dt_A$useData[obs$dt_A$u == "woods" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_G$useData[obs$dt_G$u == "woods" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_L$useData[obs$dt_L$u == "woods" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_dA$useData[obs$dt_dA$u == "woods" & obs$dt_dA$data_source %in% data_sources_toExclude] <- FALSE
+
+  # exclude these data sources for grass
+  data_sources_toExclude <- c("IACS")
+  obs$dt_A$useData[obs$dt_A$u == "grass" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+
+  # exclude these data sources for rough
+  data_sources_toExclude <- c("IACS", "LCC")
+  obs$dt_A$useData[obs$dt_A$u == "rough" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+    
+  # exclude these data sources for urban
+  obs$dt_A$useData[obs$dt_A$u == "urban" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_G$useData[obs$dt_G$u == "urban" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_L$useData[obs$dt_L$u == "urban" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+    
+  # exclude these data sources for other
+  obs$dt_A$useData[obs$dt_A$u == "other" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_G$useData[obs$dt_G$u == "other" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_L$useData[obs$dt_L$u == "other" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+
+  obs$dt_dA <- subset(obs$dt_dA, useData)
+  obs$dt_A <- subset(obs$dt_A, useData)
+  obs$dt_G <- subset(obs$dt_G, useData)
+  obs$dt_L <- subset(obs$dt_L, useData)
+
+  return(obs)
+  #return(list(dt_A = dt_A, dt_dA = dt_dA, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
 }

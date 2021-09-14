@@ -274,9 +274,16 @@ list(
         
   # Combine BLAGs to give list of data tables with all obs
   tar_target(
-    c_obs,
+    c_obs_all,
     combine_blags(
       l_blags = list(c_blag_AgCensus, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm))
+  ),
+            
+  # Exclude some data sources which we do not want to use
+  tar_target(
+    c_obs,
+    set_exclusions(
+      c_obs_all)
   ),
     
   # # META pipeline targets ----

@@ -75,8 +75,8 @@ wflow_status()
 wflow_build() # default is make = TRUE, only where .html doesn't match .Rmd
 wflow_build("analysis/index.Rmd")
 wflow_build("analysis/m_uqdata.Rmd")
-wflow_build("analysis/m_CS_plot.Rmd")
 wflow_build("analysis/m_AgCensus_plot.Rmd")
+wflow_build("analysis/m_data_comparison.Rmd")
 wflow_build("analysis/m_00_status.Rmd") # force the status file to be rendered
 # All tracked files that have been modified
 wflow_publish(all = TRUE, message = "Adding FC GL targets")

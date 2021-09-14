@@ -48,59 +48,6 @@ knitr::read_chunk("R/luct.R")
 
 Having assembled all the available data sources, we can now plot them on a common series of axes to compare their absolute magnitudes and relative trends in time.
 
-<!--- { exclusions -->
-```{r exclusions, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land-use areas $\\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only."}
-
-# zeroes are actually missing values
-# should remove earlier
-obs$dt_A$area[obs$dt_A$area == 0]    <- NA
-obs$dt_dA$area[obs$dt_dA$area == 0]    <- NA
-obs$dt_dA$area[is.nan(obs$dt_dA$area)] <- NA
-obs$dt_G$area[obs$dt_G$area == 0]    <- NA
-obs$dt_G$area[is.nan(obs$dt_G$area)] <- NA
-obs$dt_L$area[obs$dt_L$area == 0]    <- NA
-obs$dt_L$area[is.nan(obs$dt_L$area)] <- NA
-obs$dt_B$area[obs$dt_B$area == 0] <- NA
-
-unique(obs$dt_dA$data_source); unique(obs$dt_B$data_source)
-
-obs$dt_A$useData <- TRUE
-obs$dt_G$useData <- TRUE
-obs$dt_L$useData <- TRUE
-obs$dt_dA$useData <- TRUE
-
-# exclude these data sources for woods
-data_sources_toExclude <- c("AgCensus", "IACS", "LCC")
-obs$dt_A$useData[obs$dt_A$u == "woods" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-obs$dt_G$useData[obs$dt_G$u == "woods" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
-obs$dt_L$useData[obs$dt_L$u == "woods" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
-obs$dt_dA$useData[obs$dt_dA$u == "woods" & obs$dt_dA$data_source %in% data_sources_toExclude] <- FALSE
-
-# exclude these data sources for grass
-data_sources_toExclude <- c("IACS")
-obs$dt_A$useData[obs$dt_A$u == "grass" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-
-# exclude these data sources for rough
-data_sources_toExclude <- c("IACS", "LCC")
-obs$dt_A$useData[obs$dt_A$u == "rough" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-  
-# exclude these data sources for urban
-obs$dt_A$useData[obs$dt_A$u == "urban" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-obs$dt_G$useData[obs$dt_G$u == "urban" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
-obs$dt_L$useData[obs$dt_L$u == "urban" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
-  
-# exclude these data sources for other
-obs$dt_A$useData[obs$dt_A$u == "other" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-obs$dt_G$useData[obs$dt_G$u == "other" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
-obs$dt_L$useData[obs$dt_L$u == "other" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
-
-obs$dt_dA <- subset(obs$dt_dA, useData)
-obs$dt_A <- subset(obs$dt_A, useData)
-obs$dt_G <- subset(obs$dt_G, useData)
-obs$dt_L <- subset(obs$dt_L, useData)
-```
-<!--- } -->
-
 <!--- { DCplotA -->
 ```{r DCplotA, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land-use areas $\\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only."}
 
