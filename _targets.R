@@ -366,7 +366,29 @@ list(
     },
     # Track the files returned by the command
     format = "file"
-  )   # end m_CS_plot
+  ),   # end m_CS_plot
+  
+  ## m_02 Plot the data comparison ----
+
+  # Report investigating how to read the raw CS data
+  tar_target(
+    m_data_comparison,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("analysis", "m_data_comparison.Rmd"))
+
+      # Build the report
+      workflowr::wflow_build(
+        here("analysis", "m_data_comparison.Rmd")
+      )
+
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("analysis", "m_data_comparison.Rmd"))
+    },
+    # Track the files returned by the command
+    format = "file"
+  )   # end m_data_comparison
 )     # end target list
 
   # # Report investigating how to exclude unwanted rows

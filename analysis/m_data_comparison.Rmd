@@ -1,0 +1,235 @@
+---
+title: "[meta] Plot data_comparison"
+subtitle: "m_data_comparison"
+author: "Peter Levy"
+date: "2021-09-13"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+  markdown: 
+    wrap: 72
+---
+
+```{r setup}
+# NOTE this notebook can be run manually or automatically by {targets}
+# So load the packages required by this notebook here
+# rather than relying on _targets.R to load them.
+
+# Set up the project environment, because {workflowr} knits each Rmd file 
+# in a new R session, and doesn't execute the project .Rprofile
+
+library(targets) # access data from the targets cache
+library(tictoc) # capture execution time
+library(here) # construct file paths relative to project root
+library(ggplot2) # data wrangling
+library(units) # data wrangling
+
+# start the execution time clock
+tictoc::tic("Computation time (excl. render)")
+
+# Get the path to the raw entity data file
+# This is a target managed by {targets}
+obs <- tar_read(c_obs)
+```
+
+```{r, include = FALSE, cache = FALSE}
+# Get all the functions used by {targets} 
+# so we can display and use them in this notebook
+# with a guarantee that they will be identical
+# here and when used by {targets}.
+
+# This is  work-around because tarchetypes::tar_knitr_deps()
+# fails if a call to here::here() is embedded in 
+# a call to knitr::read_chunk()
+knitr::read_chunk("R/luct.R")
+```
+
+# Introduction
+
+Having assembled all the available data sources, we can now plot them on a common series of axes to compare their absolute magnitudes and relative trends in time.
+
+<!--- { exclusions -->
+```{r exclusions, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land-use areas $\\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only."}
+
+# zeroes are actually missing values
+# should remove earlier
+obs$dt_A$area[obs$dt_A$area == 0]    <- NA
+obs$dt_dA$area[obs$dt_dA$area == 0]    <- NA
+obs$dt_dA$area[is.nan(obs$dt_dA$area)] <- NA
+obs$dt_G$area[obs$dt_G$area == 0]    <- NA
+obs$dt_G$area[is.nan(obs$dt_G$area)] <- NA
+obs$dt_L$area[obs$dt_L$area == 0]    <- NA
+obs$dt_L$area[is.nan(obs$dt_L$area)] <- NA
+obs$dt_B$area[obs$dt_B$area == 0] <- NA
+
+unique(obs$dt_dA$data_source); unique(obs$dt_B$data_source)
+
+obs$dt_A$useData <- TRUE
+obs$dt_G$useData <- TRUE
+obs$dt_L$useData <- TRUE
+obs$dt_dA$useData <- TRUE
+
+# exclude these data sources for woods
+data_sources_toExclude <- c("AgCensus", "IACS", "LCC")
+obs$dt_A$useData[obs$dt_A$u == "woods" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+obs$dt_G$useData[obs$dt_G$u == "woods" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+obs$dt_L$useData[obs$dt_L$u == "woods" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+obs$dt_dA$useData[obs$dt_dA$u == "woods" & obs$dt_dA$data_source %in% data_sources_toExclude] <- FALSE
+
+# exclude these data sources for grass
+data_sources_toExclude <- c("IACS")
+obs$dt_A$useData[obs$dt_A$u == "grass" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+
+# exclude these data sources for rough
+data_sources_toExclude <- c("IACS", "LCC")
+obs$dt_A$useData[obs$dt_A$u == "rough" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  
+# exclude these data sources for urban
+obs$dt_A$useData[obs$dt_A$u == "urban" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+obs$dt_G$useData[obs$dt_G$u == "urban" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+obs$dt_L$useData[obs$dt_L$u == "urban" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+  
+# exclude these data sources for other
+obs$dt_A$useData[obs$dt_A$u == "other" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+obs$dt_G$useData[obs$dt_G$u == "other" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+obs$dt_L$useData[obs$dt_L$u == "other" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+
+obs$dt_dA <- subset(obs$dt_dA, useData)
+obs$dt_A <- subset(obs$dt_A, useData)
+obs$dt_G <- subset(obs$dt_G, useData)
+obs$dt_L <- subset(obs$dt_L, useData)
+```
+<!--- } -->
+
+<!--- { DCplotA -->
+```{r DCplotA, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land-use areas $\\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only."}
+
+# A time series
+p <- ggplot(obs$dt_A, aes(time, area, colour = data_source))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ggtitle("Total Area in UK")
+p <- p + xlim(1990, 2020)
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+#ggsave(p, file = "A_vsTime_100m.png")
+```
+
+Figure \@ref(fig:DCplotA) shows the total areas of each land-use class estimated by the available data sources. For the total area of woodland, Agricultural Census and IACS only record the woodland area occurring on agricultural land, so these should not be expected to match the actual totals; they are only included to compare the rate of increase. However, between the remaining sources, there is a wide range in estimates, varying by 16000 km^2^, with FC > LCM > CORINE. CORINE shows an apparent decline in woodland area, which has to be considered suspect. LCM and FC show similar trends, but LCM estimates the woodland area to be ~ 6000 km^2^ lower. Because the FC data is largely based on ground-based survey and aerial photography rather than satellite, we assume this to be more reliable.
+
+The Agricultural Census shows the total crop area to be relatively stable at ~50000 km^2^.  The latter part of the IACS data appear in close agreement with this, but they account only for England.  Adding in the crop area of Scotland, Wales and NI suggests that the IACS estimates exceed the Agricultural Census by around 10000 km^2^. The IACS crop data show a step change after the first three year, which is probably an artefact of changes in the methodology of IACS reporting. The LCC data start in close agreement with Agricultural Census, but show a strongly rising trend of ~5000 km^2^ not seen in other data sources. Both CORINE and LCM show higher crop areas, with a declining trend not seen in the ground-based data.
+
+For grassland, the outlying line of IACS data can be discounted as it covers only England, and is included only for comparison of trends. Otherwise, estimates seem in closer agreement in absolute terms, although trends are not very consistent across data sources. The total area of rough grazing and semi-natural land shows a similar decline in both Agricultural Census and LCM, although their initial starting points differ by 10000 km^2^. CORINE shows the reverse, which appears implausible. For urban and built-up land however, LCM and CORINE show very close agreement on the absolute area and trend. Estimates of the total area of other land uses are only provided by LCM and CORINE, and neither appears plausible as genuine land-use change. This other land is mostly coastal zone, and it is more likely that this apparent change is due to differences in satellite imagery and the algorithms used to classify them.
+<!--- } -->
+
+<!--- { DCplotB -->
+```{r DCplotB, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of area changing from each land use to every other land use (the matrix $\\mathbf{B}$) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates."}
+# B matrix
+#p <- ggplot(df[data_source == "CS" & time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
+p <- ggplot(obs$dt_B[time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
+p <- p + geom_line()
+# 1/5 of temp grass will change to crop & vv each year, from Ag Census
+#p <- p + geom_hline(yintercept = 2000, colour = "yellow")
+p <- p + geom_point()
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + facet_grid(rows = vars(u_from), cols = vars(u_to), scales = "free_y")
+p
+#ggsave(p, file = "B_vsTime_100m.png")
+```
+
+Figure \@ref(fig:DCplotB) shows the $\mathbf{B}$ matrix over time.
+The y axis scales are somewhat skewed by a number of outlying high values. The plots on the top row, representing deforestation, are dominated by the high values from post-2015 LCM. Given the abrupt change with the previous LCM estimate, these would seem implausible. For the conversions from crop to grass and vice versa, the LCC and post-2015 LCM data give very high values (4000 to 6000 km^2^) compared with CS and pre-2015 LCM (< 500 km^2^). IACS also shows similarily high values when we account for the fact that this only cover England and also with a step-change in the time series that appears implausible. Similar patterns are seen in other panels e.g. other to rough, where a single CORINE value dominates. Because of these order-of-magnitude differences, it is hard to discern subtler features here.  As an alternative presentation, we can show the matrix numerically, with the colour scale indicating the magnitude of the area (Figure \@ref(fig:DCplotBtext)).
+<!--- } -->
+
+<!--- { DCplotBtext -->
+```{r DCplotBtext, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Area changing from each land use to every other land use (the matrix $\\mathbf{B}$) observed by different data sources between 2017 and 2018."}
+p <- ggplot(data = obs$dt_B[time == 2018], aes(u_to, u_from)) 
+p <- p + geom_raster(aes(fill = area))
+p <- p + geom_text(aes(label = round(area, 0)), colour = "blue")
+p <- p + facet_wrap(~ data_source)
+p <- p + scico::scale_fill_scico(palette = "lajolla")
+p
+#ggsave(p, file = "B_text_100m.png")
+```
+
+Figure \@ref(fig:DCplotBtext) indicates that LCC and LCM give $B$ values that are approximately an order of magnitude higher than CS and CORINE in 2017-2018. The former give crop-grass transitions close to 4000 km^2^; CS averages 583 km^2^. For grass-rough transitions, LCM gives values close to 2000 km^2^; CS estimates 570 km^2^. To examine the general patterns over time more clearly, we can plot the gross changes of each land-use class i.e. the sums of the rows and columns in Figures \@ref(fig:DCplotG) and \@ref(fig:DCplotL).
+<!--- } -->
+
+<!--- { DCplotG -->
+```{r DCplotG, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of gross gain of area  $\\mathbf{G}$ to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates."}
+# G time series
+# remove first records (zero) and outlier IACS point at 2014/5
+p <- ggplot(obs$dt_G[time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ggtitle("Gross Gains")
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+#ggsave(p, file = "G_vsTime_100m.png")
+```
+
+Figure \@ref(fig:DCplotG) shows the gross gain in area of each land use.
+For woodlands, we would place highest confidence in the FC data (green symbols), which shows the gross gain to have declined from 250 km^2^ to near zero in 2016. The 1990-2015 LCM data gives a slightly higher mean compared to this, and the CS data are not truly independent of the FC data as they share some data in common.  The post-2015 LCM data show much higher rates, over 2000 km^2^, which are not believable.  CORINE also shows high afforestation in 2006, but sharply declining; again this is not believable, assuming the FC data are resonably reliable.
+
+A similar lack of agreement is generally apparent in the data for the other five land uses. The 1990-2015 LCM and CS data show reasonable agreement The post-2015 LCM, LCC and IACS data show much higher gross gains. In the case of crops, if we factor in that the IACS data only account for England, then these three data sets are in some agreement that the gross gain in crop is in the range 3000-7000 km^2^. However, their patterns over time make us suspicious of their validity. The large year-to-year variability seems unlikely, and the patterns in LCC and LCM are not consistent.
+<!--- } -->
+
+<!--- { DC1plotL -->
+```{r DCplotL, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of gross loss of area $\\mathbf{L}$ from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates."}
+# L time series
+# remove first records (zero) and outlier IACS point at 2014/5
+p <- ggplot(obs$dt_L[time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ggtitle("Gross Losses")
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+#ggsave(p, file = "L_vsTime_100m.png")
+```
+
+Examining the gross losses shows a similar picture(Figure \@ref(fig:DCplotL)). According to FC data (green symbols), deforestation rates have remained very low, less than 50 km^2^. The 1990-2015 LCM data gives a close but slightly higher mean compared to this.  The post-2015 LCM data show much higher rates, over 2000 km^2^, which again seem implausible.  CORINE also shows high deforestation in 2006, which then decreses. Over all land uses, there is essentially the same overall pattern as in the gross gains. with the 1990-2015 LCM and CS data showing small losses, whilst the post-2015 LCM, LCC and IACS data show much larger losses.
+<!--- } -->
+
+<!--- { DCplotdA -->
+```{r DCplotdA, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net change in area of each land use $\\Delta \\mathbf{A}$ observed by different data sources."}
+# dA time series
+p <- ggplot(obs$dt_dA[time > 1690 & time < 2120 & area != 0], 
+  aes(time, area, colour = data_source))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ggtitle("Net Change in Area in UK")
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + geom_hline(yintercept = 0)
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+#ggsave(p, file = "dA_vsTime_100m.png")
+```
+
+The net effect of these gains and losses is shown in Figure \@ref(fig:DCplotdA). The same broad pattern is apparent The 1990-2015 LCM and CS data give lower estimates, with little temporal resolution because of the frequency of the surveys.  The Agricultural Census shows annual variability, oscillating from positive to negative, but at a lower level. LCC, post-2015 LCM data, and IACS data show higher net rates of change, with rates of net change 3-4 times higher and a more noisy pattern.
+<!--- } -->
+
+## Discussion
+From the above results, it appears that more work remains to be done on the EO-based data sets before they are suitable for use as direct measures of land-use change. Whilst the larger gross changes that they observe may be correct, their patterns over time make them appear less plausible. Particularly, the temporal patterns are not consistent (i.e. they do not increase and decrease at the same times), and the large year-to-year variability seems unlikely, given the way land management works. It appears that their sensitivity for detecting change alters over time. In the CORINE time series, both the gains and losses are initially large, and both decline at a similar rate over time. not useful. With LCM, there is a clear difference between the magnitude of gross change detected in recent years compared with pre-2015. The IACS data are also not consistent in time, and the magnitude and variability of changes appears questionable.
+
+None of the data sources here represent absolute truth. We cannot rule out the possibility that the much higher gross change rates are indeed correct, and that the Agricultural Census and CS underestimate these.  However, we should consider other factors as well as the patterns in the data themselves. Firstly is the parsimony principle: if small gross changes can reproduce the observed net change, this is fundamentally more more probable than the occurence of large gross changes, all else being equal.  In the Bayesian methodology, we can specify this as a prior probability distribution, and the the extent to whether "all else" really is "equal" is quantified by the observed data. We use this approach later. Secondly, the errors produced by EO-based and ground-based estimates are quite different. If we estimate land-use change by differencing maps, errors in the maps appear as spurious land-use change.  So this method will necessarily over-estimate land-use change, to an extent that can be predicted from the predictive accuracy of the individual maps. The error variance in the land-use change estimate will be the sum of the variance in the two maps used. Future work may provide a quantification of this. The systematic errors present in ground-based estimates are less clear-cut, as it depends on the methodology used.  However, because it requires sampling effort to detect change, it is commonly assumed that it is easier to under-estimate change. Again, future work may clarify this.
+
+Given the uncertainties in the EO data that may be tackled at a later stage, we focus on using ground-based observations for the data assimilation in WP-A, as originally proposed.
+We elect to use CS, FC and Agricultural Census data to estimate the $B$ matrix.
+We use the spatial pattern in the other data sources (LCM, LCC, IACS, CORINE) to estimate the likelihood of where change occurs,
+but not in the estimation of the $B$ matrix itself.
+This is a conservative approach, as the emphasis is on the same input data sets as used in the current inventory method, but constrains them with the net change measured by the national-scale Agricultural Census data, and the spatial pattern contained in LCM, LCC, IACS, and CORINE data. In this way we can try to minimise confounding changes to the methodology for estimating land-use change, and the data sources used in its estimation.
+
+The issues with the time trends and the plausibility of much higher gross rates of change in these data sets are issues which may be resolved in future work, which will focus on EO data.
+There are various approaches to further examining this.
+For example, if the IACS data are reliable, they should match the spatial pattern in the Agricultural Holdings data. If the two data sets are at odds, we cannot have great confidence in both of them.
+The Agricultural Census contains some data which would act as a constraint on our estimates of the gross changes to/from grass. The area of grassland less than five years old is specified. Assuming a uniform distribution, one fifth of this would be converted each year on average, which would give a ball-park estimate of the gross gain and loss. The complications arise in the age distribution of grassland (what area is > 5 years old?) and whether the distribution is really uniform.
+Lastly, some other data sets exist for comparison, but have not become available within the time frame of this project (further IACS data, CROME, and LUCAS).
+
+
+# Timing {.unnumbered}
+
+```{r echo=FALSE}
+tictoc::toc()
+```

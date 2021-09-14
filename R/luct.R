@@ -1,3 +1,5 @@
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
 names_u_chess <- c("white", "empty", "black")
 names_u  <- c("woods", "crops", "grass", "rough", "urban", "other")
 colour_u <- c("lightblue", "green", "pink", "purple", "orange", "midnightblue")
