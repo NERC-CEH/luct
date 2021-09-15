@@ -2,6 +2,7 @@ library(renv)
 library(workflowr)
 library(targets)
 library(tarchetypes)
+source("./_targets_packages.R")
 
 # renv
 renv::install("sf")
@@ -73,10 +74,10 @@ tar_load(c(c_blag_AgCensus, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_
 wflow_git_config()
 wflow_status()
 wflow_build() # default is make = TRUE, only where .html doesn't match .Rmd
+wflow_build("analysis/m_data_comparison.Rmd")
 wflow_build("analysis/index.Rmd")
 wflow_build("analysis/m_uqdata.Rmd")
 wflow_build("analysis/m_AgCensus_plot.Rmd")
-wflow_build("analysis/m_data_comparison.Rmd")
 wflow_build("analysis/m_00_status.Rmd") # force the status file to be rendered
 # All tracked files that have been modified
 wflow_publish(all = TRUE, message = "Adding FC GL targets")

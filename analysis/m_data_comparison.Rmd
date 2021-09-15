@@ -139,10 +139,10 @@ p
 Examining the gross losses shows a similar picture(Figure \@ref(fig:DCplotL)). According to FC data (green symbols), deforestation rates have remained very low, less than 50 km^2^. The 1990-2015 LCM data gives a close but slightly higher mean compared to this.  The post-2015 LCM data show much higher rates, over 2000 km^2^, which again seem implausible.  CORINE also shows high deforestation in 2006, which then decreses. Over all land uses, there is essentially the same overall pattern as in the gross gains. with the 1990-2015 LCM and CS data showing small losses, whilst the post-2015 LCM, LCC and IACS data show much larger losses.
 <!--- } -->
 
-<!--- { DCplotdA -->
-```{r DCplotdA, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net change in area of each land use $\\Delta \\mathbf{A}$ observed by different data sources."}
-# dA time series
-p <- ggplot(obs$dt_dA[time > 1690 & time < 2120 & area != 0], 
+<!--- { DCplotD -->
+```{r DCplotD, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net change in area of each land use $\\Delta \\mathbf{A}$ observed by different data sources."}
+# D time series
+p <- ggplot(obs$dt_D[time > 1690 & time < 2120 & area != 0], 
   aes(time, area, colour = data_source))
 p <- p + geom_line()
 p <- p + geom_point()
@@ -151,10 +151,10 @@ p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
 p <- p + geom_hline(yintercept = 0)
 p <- p + facet_wrap(~ u, scales = "free_y")
 p
-#ggsave(p, file = "dA_vsTime_100m.png")
+#ggsave(p, file = "D_vsTime_100m.png")
 ```
 
-The net effect of these gains and losses is shown in Figure \@ref(fig:DCplotdA). The same broad pattern is apparent The 1990-2015 LCM and CS data give lower estimates, with little temporal resolution because of the frequency of the surveys.  The Agricultural Census shows annual variability, oscillating from positive to negative, but at a lower level. LCC, post-2015 LCM data, and IACS data show higher net rates of change, with rates of net change 3-4 times higher and a more noisy pattern.
+The net effect of these gains and losses is shown in Figure \@ref(fig:DCplotD). The same broad pattern is apparent The 1990-2015 LCM and CS data give lower estimates, with little temporal resolution because of the frequency of the surveys.  The Agricultural Census shows annual variability, oscillating from positive to negative, but at a lower level. LCC, post-2015 LCM data, and IACS data show higher net rates of change, with rates of net change 3-4 times higher and a more noisy pattern.
 <!--- } -->
 
 ## Discussion

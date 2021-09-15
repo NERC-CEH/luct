@@ -285,6 +285,12 @@ list(
     set_exclusions(
       c_obs_all)
   ),
+                
+  # Exclude some data sources which we do not want to use
+  tar_target(
+    pred_ls,
+    get_pred_ls(c_obs, start_year = 2017, end_year = 2019, n_u = 6)
+  ),
     
   # # META pipeline targets ----
 

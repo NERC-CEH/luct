@@ -823,6 +823,10 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
   dt$area <-  set_units(dt$area, km^2)
   dt$area <- drop_units(dt$area)
   dt_B <- dt
+  
+  # re-ordering by (u_to, u_from) (not u_from, u_to) allows 
+  # the default vector to matrix conversion to work (where byrow = FALSE)
+  dt_B <- arrange(dt_B, time, data_source, u_to, u_from)
 
   # G time series
   dt <- rbindlist(lapply(l_blags, '[[', "dt_G"), use.names=TRUE)
@@ -838,18 +842,12 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
   dt$area <- drop_units(dt$area)
   dt_L <- dt  
   
-  # dA time series
+  # D time series
   dt <- rbindlist(lapply(l_blags, '[[', "dt_dA"), use.names=TRUE)
   dt$area <-  set_units(dt$area, m^2)
   dt$area <-  set_units(dt$area, km^2)
   dt$area <- drop_units(dt$area)
-  dt_dA <- dt
-
-
-# #load("dt_A_AgCensus.RData", verbose = TRUE)
-# load("dt_A_HistAC.RData", verbose = TRUE)
-# df <- rbind(dt_dA_UK, df, fill = TRUE)
-# dt_dA <- as.data.table(df)
+  dt_D <- dt
 
   # A time series
   dt <- rbindlist(lapply(l_blags, '[[', "dt_A"), use.names=TRUE)
@@ -858,17 +856,7 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
   dt$area <- drop_units(dt$area)
   dt_A <- dt
   
-# df$N <- NULL
-# df <- subset(df, area != 0)
-# df <- subset(df, !(data_source == "IACS" & u == "rough"))
-# df$area <- set_units(df$area, m^2)
-# df$area <- set_units(df$area, km^2)
-# #load("dt_A_AgCensus.RData")
-# load("dt_A_HistAC.RData")
-# df <- rbind(dt_A_UK, df, fill = TRUE)
-# dt_A <- as.data.table(df)
-
-  return(list(dt_A = dt_A, dt_dA = dt_dA, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
+  return(list(dt_A = dt_A, dt_D = dt_D, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
 }
 
 
@@ -890,27 +878,27 @@ set_exclusions <- function(obs){
   # zeroes are actually missing values
   # should remove earlier
   obs$dt_A$area[obs$dt_A$area == 0]    <- NA
-  obs$dt_dA$area[obs$dt_dA$area == 0]    <- NA
-  obs$dt_dA$area[is.nan(obs$dt_dA$area)] <- NA
+  obs$dt_D$area[obs$dt_D$area == 0]    <- NA
+  obs$dt_D$area[is.nan(obs$dt_D$area)] <- NA
   obs$dt_G$area[obs$dt_G$area == 0]    <- NA
   obs$dt_G$area[is.nan(obs$dt_G$area)] <- NA
   obs$dt_L$area[obs$dt_L$area == 0]    <- NA
   obs$dt_L$area[is.nan(obs$dt_L$area)] <- NA
   obs$dt_B$area[obs$dt_B$area == 0] <- NA
 
-  unique(obs$dt_dA$data_source); unique(obs$dt_B$data_source)
+  unique(obs$dt_D$data_source); unique(obs$dt_B$data_source)
 
   obs$dt_A$useData <- TRUE
   obs$dt_G$useData <- TRUE
   obs$dt_L$useData <- TRUE
-  obs$dt_dA$useData <- TRUE
+  obs$dt_D$useData <- TRUE
 
   # exclude these data sources for woods
   data_sources_toExclude <- c("AgCensus", "IACS", "LCC")
   obs$dt_A$useData[obs$dt_A$u == "woods" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_G$useData[obs$dt_G$u == "woods" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == "woods" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
-  obs$dt_dA$useData[obs$dt_dA$u == "woods" & obs$dt_dA$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_D$useData[obs$dt_D$u == "woods" & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
 
   # exclude these data sources for grass
   data_sources_toExclude <- c("IACS")
@@ -930,11 +918,145 @@ set_exclusions <- function(obs){
   obs$dt_G$useData[obs$dt_G$u == "other" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == "other" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
 
-  obs$dt_dA <- subset(obs$dt_dA, useData)
+  obs$dt_D <- subset(obs$dt_D, useData)
   obs$dt_A <- subset(obs$dt_A, useData)
   obs$dt_G <- subset(obs$dt_G, useData)
   obs$dt_L <- subset(obs$dt_L, useData)
 
   return(obs)
-  #return(list(dt_A = dt_A, dt_dA = dt_dA, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
 }
+
+
+## ---- get_rmse
+
+#' Define a function to calculate the root-mean-square error (RMSE) 
+#' for a given $B$ matrix. 
+#'
+#' @param v_B Beta matrix as a vector
+#' @return The RMSE from comparison of predictions versus observations
+#' @export
+#' @examples
+#' obs <- tar_read(c_obs)
+#' rmse <- get_rmse(v_B)
+get_rmse <- function(v_B, 
+    dt_B_obs, dt_G_obs, dt_L_obs, dt_D_obs, 
+    n_u = sqrt(length(v_B))){
+  m_B_pred  <- matrix(v_B, n_u, n_u)
+  dt_B_pred <- data.table(u_from = rep(names_u, n_u), u_to = rep(names_u, each = n_u), pred  = as.vector(m_B_pred))
+  dt_G_pred <- data.table(u = names_u, pred  = getAreaGrossGain_fromBeta(m_B_pred, n_u))
+  dt_L_pred <- data.table(u = names_u, pred  = getAreaGrossLoss_fromBeta(m_B_pred, n_u))
+  dt_D_pred <- data.table(u = names_u, pred = getAreaNetChange_fromBeta(m_B_pred, n_u))
+  
+  dt_B <- merge(dt_B_obs, dt_B_pred)
+  dt_G <- merge(dt_G_obs, dt_G_pred)
+  dt_L <- merge(dt_L_obs, dt_L_pred)
+  dt_D <- merge(dt_D_obs, dt_D_pred)
+  resid_D <- dt_D[, area - pred]
+  resid_G <- dt_G[, area - pred]
+  resid_L <- dt_L[, area - pred]
+  resid_B <- dt_B[, area - pred]
+
+  RMSE_D <- sqrt(mean(resid_D^2, na.rm = TRUE)) # * wt_D
+  RMSE_G <- sqrt(mean(resid_G^2,  na.rm = TRUE)) # * wt_G 
+  RMSE_L <- sqrt(mean(resid_L^2,  na.rm = TRUE)) # * wt_L 
+  RMSE_B <- sqrt(mean(resid_B^2,  na.rm = TRUE)) # * wt_B 
+  
+  v_RMSE <- c(RMSE_D, RMSE_B, RMSE_G, RMSE_L)
+  # if no data, these will be NaN, which need to be NA
+  v_RMSE[is.nan(v_RMSE)] <- NA
+  return(sum(v_RMSE, na.rm = TRUE))
+}
+
+
+## ---- get_ls_pred
+
+#' Define a function to calculate the least-squares predictions 
+#' for the $B$ matrix, and associated G, L, and D data tables. 
+#'
+#' @param v_B Beta matrix as a vector
+#' @return A blag object for the least-squares predictions
+#' @export
+#' @examples
+#' obs <- tar_read(c_obs)
+#' pred_ls <- get_pred_ls(obs, start_year = 2018, end_year = 2019)
+get_pred_ls <- function(
+  obs,
+  start_year = 2015,
+  end_year = 2019,
+  n_u = length(names_u)){
+
+  v_times <- start_year:end_year
+  n_t <- length(v_times)
+
+  # this duplicates reordering in combine_blags
+  # but the additional check is probably a good idea
+  # as the order determines vector to matrix conversion ordering
+  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
+
+  # initialise array for predicted B parameters
+  # use LCM as initial values
+  v_B <- obs$dt_B[time == 2019 & data_source == "LCM"]$area
+  v_B[is.na(v_B)] <- 0
+  m_B <- matrix(v_B, 
+    nrow = n_u, ncol = n_u, dimnames = list(names_u, names_u))
+  a_B_pred <- array(m_B, c(n_u, n_u, n_t))
+
+  # generate initial values
+  # using zeroes (no influence on results)
+  v_B_ini <- a_B_pred[ , , 1] * 0
+  #diag(v_B_ini) <- diag(a_B_pred[ , , 1])
+  # using obs + random
+  #v_B_ini <- a_B_obs[ , , i_t] + round(runif(9, 0, 20))
+  #v_B_ini <- a_B_pred[,,1]
+  # initial test
+  # get_rmse(v_B_ini)
+
+  # Loop over each year, finding the $B$ matrix which minimises RMSE with the observed data.
+  # backwards version
+  #for (i_t in (n_t):2){
+  # forwards version
+  start_time <- Sys.time()
+  for (i_t in 2:n_t){
+  #i_t = 2
+    i_time <- v_times[i_t]
+    dt_B_obs <- obs$dt_B[time == i_time]
+    dt_G_obs <- obs$dt_G[time == i_time]
+    dt_L_obs <- obs$dt_L[time == i_time]
+    dt_A_obs <- obs$dt_A[time == i_time]
+    dt_D_obs <- obs$dt_D[time == i_time]
+
+    fit <- optim(v_B_ini, get_rmse, 
+      dt_B_obs = dt_B_obs, dt_G_obs = dt_G_obs, 
+      dt_L_obs = dt_L_obs, dt_D_obs = dt_D_obs, 
+      method = "L-BFGS-B", 
+      lower = 0, control = list(factr = 1e9, maxit = 1000, trace = 2))
+   # fit <- optim(fit$par, getRMSE, method = "L-BFGS-B", 
+     # lower = 0, control = list(factr = 1e3, maxit = 1000, trace = 2))
+
+    # compare B
+    v_B_ini
+    round(fit$par, 0)
+    # a_B_obs[ , , i_t]
+    # store B matrix for this time step in array
+    a_B_pred[ , , i_t] <- matrix(fit$par, n_u, n_u)
+  }
+
+  print(paste0("time elapsed (mins): ", round(Sys.time() - start_time, 3)))
+
+  # derive the Losses And Gains from the Beta matrix 
+  pred <- getBLAG(a_B_pred, names_u = names_u, name_data_source = "pred_ls",
+    v_times = v_times)  
+
+  # not needed I think
+  # # Beta matrix
+  # pred$dt_B <- subset(pred$dt_B, time > v_times[1])
+  # # net change
+  # pred$dt_D <- subset(pred$dt_D, time > v_times[1])
+  # # gross Gain
+  # pred$dt_G <- subset(pred$dt_G, time > v_times[1])
+  # # gross Loss
+  # pred$dt_L <- subset(pred$dt_L, time > v_times[1])
+
+  return(pred)
+}
+
