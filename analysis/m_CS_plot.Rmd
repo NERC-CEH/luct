@@ -82,7 +82,7 @@ p <- p + xlim(1970, 2020)
 p <- p + facet_wrap(~ u, scales = "fixed")
 p
 
-p <- ggplot(blag$dt_dA, aes(time, area))
+p <- ggplot(blag$dt_D, aes(time, area))
 p <- p + geom_line()
 p <- p + geom_point()
 p <- p + ylab(expression(paste(Area*", "*~km^2/y)))

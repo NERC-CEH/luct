@@ -70,12 +70,12 @@ getAreaGrossLoss_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
 #' @return A vector of the net change in area by land use
 #' @export
 #' @examples
-#' dA_u <- getAreaNetChange_fromBeta(v_B, n_u = 6)
+#' D_u <- getAreaNetChange_fromBeta(v_B, n_u = 6)
 getAreaNetChange_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
   m_B <- matrix(v_B, n_u, n_u)
   diag(m_B) <- 0
-  dA_u <- colSums(m_B) - rowSums(m_B)
-  return(dA_u)  
+  D_u <- colSums(m_B) - rowSums(m_B)
+  return(D_u)  
 }
 
 ## ---- wrangle_AgCensus_Eng
@@ -468,10 +468,10 @@ combine_AgCensus <- function(l_df = list(df_A_Eng, df_A_Sco, df_A_Wal, df_A_NIr)
   dt_A$area <- set_units(dt_A$area, m^2)
   dt_A$area <- drop_units(dt_A$area)
 
-  dt_dA <- dt_A[, .(time, area = c(0, diff(area)), data_source), by = .(u)]
-  dt_dA <- dt_dA[time >= 1900]
+  dt_D <- dt_A[, .(time, area = c(0, diff(area)), data_source), by = .(u)]
+  dt_D <- dt_D[time >= 1900]
  
-  return(list(dt_A = dt_A, dt_dA = dt_dA)) #, 
+  return(list(dt_A = dt_A, dt_D = dt_D)) #, 
               # df_A_Eng = l_df$df_A_Eng, df_A_Sco = l_df$df_A_Sco, 
               # df_A_Wal = l_df$df_A_Wal, df_A_NIr = l_df$df_A_NIr))
 }
@@ -586,46 +586,46 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   dt_L <- melt(dt_L, id=c("time"), variable.name = "u", value.name = "area")
   dt_L$year <- v_times[dt_L$time]
 
-  ## ----CSplotdA, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied net change in area $\\Delta \\mathbf{A}$ of each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
-  # dt_dA_cs, ## this is dA not A**
+  ## ----CSplotD, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied net change in area $\\Delta \\mathbf{A}$ of each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
+  # dt_D_cs, ## this is D not A**
   # calc net change from B; MARGIN = 3 because that is the time dimension
-  dt_dA <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaNetChange_fromBeta, n_u = 6)))
-  names(dt_dA) <- names_u
-  dt_dA <- data.table(time = as.numeric(rownames(dt_dA)), dt_dA)
-  dt_dA <- melt(dt_dA, id=c("time"), variable.name = "u", value.name = "area")
-  dt_dA$year <- v_times[dt_dA$time]
+  dt_D <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaNetChange_fromBeta, n_u = 6)))
+  names(dt_D) <- names_u
+  dt_D <- data.table(time = as.numeric(rownames(dt_D)), dt_D)
+  dt_D <- melt(dt_D, id=c("time"), variable.name = "u", value.name = "area")
+  dt_D$year <- v_times[dt_D$time]
 
   ## ----saving, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE----------------------
-  dt_dA$data_source <- "CS"
+  dt_D$data_source <- "CS"
   dt_B$data_source <- "CS"
   dt_G$data_source <- "CS"
   dt_L$data_source <- "CS"
 
-  dt_dA$time <- dt_dA$year; dt_dA$year <- NULL 
+  dt_D$time <- dt_D$year; dt_D$year <- NULL 
   dt_B$time <- dt_B$year; dt_B$year <- NULL 
   dt_G$time <- dt_G$year; dt_G$year <- NULL 
   dt_L$time <- dt_L$year; dt_L$year <- NULL
 
-  dt_dA$area <- set_units(dt_dA$area, km^2)
+  dt_D$area <- set_units(dt_D$area, km^2)
   dt_B$area <- set_units(dt_B$area, km^2)
   dt_G$area <- set_units(dt_G$area, km^2)
   dt_L$area <- set_units(dt_L$area, km^2)
 
-  dt_dA$area <- set_units(dt_dA$area, m^2)
+  dt_D$area <- set_units(dt_D$area, m^2)
   dt_B$area <- set_units(dt_B$area, m^2)
   dt_G$area <- set_units(dt_G$area, m^2)
   dt_L$area <- set_units(dt_L$area, m^2) 
 
-  dt_dA$area <- drop_units(dt_dA$area)
+  dt_D$area <- drop_units(dt_D$area)
   dt_B$area <- drop_units(dt_B$area)
   dt_G$area <- drop_units(dt_G$area)
   dt_L$area <- drop_units(dt_L$area) 
 
-  dt_dA_cs <- dt_dA
+  dt_D_cs <- dt_D
   dt_B_cs <- dt_B
   dt_G_cs <- dt_G
   dt_L_cs <- dt_L 
-  return(list(dt_dA = dt_dA, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
+  return(list(dt_D = dt_D, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
 }
 
 
@@ -670,19 +670,19 @@ wrangle_FC <- function(v_fpath =
   dt_L$area <- drop_units(dt_L$area)
 
   # initialise a copy for net change
-  dt_dA <- dt_L
+  dt_D <- dt_L
   dt <- merge(dt_L, dt_G, all.x = TRUE, by = "time")
-  dt_dA$area <- dt$area.y - dt$area.x
-  dt_dA$area <- set_units(dt_dA$area, m^2)
-  dt_dA$area <- drop_units(dt_dA$area)
+  dt_D$area <- dt$area.y - dt$area.x
+  dt_D$area <- set_units(dt_D$area, m^2)
+  dt_D$area <- drop_units(dt_D$area)
   
   # initialise a copy for absolute area
-  dt_A  <- dt_dA
+  dt_A  <- dt_D
   # assume initial area of forest in 1990 worked out previously - check this
-  initArea <- (36312.07 * 1e6) - sum(dt_dA$area)
-  dt_A$area <- initArea + cumsum(dt_dA$area)
+  initArea <- (36312.07 * 1e6) - sum(dt_D$area)
+  dt_A$area <- initArea + cumsum(dt_D$area)
   
-  return(list(dt_A = dt_A, dt_dA = dt_dA, dt_G = dt_G, dt_L = dt_L))
+  return(list(dt_A = dt_A, dt_D = dt_D, dt_G = dt_G, dt_L = dt_L))
 }
 
 
@@ -843,7 +843,7 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
   dt_L <- dt  
   
   # D time series
-  dt <- rbindlist(lapply(l_blags, '[[', "dt_dA"), use.names=TRUE)
+  dt <- rbindlist(lapply(l_blags, '[[', "dt_D"), use.names=TRUE)
   dt$area <-  set_units(dt$area, m^2)
   dt$area <-  set_units(dt$area, km^2)
   dt$area <- drop_units(dt$area)

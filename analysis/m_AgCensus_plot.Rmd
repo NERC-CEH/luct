@@ -34,7 +34,7 @@ l_df_AgCensus_Wal  <- tar_read(c_df_A_AgCensus_Wal)
 l_df_AgCensus_NIr  <- tar_read(c_df_A_AgCensus_NIr)
 
 dt_A_UK  <- tar_read(c_blag_AgCensus)$dt_A
-dt_dA_UK <- tar_read(c_blag_AgCensus)$dt_dA
+dt_D_UK <- tar_read(c_blag_AgCensus)$dt_D
 ```
 
 ```{r, include = FALSE, cache = FALSE}
@@ -110,7 +110,7 @@ p + facet_wrap(~ u, scales = "free_y")
 <!--- } -->
 
 
-<!--- { plotdAUK -->
+<!--- { plotDUK -->
 ```{r plotUK, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019."}
 p <- ggplot(dt_A_UK, aes(time, area))
 p <- p + geom_line()
@@ -119,8 +119,8 @@ p <- p + xlim(1981, 2020)
 p + facet_wrap(~ u, scales = "fixed")
 ```
 
-```{r plot_dA_UK, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019."}
-p <- ggplot(dt_dA_UK, aes(time, area))
+```{r plot_D_UK, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019."}
+p <- ggplot(dt_D_UK, aes(time, area))
 p <- p + geom_line()
 #p <- p + geom_point(aes(colour = u))
 p <- p + xlim(1982, 2020)

@@ -142,12 +142,12 @@ getAreaGrossLoss_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
 #' @return A vector of the net change in area by land use
 #' @export
 #' @examples
-#' dA_u <- getAreaNetChange_fromBeta(v_B, n_u = 6)
+#' D_u <- getAreaNetChange_fromBeta(v_B, n_u = 6)
 getAreaNetChange_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
   m_B <- matrix(v_B, n_u, n_u)
   diag(m_B) <- 0
-  dA_u <- colSums(m_B) - rowSums(m_B)
-  return(dA_u)  
+  D_u <- colSums(m_B) - rowSums(m_B)
+  return(D_u)  
 }
 
 #' Function to calculate the time series of change for each land use
@@ -191,13 +191,13 @@ getBLAG <- function(a_B, names_u = names_u, name_data_source = "",
   dt_A <- na.omit(dt_A, cols="u")
   dt_A$u <- factor(dt_A$u, levels = names_u)
 
-  # dA time series
-  dt_dA <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaNetChange_fromBeta, n_u = n_u)))
-  names(dt_dA) <- names_u
-  dt_dA <- data.table(time = v_times, dtime = c(0, diff(v_times)), dt_dA)
-  dt_dA <- melt(dt_dA, id=c("time", "dtime"), variable.name = "u", value.name = "area")
-  dt_dA$area <- dt_dA$area / dt_dA$dtime # convert km2 to km2/year
-  dt_dA$dtime <- NULL
+  # D time series
+  dt_D <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaNetChange_fromBeta, n_u = n_u)))
+  names(dt_D) <- names_u
+  dt_D <- data.table(time = v_times, dtime = c(0, diff(v_times)), dt_D)
+  dt_D <- melt(dt_D, id=c("time", "dtime"), variable.name = "u", value.name = "area")
+  dt_D$area <- dt_D$area / dt_D$dtime # convert km2 to km2/year
+  dt_D$dtime <- NULL
   
   # G time series
   # calc gross gain from B; MARGIN = 3 because that is the time dimension
@@ -218,18 +218,18 @@ getBLAG <- function(a_B, names_u = names_u, name_data_source = "",
   dt_L$area <- dt_L$area / dt_L$dtime # convert km2 to km2/year
   dt_L$dtime <- NULL
   
-  # # dA, net change in area
+  # # D, net change in area
   # # calculate annual change by difference
-  # dt_dA_wide <- as.data.table(apply(dt_A_wide, MARGIN = 2, diff))
+  # dt_D_wide <- as.data.table(apply(dt_A_wide, MARGIN = 2, diff))
   # # diff produces n-1 rows, so need to add a row of zeroes to conform
-  # dt_dA_wide <- rbind(dt_dA_wide[1,], dt_dA_wide)
-  # dt_dA_wide[1,] <- 0
-  # dt_dA_wide$dtime <- dt_dA_wide$time
-  # dt_dA_wide$time  <- v_times
+  # dt_D_wide <- rbind(dt_D_wide[1,], dt_D_wide)
+  # dt_D_wide[1,] <- 0
+  # dt_D_wide$dtime <- dt_D_wide$time
+  # dt_D_wide$time  <- v_times
   
-  # dt_dA <- melt(dt_dA_wide, id=c("time", "dtime"), variable.name = "u", value.name = "area")
-  # dt_dA$area <- dt_dA$area / dt_dA$dtime # convert km2 to km2/year
-  # dt_dA$dtime <- NULL
+  # dt_D <- melt(dt_D_wide, id=c("time", "dtime"), variable.name = "u", value.name = "area")
+  # dt_D$area <- dt_D$area / dt_D$dtime # convert km2 to km2/year
+  # dt_D$dtime <- NULL
 
   # reshape to wide format
   # G and L, Gross Gains and Losses
@@ -239,14 +239,14 @@ getBLAG <- function(a_B, names_u = names_u, name_data_source = "",
   dt_L_wide <- dcast(dt_L, time ~ u, value.var="area")
   rownames(dt_L_wide) <- dt_L_wide$time
   dt_L_wide$time <- NULL
-  # dA
-  dt_dA_wide <- dcast(dt_dA, time ~ u, value.var="area")
-  rownames(dt_dA_wide) <- dt_dA_wide$time
-  dt_dA_wide$time <- NULL
+  # D
+  dt_D_wide <- dcast(dt_D, time ~ u, value.var="area")
+  rownames(dt_D_wide) <- dt_D_wide$time
+  dt_D_wide$time <- NULL
 
   # add data source name as a column
   dt_A$data_source <- name_data_source
-  dt_dA$data_source <- name_data_source
+  dt_D$data_source <- name_data_source
   dt_B$data_source <- name_data_source
   dt_G$data_source <- name_data_source
   dt_L$data_source <- name_data_source
@@ -255,14 +255,14 @@ getBLAG <- function(a_B, names_u = names_u, name_data_source = "",
     v_times = v_times,
     v_dtime = dtime,
     dt_A = dt_A, 
-    dt_dA = dt_dA, 
+    dt_D = dt_D, 
     dt_B = dt_B, 
     a_B = a_B, 
     dt_G = dt_G, 
     dt_L = dt_L,
     # reshaped
     dt_A_wide  = dt_A_wide ,
-    dt_dA_wide = dt_dA_wide,
+    dt_D_wide = dt_D_wide,
     dt_G_wide  = dt_G_wide ,
     dt_L_wide  = dt_L_wide
   ))
@@ -353,14 +353,14 @@ getBLAG_fromU <- function(
     v_times = blag$v_times,
     v_dtime = blag$v_dtime,
     dt_A  = blag$dt_A, 
-    dt_dA = blag$dt_dA,
+    dt_D = blag$dt_D,
     dt_B  = blag$dt_B, 
     a_B   = a_B, 
     dt_G  = blag$dt_G, 
     dt_L  = blag$dt_L,
     # reshaped
     dt_A_wide  = blag$dt_A_wide ,
-    dt_dA_wide = blag$dt_dA_wide,
+    dt_D_wide = blag$dt_D_wide,
     dt_G_wide  = blag$dt_G_wide ,
     dt_L_wide  = blag$dt_L_wide
   )
