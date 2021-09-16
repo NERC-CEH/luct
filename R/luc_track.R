@@ -307,11 +307,17 @@ getBetaRateMatrices <- function(a_B, names_u = names_u,
 #' (B, L, A, G) from U. U is a stars object with integer 
 #' land-use classes (u) in space and time dimensions.
 
-#' @param st_U A land use stars object.
+#' @param   v_times Numeric vector of times (in years).
+#' @param   v_fnames Character vector of file names.
+#' @param   name_data_source Character string for name of data source.
+#' @param   names_u Character vector of names of land uses.
+#' @param   returnU Logical Whether to return the whole U object instead. Default is FALSE.
 #' @return A BLAG object.
 #' @export
 #' @examples
-#' blag <- getBLAG_fromU(st_U)
+#' blag <- getBLAG_fromU(v_times = c(2000, 2006),
+#'   v_fnames = c("data/CORINE/Level1/r_U_cor_1000m_2000.tif", "data/CORINE/Level1/r_U_cor_1000m_2006.tif"),
+#'   name_data_source = "CORINE")
 getBLAG_fromU <- function(
   v_times,
   v_fnames,
