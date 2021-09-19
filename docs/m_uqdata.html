@@ -367,7 +367,7 @@ div.tocify {
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
 workflowr
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -377,7 +377,7 @@ workflowr
 </li>
 <li>
 <a data-toggle="tab" href="#checks">
-Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </a>
 </li>
 <li>
@@ -387,14 +387,14 @@ Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></sp
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-09-14
+<strong>Last updated:</strong> 2021-09-19
 </p>
 <p>
 <strong>Checks:</strong>
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-7
+6
 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-0
+1
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -417,16 +417,21 @@ The <em>Past versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>R Markdown file:</strong> up-to-date
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<strong>R Markdown file:</strong> uncommitted changes
 </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you
-know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes.
+To know which version of the R Markdown file created these
+results, you’ll want to first commit it to the Git repo. If
+you’re still working on the analysis, you can ignore this
+warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and
+build the HTML.</p>
 </div>
 </div>
 </div>
@@ -515,20 +520,20 @@ makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreec6752cc04cc382414a3903e44ad73bd89d0f4b0etargetblankc6752cca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreecb43b025c3d8f43ff72d6f0657bbd118bc98814ftargetblankcb43b02a">
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/c6752cc04cc382414a3903e44ad73bd89d0f4b0e" target="_blank">c6752cc</a>
+<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/cb43b025c3d8f43ff72d6f0657bbd118bc98814f" target="_blank">cb43b02</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreec6752cc04cc382414a3903e44ad73bd89d0f4b0etargetblankc6752cca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreecb43b025c3d8f43ff72d6f0657bbd118bc98814ftargetblankcb43b02a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and
 connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/c6752cc04cc382414a3903e44ad73bd89d0f4b0e" target="_blank">c6752cc</a>.
+The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/cb43b025c3d8f43ff72d6f0657bbd118bc98814f" target="_blank">cb43b02</a>.
 See the <em>Past versions</em> tab to see a history of the changes made to the
 R Markdown and HTML files.
 </p>
@@ -547,25 +552,33 @@ Ignored files:
     Ignored:    _targets/
     Ignored:    analysis/life_tables.xlsx
     Ignored:    analysis/m_lifetables.pdf
-    Ignored:    analysis/m_uqdata.html
     Ignored:    analysis/m_uqdata.pdf
     Ignored:    data-raw
     Ignored:    data/
+    Ignored:    output/
+    Ignored:    output_priorHnl_iter600k/
     Ignored:    renv/library/
     Ignored:    renv/local/
     Ignored:    renv/staging/
 
 Untracked files:
     Untracked:  R/luct_Fp_Fn.R
+    Untracked:  a_B.rda
+    Untracked:  slurm/DA2_Beta.Rmd
     Untracked:  slurm/runLikU.job
-    Untracked:  slurm/runMCMC_Beta.job
     Untracked:  slurm/runSampleU.job
     Untracked:  slurm/runVectors.job
+    Untracked:  slurm/run_mcmc_beta.R
+    Untracked:  slurm/run_mcmc_beta.job
 
 Unstaged changes:
+    Modified:   R/luc_track.R
     Modified:   R/luct.R
     Modified:   _targets.R
-    Modified:   analysis/m_data_comparison.Rmd
+    Modified:   _targets_packages.R
+    Modified:   analysis/m_uqdata.Rmd
+    Modified:   renv.lock
+    Modified:   run.R
 
 </code></pre>
 <p>
@@ -610,6 +623,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/b3d846cf92cb43c1c8c68d508f6608d827e433ae/docs/m_uqdata.html" target="_blank">b3d846c</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+<td>
+Data source exclusions target added
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -704,11 +734,11 @@ Adding data uncertainty text
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<p>The Tracking Land-Use Change project uses a data assimilation approach to combining different data sources. Several different data sources provide observations of the transition matrix <span class="math inline">\(B\)</span>, as well as net and gross change in area of each land use (<span class="math inline">\(dA, G, L\)</span>). The current (WP-A) method treats all data sources as equally uncertain, and assumes the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these. We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but potentially complicated in practice, for the following reasons.</p>
+<p>The Tracking Land-Use Change project uses a data assimilation approach to combining different data sources. Several different data sources provide observations of the transition matrix <span class="math inline">\(B\)</span>, as well as net and gross change in area of each land use (<span class="math inline">\(D, G, L\)</span>). The current (WP-A) method treats all data sources as equally uncertain, and assumes the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these. We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but potentially complicated in practice, for the following reasons.</p>
 <ol style="list-style-type: decimal">
 <li><p>We can consider increasing levels of detail:</p>
 <ul>
-<li><p>variable-specific uncertainties (i.e. different for <span class="math inline">\(B, G, L\)</span> &amp; <span class="math inline">\(dA\)</span>)</p></li>
+<li><p>variable-specific uncertainties (i.e. different for <span class="math inline">\(B, G, L\)</span> &amp; <span class="math inline">\(D\)</span>)</p></li>
 <li><p>data source type-specific uncertainties (i.e. different for ground-based vs EO data)</p></li>
 <li><p>data set-specific uncertainties (i.e. different for CS, IACS, LCM etc.)</p></li>
 <li><p>land-use type-specific uncertainties (i.e. different for woods, crops, grass etc.)</p></li>
@@ -778,48 +808,82 @@ We define the reference data set as the June Agricultural Census data for crops,
 The table below shows two metrics, the RMSE and the correlation coefficient.
 We combine these in a multiplicative way (using <span class="math inline">\(1/(r^2+1)\)</span>) to give a single scaling factor for <span class="math inline">\(\sigma^\mathrm{obs}\)</span> (“sigma_scaling” in the table).
 The ranking shows that IACS has the lowest uncertainty and the Land Cover Crop Maps has the highest (bearing in mind all the imperfections in the reference data). This produces a quantitative means of accounting for the different relative uncertainties in these data sources.</p>
+<p><img src="figure/m_uqdata.Rmd/plot_ts-1.png" width="672" style="display: block; margin: auto;" /></p>
 <table>
 <thead>
 <tr class="header">
 <th align="left"></th>
 <th align="right">RMSE</th>
 <th align="right">r2</th>
-<th align="right">sigma_scaling</th>
+<th align="right">sigma</th>
+<th align="right">Fp</th>
+<th align="right">Fn</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">IACS</td>
-<td align="right">449.7475</td>
-<td align="right">0.8337437</td>
-<td align="right">245.2619</td>
+<td align="left">AgCensus</td>
+<td align="right">0.0000</td>
+<td align="right">1.0000000</td>
+<td align="right">164.0017</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="left">CORINE</td>
-<td align="right">590.8654</td>
-<td align="right">-0.0119028</td>
-<td align="right">597.9831</td>
+<td align="left">FC</td>
+<td align="right">0.0000</td>
+<td align="right">1.0000000</td>
+<td align="right">164.0017</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="left">LCM</td>
-<td align="right">943.8205</td>
-<td align="right">0.1174771</td>
-<td align="right">844.5994</td>
+<td align="left">CORINE</td>
+<td align="right">497.1706</td>
+<td align="right">0.3402599</td>
+<td align="right">328.0034</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">CS</td>
-<td align="right">948.4324</td>
-<td align="right">0.0921650</td>
-<td align="right">868.3967</td>
+<td align="right">540.1346</td>
+<td align="right">0.2335046</td>
+<td align="right">414.0106</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">LCM</td>
+<td align="right">812.7562</td>
+<td align="right">-0.0246789</td>
+<td align="right">832.8141</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">IACS</td>
+<td align="right">1118.9417</td>
+<td align="right">0.0397577</td>
+<td align="right">1074.4551</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">LCC</td>
-<td align="right">1272.6419</td>
-<td align="right">0.2041237</td>
-<td align="right">1056.9030</td>
+<td align="right">1340.3314</td>
+<td align="right">0.1350960</td>
+<td align="right">1159.2580</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
+<p>An example is shown below.</p>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>Warning: Removed 144 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>Warning: Removed 144 rows containing missing values (geom_point).</code></pre>
+<p><img src="figure/m_uqdata.Rmd/plot_correspondence-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="conclusions" class="section level1">
 <h1><span class="header-section-number">6</span> Conclusions</h1>
@@ -829,7 +893,7 @@ The ranking shows that IACS has the lowest uncertainty and the Land Cover Crop M
 <li>A starting point would be to implement a simple method, whereby <span class="math inline">\(\sigma\)</span> for each data set is scaled according to metrics measuring its correspondence with reference data. This could be based on any or all of <span class="math inline">\(\Delta A, G, L\)</span> and <span class="math inline">\(B\)</span>.</li>
 <li>A better method is to estimate the biases and uncertainties as part of the data assimilation. With confusion matrices, we have a clear method for doing this, by explicitly representing the false positive and false negative error rates. The downside of this approach is that it is more complicated, involves estimating more parameters, and will have greater computation time. Pragmatically, we would propose starting with the simple method, and implementing and testing the more complex approach as time allows.</li>
 </ul>
-<pre><code>Computation time (excl. render): 0.64 sec elapsed</code></pre>
+<pre><code>Computation time (excl. render): 4.78 sec elapsed</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -856,23 +920,33 @@ attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
 
 other attached packages:
-[1] units_0.7-2   tidyr_1.1.3   dplyr_1.0.7   fs_1.5.0      here_1.0.1   
-[6] tictoc_1.0.1  targets_0.6.0
+ [1] ggplot2_3.3.5     units_0.7-2       data.table_1.14.0 tidyr_1.1.3      
+ [5] dplyr_1.0.7       qs_0.25.1         fs_1.5.0          here_1.0.1       
+ [9] tictoc_1.0.1      targets_0.6.0    
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.7        highr_0.9         pillar_1.6.2      compiler_4.0.4   
- [5] bslib_0.2.5.1     later_1.2.0       jquerylib_0.1.4   git2r_0.28.0     
- [9] workflowr_1.6.2   tools_4.0.4       digest_0.6.27     jsonlite_1.7.2   
-[13] evaluate_0.14     lifecycle_1.0.0   tibble_3.1.3      pkgconfig_2.0.3  
-[17] rlang_0.4.11      igraph_1.2.6      cli_3.0.1         yaml_2.2.1       
-[21] xfun_0.25         withr_2.4.2       stringr_1.4.0     knitr_1.33       
-[25] generics_0.1.0    vctrs_0.3.8       sass_0.4.0        tidyselect_1.1.1 
-[29] rprojroot_2.0.2   data.table_1.14.0 glue_1.4.2        R6_2.5.0         
-[33] processx_3.5.2    fansi_0.5.0       rmarkdown_2.10    bookdown_0.23    
-[37] purrr_0.3.4       callr_3.7.0       magrittr_2.0.1    whisker_0.4      
-[41] codetools_0.2-18  ps_1.6.0          promises_1.2.0.1  ellipsis_0.3.2   
-[45] htmltools_0.5.1.1 renv_0.14.0       httpuv_1.6.1      utf8_1.2.2       
-[49] stringi_1.7.3     crayon_1.4.1     </code></pre>
+ [1] tidyselect_1.1.1    xfun_0.25           bslib_0.2.5.1      
+ [4] purrr_0.3.4         lattice_0.20-41     splines_4.0.4      
+ [7] colorspace_2.0-2    vctrs_0.3.8         generics_0.1.0     
+[10] htmltools_0.5.1.1   mgcv_1.8-33         yaml_2.2.1         
+[13] utf8_1.2.2          rlang_0.4.11        jquerylib_0.1.4    
+[16] later_1.2.0         pillar_1.6.2        glue_1.4.2         
+[19] withr_2.4.2         lifecycle_1.0.0     stringr_1.4.0      
+[22] munsell_0.5.0       gtable_0.3.0        workflowr_1.6.2    
+[25] stringfish_0.15.2   codetools_0.2-18    evaluate_0.14      
+[28] labeling_0.4.2      RApiSerialize_0.1.0 knitr_1.33         
+[31] callr_3.7.0         httpuv_1.6.1        ps_1.6.0           
+[34] fansi_0.5.0         highr_0.9           Rcpp_1.0.7         
+[37] scales_1.1.1        renv_0.14.0         promises_1.2.0.1   
+[40] RcppParallel_5.1.4  jsonlite_1.7.2      farver_2.1.0       
+[43] digest_0.6.27       stringi_1.7.3       bookdown_0.23      
+[46] processx_3.5.2      grid_4.0.4          rprojroot_2.0.2    
+[49] cli_3.0.1           tools_4.0.4         magrittr_2.0.1     
+[52] sass_0.4.0          tibble_3.1.3        crayon_1.4.1       
+[55] whisker_0.4         pkgconfig_2.0.3     Matrix_1.3-2       
+[58] ellipsis_0.3.2      rmarkdown_2.10      R6_2.5.0           
+[61] nlme_3.1-152        igraph_1.2.6        git2r_0.28.0       
+[64] compiler_4.0.4     </code></pre>
 </div>
 </div>
 

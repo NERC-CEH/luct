@@ -497,4 +497,5 @@ getVectors <- function(b_U){
 
 names_u_chess <- c("white", "empty", "black")
 names_u  <- c("woods", "crops", "grass", "rough", "urban", "other")
+n_u  <- length(names_u)
 colour_u <- c("lightblue", "green", "pink", "purple", "orange", "midnightblue")

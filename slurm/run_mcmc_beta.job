@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH -p par-single
+#SBATCH --job-name=mcmcb 
+#SBATCH -o mcmcb_%A_%a.out
+#SBATCH -e mcmcb_%A_%a.err
+#SBATCH -t 01:30:00
+#SBATCH --cpus-per-task=3
+#SBATCH --array=1-269
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID}" run_mcmc_beta.R "console${SLURM_ARRAY_TASK_ID}.Rout"

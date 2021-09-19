@@ -25,29 +25,32 @@ render("analysis/m_uqdata.Rmd", pdf_document())
 # in a new R session, and doesn't execute the project .Rprofile
 
 library(targets) # access data from the targets cache
-
+here::i_am("analysis/m_uqdata.Rmd")
 library(tictoc) # capture execution time
 library(here) # construct file paths relative to project root
 library(fs) # file system operations
+library(qs)
 library(dplyr) # data wrangling
 # install.packages("sn") # skewed normal distribution
 #library(sn) # skewed normal distribution
 library(tidyr)
+library(data.table) # data wrangling
 library(units)
-#library(ggplot2)
-#library(ggforce)
+library(ggplot2)
 
 # start the execution time clock
 tictoc::tic("Computation time (excl. render)")
+
+dt_D <- tar_read(c_obs)$dt_D
 ```
 
 # Introduction
 
-The Tracking Land-Use Change project uses a data assimilation approach to combining different data sources. Several different data sources provide observations of the transition matrix $B$, as well as net and gross change in area of each land use ($dA, G, L$). The current (WP-A) method treats all data sources as equally uncertain, and assumes the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these.  We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but potentially complicated in practice, for the following reasons.
+The Tracking Land-Use Change project uses a data assimilation approach to combining different data sources. Several different data sources provide observations of the transition matrix $B$, as well as net and gross change in area of each land use ($D, G, L$). The current (WP-A) method treats all data sources as equally uncertain, and assumes the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these.  We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but potentially complicated in practice, for the following reasons.
 
 1. We can consider increasing levels of detail:
 
-    -   variable-specific uncertainties (i.e. different for $B, G, L$ & $dA$)
+    -   variable-specific uncertainties (i.e. different for $B, G, L$ & $D$)
 
     -   data source type-specific uncertainties (i.e. different for ground-based vs EO data)
 
@@ -148,23 +151,26 @@ getRMSE <- function(df = df, v, v_ref = "Ref"){
   return(RMSE)
 }
 
-get_cor <- function(df = df, v = "CS", v_ref = "Ref"){
+get_cor <- function(df = df, v = "CORINE", v_ref = "Ref"){
   v     <- df[[v]]
   v_ref <- df[[v_ref]]
   r2 <- cor(v, v_ref, use = "pairwise.complete.obs")
+  r2
   # if no data, these will be NaN, which need to be NA
-  #RMSE[is.nan(RMSE)] <- NA
+  r2[is.nan(r2)] <- NA
   return(r2)
 }
 ```
 
-```{r, loading, eval = TRUE, echo = FALSE}
-load(file = here::here("data-raw", "blags_1km.RData"), verbose = FALSE)
+```{r, loading, eval = FALSE, echo = FALSE}
+# load(file = here::here("data-raw", "blags_100m.RData"), verbose = TRUE)
+# dt_D <- dt_dA_obs
 ```
 
-```{r, plotting, eval = FALSE, echo = FALSE}
-# dA time series
-p <- ggplot(dt_dA_obs[time > 1990 & time < 2020 & area != set_units(0, km^2)], 
+```{r, plot_ts, eval = TRUE, echo = FALSE}
+# D time series
+#dt_D$area <- drop_units(dt_D$area)
+p <- ggplot(dt_D[time > 1990 & time < 2020 & area != 0], 
   aes(time, area, colour = data_source))
 p <- p + geom_line()
 p <- p + geom_point()
@@ -176,28 +182,45 @@ p
 ```
 
 ```{r, metrics, eval = TRUE, echo = FALSE}
-df <- pivot_wider(dt_dA_obs, names_from = data_source, values_from = area)
+df <- pivot_wider(dt_D, names_from = data_source, values_from = area)
 df <- subset(df, time >= 1990 & time <= 2020)
 df$Ref <- df$AgCensus
 df$Ref[df$u == "woods"] <- df$FC[df$u == "woods"]
-v_names_sources = c("AgCensus", "CS", "LCM", "CORINE", "LCC", "IACS")
+
+v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME")
 v_rmse <- sapply(v_names_sources, getRMSE, df = df, v_ref = "Ref")
-v_r2 <- sapply(v_names_sources, get_cor,     df = df, v_ref = "Ref")
-# df_scaled <- data.frame(RMSE = v_rmse, invr2 = 1/(v_r2+1))
-# df_scaled <- as.data.frame(scale(df_scaled))
-# df_scaled$sigma_scaling <-  df_scaled$RMSE * df_scaled$invr2
-# df_scaled$sigma_scaling <-  df_scaled$sigma_scaling
+v_r2   <- sapply(v_names_sources, get_cor, df = df, v_ref = "Ref")
 
-df_scaled <- data.frame(RMSE = v_rmse, invr2 = 1/(v_r2+1))
+df_scaling_uncert <- data.frame(RMSE = v_rmse, r2 = v_r2, 
+  # reduce RMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
+  sigma = v_rmse * abs(1 - v_r2))
 
-df_out <- data.frame(RMSE = v_rmse, r2 = v_r2, 
-  sigma_scaling = v_rmse * 1/(v_r2+1))
+df_scaling_uncert <- df_scaling_uncert[order(df_scaling_uncert$sigma),]
+# AgCensus and FC form the reference, so are rows 1:2 when ordered
+# guess sigma for these as half the lowest value, which will be row 3 
+# very arbitrary assumption, to be improved upon
+df_scaling_uncert["AgCensus",]$sigma <- df_scaling_uncert[3,]$sigma * 0.5
+df_scaling_uncert["FC",]$sigma       <- df_scaling_uncert[3,]$sigma * 0.5
 
-df_out <- df_out[order(df_out$sigma_scaling),]
-df_out <- df_out[-1,] # remove AgCensus, as most of ref data
-knitr::kable(df_out)
+# add dummy values for false positive and neg rates
+df_scaling_uncert$Fp <- 0
+df_scaling_uncert$Fn <- 0
+
+knitr::kable(df_scaling_uncert)
+qsave(df_scaling_uncert, file = here("data", "df_scaling_uncert.qs"))
 ```
 
+An example is shown below.
+
+```{r, plot_correspondence, eval = TRUE, echo = FALSE}
+# Plot correspondence
+p <- ggplot(df, aes(Ref, CROME, colour = u))
+p <- p + geom_point()
+p <- p + stat_smooth(method = "lm")
+p <- p + geom_abline()
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+```
 
 # Conclusions
 * Representing data source-specific uncertainty is relatively straightforward in principle. We need to estimate appropriate $\sigma$ values for each data source and use these in the likelihood function.
