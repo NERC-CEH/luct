@@ -26,6 +26,10 @@ library(readxl) # reading excel
 library(tictoc) # capture execution time
 library(here) # construct file paths relative to project root
 
+knitr::opts_chunk$set(dev = "png",
+                      dev.args = list(png = list(type = "cairo-png")),
+                      optipng = "-o1 -quiet")
+                      
 # start the execution time clock
 tictoc::tic("Computation time (excl. render)")
 ```

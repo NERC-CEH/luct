@@ -411,11 +411,11 @@ list(
 
       # Track the input Rmd file (and not the rendered HTML file).
       # Make the path relative to keep the project portable.
-      fs::path_rel(here("analysis", "m_CS_plot.Rmd"))
+      fs::path_rel(here("analysis", "m_AgCensus_plot.Rmd"))
     },
     # Track the files returned by the command
     format = "file",
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "thorough")
   ),   # end m_AgCensus_plot
   
   ## m_02 Plot the CS data ----
