@@ -461,7 +461,11 @@ list(
     },
     # Track the files returned by the command
     format = "file",
+<<<<<<< HEAD
     cue = tar_cue(mode = "thorough")
+=======
+    cue = tar_cue(mode = "never")
+>>>>>>> 8545d2af34338065df8f42e41ce059d76fddf6c5
   ),   # end m_data_comparison
   
   ## m_04 Quantify relative uncertainties ----
