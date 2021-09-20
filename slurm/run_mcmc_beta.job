@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH -p 6hour
+#SBATCH --job-name=mcmcb 
+#SBATCH -o output/mcmcb_%A_%a.out
+#SBATCH -e output/mcmcb_%A_%a.err
+#SBATCH -t 05:30:00
+#SBATCH --cpus-per-task=3
+#SBATCH --array=1-29
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID}" slurm/run_mcmc_beta.R "output/console${SLURM_ARRAY_TASK_ID}.Rout"

@@ -792,15 +792,45 @@ run_lcc_job <- function(fname_job = "./slurm/process_LCC.job"){
 #' fname_job = "./slurm/process_LCM.job"
 #' x <- run_lcm_job(fname_job)
 run_lcm_job <- function(fname_job = "./slurm/process_LCM.job"){
-  cmd <- paste0("sbatch ", fname_job)
-  # submit the jobs to the SLURM queue
-  err <- system(cmd)
+  # no reprocessing needed now - done by Sam outwith targets
+  # redo later within targets
+  # cmd <- paste0("sbatch ", fname_job)
+  # # submit the jobs to the SLURM queue
+  # err <- system(cmd)
   # and return the years and paths of the output files
   # these need to match slurm/process_LCM.R - no programmed check they are consistent
-  v_times <- c(1990, 2015, 2017, 2018, 2019)
+  v_times <- c(1990, 1994, 1998, 2002, 2006, 2010, 2015, 2017, 2018, 2019)
   return(list(
     v_times = v_times,
-    v_fnames = paste0("./data/LCM/Level1/r_U_lcm_100m_", v_times, ".tif")
+    v_fnames = paste0("./data/LCM/Level1/r_U_lcm_1000m_", v_times, ".tif")
+  ))
+}
+
+
+## ---- run_crome_job
+
+#' Function to run CROME processing job 
+#'  from raw tif files to R objects
+#'
+#' @param fname_job File path to SLURM job file for CROME processing
+#' @return A job object
+#' @export
+#' @examples
+#' fname_job = "./slurm/process_CROME.job"
+#' x <- run_crome_job(fname_job)
+run_crome_job <- function(fname_job = "./slurm/process_CROME.job"){
+  # no reprocessing needed now - done by Sam outwith targets
+  # no job called, just returns the Level1 file paths
+  # redo later within targets
+  # cmd <- paste0("sbatch ", fname_job)
+  # # submit the jobs to the SLURM queue
+  # err <- system(cmd)
+  # and return the years and paths of the output files
+  # these need to match slurm/process_CROME.R - no programmed check they are consistent
+  v_times <- c(2016, 2017, 2018, 2019)
+  return(list(
+    v_times = v_times,
+    v_fnames = paste0("./data/CROME/Level1/r_U_crome_100m_", v_times, ".tif")
   ))
 }
 
@@ -894,7 +924,7 @@ set_exclusions <- function(obs){
   obs$dt_D$useData <- TRUE
 
   # exclude these data sources for woods
-  data_sources_toExclude <- c("AgCensus", "IACS", "LCC")
+  data_sources_toExclude <- c("AgCensus", "IACS", "LCC", "CROME")
   obs$dt_A$useData[obs$dt_A$u == "woods" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_G$useData[obs$dt_G$u == "woods" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == "woods" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
@@ -927,48 +957,71 @@ set_exclusions <- function(obs){
 }
 
 
-## ---- get_rmse
+## ---- get_loglik
 
-#' Define a function to calculate the root-mean-square error (RMSE) 
-#' for a given $B$ matrix. 
+#' Define a function to calculate the log-likelihood (loglik) 
+#' for observations and a given $B$ matrix. 
 #'
 #' @param v_B Beta matrix as a vector
 #' @return The RMSE from comparison of predictions versus observations
+#' @return dt_B_obs Data table containing observations of Beta matrix terms
+#' @return dt_G_obs Data table containing observations of gross gains
+#' @return dt_L_obs Data table containing observations of gross losses
+#' @return dt_D_obs Data table containing observations of net area changes
+#' @return n_u Numeric The number of land uses
+#' @return use_rmse = FALSE
 #' @export
 #' @examples
 #' obs <- tar_read(c_obs)
-#' rmse <- get_rmse(v_B)
-get_rmse <- function(v_B, 
-    dt_B_obs, dt_G_obs, dt_L_obs, dt_D_obs, 
-    n_u = sqrt(length(v_B))){
+#' rmse   <- get_loglik(v_B, use_rmse = TRUE)
+#' rmse   <- get_loglik(v_B, obs$dt_B, obs$dt_G, obs$dt_L, obs$dt_D, use_rmse = TRUE)
+#' loglik <- get_loglik(v_B, obs$dt_B, obs$dt_G, obs$dt_L, obs$dt_D)
+get_loglik <- function(v_B, 
+    #dt_B_obs, dt_G_obs, dt_L_obs, dt_D_obs, 
+    n_u = sqrt(length(v_B)), use_rmse = FALSE){
   m_B_pred  <- matrix(v_B, n_u, n_u)
   dt_B_pred <- data.table(u_from = rep(names_u, n_u), u_to = rep(names_u, each = n_u), pred  = as.vector(m_B_pred))
   dt_G_pred <- data.table(u = names_u, pred  = getAreaGrossGain_fromBeta(m_B_pred, n_u))
   dt_L_pred <- data.table(u = names_u, pred  = getAreaGrossLoss_fromBeta(m_B_pred, n_u))
   dt_D_pred <- data.table(u = names_u, pred = getAreaNetChange_fromBeta(m_B_pred, n_u))
   
-  dt_B <- merge(dt_B_obs, dt_B_pred)
-  dt_G <- merge(dt_G_obs, dt_G_pred)
-  dt_L <- merge(dt_L_obs, dt_L_pred)
-  dt_D <- merge(dt_D_obs, dt_D_pred)
-  resid_D <- dt_D[, area - pred]
-  resid_G <- dt_G[, area - pred]
-  resid_L <- dt_L[, area - pred]
-  resid_B <- dt_B[, area - pred]
+  dt_B <- merge(dt_B_obs, dt_B_pred, by = c("u_from", "u_to"))
+  dt_G <- merge(dt_G_obs, dt_G_pred, by = "u")
+  dt_L <- merge(dt_L_obs, dt_L_pred, by = "u")
+  dt_D <- merge(dt_D_obs, dt_D_pred, by = "u")
 
-  RMSE_D <- sqrt(mean(resid_D^2, na.rm = TRUE)) # * wt_D
-  RMSE_G <- sqrt(mean(resid_G^2,  na.rm = TRUE)) # * wt_G 
-  RMSE_L <- sqrt(mean(resid_L^2,  na.rm = TRUE)) # * wt_L 
-  RMSE_B <- sqrt(mean(resid_B^2,  na.rm = TRUE)) # * wt_B 
-  
-  v_RMSE <- c(RMSE_D, RMSE_B, RMSE_G, RMSE_L)
-  # if no data, these will be NaN, which need to be NA
-  v_RMSE[is.nan(v_RMSE)] <- NA
-  return(sum(v_RMSE, na.rm = TRUE))
+  if (use_rmse){
+    resid_D <- dt_D[, area - pred]
+    resid_G <- dt_G[, area - pred]
+    resid_L <- dt_L[, area - pred]
+    resid_B <- dt_B[, area - pred]
+
+    RMSE_D <- sqrt(mean(resid_D^2, na.rm = TRUE)) # * wt_D
+    RMSE_G <- sqrt(mean(resid_G^2, na.rm = TRUE)) # * wt_G 
+    RMSE_L <- sqrt(mean(resid_L^2, na.rm = TRUE)) # * wt_L 
+    RMSE_B <- sqrt(mean(resid_B^2, na.rm = TRUE)) # * wt_B 
+    
+    v_RMSE <- c(RMSE_D, RMSE_B, RMSE_G, RMSE_L)
+    # if no data, these will be NaN, which need to be NA
+    v_RMSE[is.nan(v_RMSE)] <- NA
+    return(sum(v_RMSE, na.rm = TRUE))
+  } else {
+    # use constant CV for sigma in obs; could use mult_sd <- c(0.05, 0.1, 0.1, 0.4, 0.3, 0.2)
+    # v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = 0.1*abs(dt_B$area), log = T)
+    # v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = 0.1*abs(dt_G$area), log = T)
+    # v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = 0.1*abs(dt_L$area), log = T)
+    # v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = 0.1*abs(dt_D$area), log = T)
+    v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = dt_B$sigma*abs(dt_B$area), log = T)
+    v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = dt_G$sigma*abs(dt_G$area), log = T)
+    v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = dt_L$sigma*abs(dt_L$area), log = T)
+    v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = dt_D$sigma*abs(dt_D$area), log = T)
+    loglik <- sum(v_llik_D, v_llik_G, v_llik_L, v_llik_B, na.rm = TRUE)
+    return(loglik)
+  }
 }
 
 
-## ---- get_ls_pred
+## ---- get_pred_ls
 
 #' Define a function to calculate the least-squares predictions 
 #' for the $B$ matrix, and associated G, L, and D data tables. 
@@ -982,8 +1035,7 @@ get_rmse <- function(v_B,
 get_pred_ls <- function(
   obs,
   start_year = 2015,
-  end_year = 2019,
-  n_u = length(names_u)){
+  end_year = 2019){
 
   v_times <- start_year:end_year
   n_t <- length(v_times)
@@ -1019,17 +1071,32 @@ get_pred_ls <- function(
   for (i_t in 2:n_t){
   #i_t = 2
     i_time <- v_times[i_t]
-    dt_B_obs <- obs$dt_B[time == i_time]
-    dt_G_obs <- obs$dt_G[time == i_time]
-    dt_L_obs <- obs$dt_L[time == i_time]
-    dt_A_obs <- obs$dt_A[time == i_time]
-    dt_D_obs <- obs$dt_D[time == i_time]
+    # need to super-assign these to the global environment
+    # because that is where get_loglik is defined, so the local
+    # values are not available to it (scoping is lexical not dynamic).
+    dt_B_obs <<- obs$dt_B[time == i_time]
+    dt_G_obs <<- obs$dt_G[time == i_time]
+    dt_L_obs <<- obs$dt_L[time == i_time]
+    dt_A_obs <<- obs$dt_A[time == i_time]
+    dt_D_obs <<- obs$dt_D[time == i_time]
 
-    fit <- optim(v_B_ini, get_rmse, 
-      dt_B_obs = dt_B_obs, dt_G_obs = dt_G_obs, 
-      dt_L_obs = dt_L_obs, dt_D_obs = dt_D_obs, 
+    # minimise the RMSE
+    fit <- optim(v_B_ini, get_loglik, 
+      # dt_B_obs = dt_B_obs, dt_G_obs = dt_G_obs, 
+      # dt_L_obs = dt_L_obs, dt_D_obs = dt_D_obs,
+      use_rmse = TRUE,      
       method = "L-BFGS-B", 
       lower = 0, control = list(factr = 1e9, maxit = 1000, trace = 2))
+
+    # # alternatively, maximise the log-likelihood instead
+    # # use_rmse = FALSE (default) and set fnscale = -1 to maximise
+    # # seems slower
+    # fit <- optim(fit$par, get_loglik, 
+      # dt_B_obs = dt_B_obs, dt_G_obs = dt_G_obs, 
+      # dt_L_obs = dt_L_obs, dt_D_obs = dt_D_obs,  
+      # method = "L-BFGS-B", 
+      # lower = 0, control = list(fnscale = -1, factr = 1e9, maxit = 1000, trace = 2))
+
    # fit <- optim(fit$par, getRMSE, method = "L-BFGS-B", 
      # lower = 0, control = list(factr = 1e3, maxit = 1000, trace = 2))
 
@@ -1058,5 +1125,321 @@ get_pred_ls <- function(
   # pred$dt_L <- subset(pred$dt_L, time > v_times[1])
 
   return(pred)
+}
+
+
+## ---- get_post_mcmc_serial
+
+#' Define a function to calculate the least-squares predictions 
+#' for the $B$ matrix, and associated G, L, and D data tables. 
+#'
+#' @param v_B Beta matrix as a vector
+#' @return A blag object for the least-squares predictions
+#' @export
+#' @examples
+#' obs     <- tar_read(c_obs)
+#' pred_ls <- tar_read(c_pred_ls)
+#' l_post <- get_post_mcmc_serial(obs, pred_ls, start_year = 2018, end_year = 2019, n_iter = 1000)
+get_post_mcmc_serial <- function(
+  obs,
+  pred_ls,
+  start_year = 2015,
+  end_year = 2019,
+  n_iter = 10,
+  n_chains = 3,
+  thin = round(max(1, n_iter/1000))
+  ){
+
+  v_times <- start_year:end_year
+  n_t <- length(v_times)
+  # allocate an empty list to store an mcmc output object for each time step
+  l_mcmcOut <- vector("list", n_t)
+  
+  # this duplicates reordering in combine_blags
+  # but the additional check is probably a good idea
+  # as the order determines vector to matrix conversion ordering
+  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
+
+  ## start BayesianTools MCMC code
+
+  # Prior: use CS from 2019
+  # v_B_prior <- dt_B_obs[time == 2019 & data_source == "CS", area]
+  # v_B_prior[is.na(v_B_prior)] <- 0
+  # v_sd_prior <- 0.1*v_B_prior + 0.1
+  ## probably over-complicated
+  # prior <- createTruncatedNormalPrior(mean = v_B_prior, sd = v_sd_prior, 
+    # lower = rep(0, length(v_B_prior)), upper = 3*max(v_B_prior)+10)
+  # or just uniform ** or half-normal
+  prior <- createUniformPrior(
+    lower = rep(    0, n_u^2), 
+    upper = rep(10000, n_u^2))
+  setUp <- createBayesianSetup(get_loglik, 
+    prior = prior, parallel = FALSE)
+
+  # Initial values for chains 
+  # get LS predictions as a starting point 
+  v_B_ini <- pred_ls$dt_B[time == 2019, area]
+  m_starter <- matrix(rep(v_B_ini, n_chains), nrow = n_chains, byrow = TRUE)
+  m_starter[2,] <- rep(0, n_u^2)         # all zeroes
+  m_starter[3,] <- runif(n_u^2, 0, 1000) # random
+
+  # initialise array for predicted B parameters
+  m_B <- matrix(0, 
+    nrow = n_u, ncol = n_u, dimnames = list(names_u, names_u))
+  a_B_pred <- array(m_B, c(n_u, n_u, n_t))
+
+  # Loop over each year, finding the $B$ matrix which minimises RMSE with the observed data.
+  # backwards version
+  #for (i_t in (n_t):2){
+  # forwards version
+  start_time <- Sys.time()
+  for (i_t in 2:n_t){
+  #i_t = 2
+    i_time <- v_times[i_t]
+    # need to super-assign these to the global environment
+    # because that is where get_loglik is defined, so the local
+    # values are not available to it (scoping is lexical not dynamic).
+    dt_B_obs <<- obs$dt_B[time == i_time]
+    dt_G_obs <<- obs$dt_G[time == i_time]
+    dt_L_obs <<- obs$dt_L[time == i_time]
+    dt_A_obs <<- obs$dt_A[time == i_time]
+    dt_D_obs <<- obs$dt_D[time == i_time]
+
+    # start BayesianTools MCMC code
+    settings <- list(iterations = n_iter,  thin = thin,  nrChains = n_chains, message = TRUE)
+    system.time(out <- runMCMC(bayesianSetup = setUp, sampler = "DREAMzs", settings = settings))
+    l_mcmcOut[[i_t]] <- out
+  }
+  print(paste0("time elapsed (mins): ", round(Sys.time() - start_time, 3)))
+
+  return(l_mcmcOut)
+}
+
+
+## ---- get_post_mcmc_parallel
+
+#' Define a function to calculate the least-squares predictions 
+#' for the $B$ matrix, and associated G, L, and D data tables. 
+#'
+#' @param v_B Beta matrix as a vector
+#' @return A blag object for the least-squares predictions
+#' @export
+#' @examples
+#' obs     <- tar_read(c_obs)
+#' pred_ls <- tar_read(c_pred_ls)
+#' get_post_mcmc_parallel <- get_post_mcmc(obs, pred_ls, start_year = 2016, end_year = 2019, n_iter = 1000)
+get_post_mcmc_parallel <- function(
+  obs,
+  pred_ls,
+  start_year = 2015,
+  end_year = 2019,
+  n_iter = 10,
+  # we want three processors to each run one chain, with the 3 internal chains 
+  n_chains = 1, # on the same core (DREAMz uses 3 internal chains by default)
+  n_cores  = 3, # number of cores to use
+  thin = round(max(1, n_iter/1000))
+  ){
+
+  v_times <- start_year:end_year
+  n_t <- length(v_times)
+  # allocate an empty list to store an mcmc output object for each time step
+  l_mcmcOut <- vector("list", n_t)
+  
+  # this duplicates reordering in combine_blags
+  # but the additional check is probably a good idea
+  # as the order determines vector to matrix conversion ordering
+  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
+
+  ## start BayesianTools MCMC code
+
+  # Prior: use CS from 2019
+  # v_B_prior <- dt_B_obs[time == 2019 & data_source == "CS", area]
+  # v_B_prior[is.na(v_B_prior)] <- 0
+  # v_sd_prior <- 0.1*v_B_prior + 0.1
+  ## probably over-complicated
+  # prior <- createTruncatedNormalPrior(mean = v_B_prior, sd = v_sd_prior, 
+    # lower = rep(0, length(v_B_prior)), upper = 3*max(v_B_prior)+10)
+  # or just uniform ** or half-normal
+  prior <- createUniformPrior(
+    lower = rep(    0, n_u^2), 
+    upper = rep(10000, n_u^2))
+  setUp <- createBayesianSetup(get_loglik, 
+    prior = prior, parallel = FALSE)
+
+  # Initial values for chains 
+  # get LS predictions as a starting point 
+  v_B_ini <- pred_ls$dt_B[time == 2019, area]
+  m_starter <- matrix(rep(v_B_ini, n_cores), nrow = n_cores, byrow = TRUE)
+  m_starter[2,] <- rep(0, n_u^2)         # all zeroes
+  m_starter[3,] <- runif(n_u^2, 0, 1000) # random
+
+
+  # initialise array for predicted B parameters
+  m_B <- matrix(0, 
+    nrow = n_u, ncol = n_u, dimnames = list(names_u, names_u))
+  a_B_pred <- array(m_B, c(n_u, n_u, n_t))
+
+  # Loop over each year, finding the $B$ matrix which minimises RMSE with the observed data.
+  # backwards version
+  #for (i_t in (n_t):2){
+  # forwards version
+  start_time <- Sys.time()
+  for (i_t in 2:n_t){
+  #i_t = 2
+    i_time <- v_times[i_t]
+    dt_B_obs <- obs$dt_B[time == i_time]
+    dt_G_obs <- obs$dt_G[time == i_time]
+    dt_L_obs <- obs$dt_L[time == i_time]
+    dt_A_obs <- obs$dt_A[time == i_time]
+    dt_D_obs <- obs$dt_D[time == i_time]
+
+    # start BayesianTools MCMC code
+    settings <- list(iterations = n_iter,  thin = thin,  nrChains = n_chains, message = TRUE)
+    system.time(out <- runMCMC(bayesianSetup = setUp, sampler = "DREAMzs", settings = settings))
+    l_mcmcOut[[i_t]] <- out
+  }
+  print(paste0("time elapsed (mins): ", round(Sys.time() - start_time, 3)))
+
+  return(l_mcmcOut)
+}
+
+
+## ---- run_mcmc_job
+
+#' Function to run MCMC processing job 
+#'  for Beta matrix
+#'
+#' @param fname_job File path to SLURM job file for LCM processing
+#' @return A job object
+#' @export
+#' @examples
+#' fname_job = "./slurm/process_LCM.job"
+#' x <- run_lcm_job(fname_job)
+run_mcmc_job <- function(fname_job = "./slurm/run_mcmc_beta.job"){
+  cmd <- paste0("sbatch ", fname_job)
+  # submit the jobs to the SLURM queue
+  err <- system(cmd)
+  # and return the years and paths of the output files
+  # these need to match slurm/process_LCM.R - no programmed check they are consistent
+  v_times <- c(1990, 2015, 2017, 2018, 2019)
+  return(list(
+    v_times = v_times,
+    v_fnames = paste0("./data/MCMC/")
+  ))
+}
+
+
+## ---- get_rmse
+
+#' Function to run MCMC processing job 
+#'  for Beta matrix
+#'
+#' @param df A data frame containing the variables
+#' @param v A character string for the name of the test variable
+#' @param v_ref A character string for the name of the reference variable
+#' @return Numeric The root-mean-square error
+#' @export
+#' @examples
+#' rmse <- get_rmse(df = df, v = "IACS", v_ref = "Ref")
+get_rmse <- function(df = df, v, v_ref = "Ref"){
+  v     <- df[[v]]
+  v_ref <- df[[v_ref]]
+  resid <- v - v_ref
+  rmse <- sqrt(mean(resid^2, na.rm = TRUE))
+  # if no data, these will be NaN, which need to be NA
+  rmse[is.nan(rmse)] <- NA
+  return(rmse)
+}
+
+
+## ---- get_r2
+
+#' Function to run MCMC processing job 
+#'  for Beta matrix
+#'
+#' @param df A data frame containing the variables
+#' @param v A character string for the name of the test variable
+#' @param v_ref A character string for the name of the reference variable
+#' @return Numeric The r2 correlation coefficient
+#' @export
+#' @examples
+#' r2 <- get_r2(df = df, v = "CORINE", v_ref = "Ref")
+get_r2 <- function(df = df, v, v_ref = "Ref"){
+  v     <- df[[v]]
+  v_ref <- df[[v_ref]]
+  r2 <- cor(v, v_ref, use = "pairwise.complete.obs")
+  r2
+  # if no data, these will be NaN, which need to be NA
+  r2[is.nan(r2)] <- NA
+  return(r2)
+}
+
+
+## ---- get_uncert_scaling
+
+#' Function to run MCMC processing job 
+#'  for Beta matrix
+#'
+#' @param obs A blag object containing the observations
+#' @param v_names_sources A character vector for the names of the data sources
+#' @param cv_AgCensus Numeric Coefficient of variation assumed for AgCensus
+#' @return df A data frame containing the scaling variables for uncertainty 
+#' @export
+#' @examples
+#' df <- get_uncert_scaling(obs, v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"))
+get_uncert_scaling <- function(obs, v_names_sources = 
+  c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
+  cv_AgCensus = 0.1){
+  
+  dt_D <- obs$dt_D
+  df <- pivot_wider(dt_D, names_from = data_source, values_from = area)
+  df <- subset(df, time >= 1990 & time <= 2020)
+  df$Ref <- df$AgCensus
+  df$Ref[df$u == "woods"] <- df$FC[df$u == "woods"]
+
+  v_rmse <- sapply(v_names_sources, get_rmse, df = df, v_ref = "Ref")
+  v_r2   <- sapply(v_names_sources, get_r2,   df = df, v_ref = "Ref")
+
+  df <- data.frame(RMSE = v_rmse, r2 = v_r2, 
+    # reduce RMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
+    sigma = v_rmse * abs(1 - v_r2))
+
+  df <- df[order(df$sigma),]
+  # AgCensus and FC form the reference, so are rows 1:2 when ordered
+  # guess sigma for these as half the lowest value, which will be row 3 
+  # very arbitrary assumption, to be improved upon
+  df["AgCensus",]$sigma <- df[3,]$sigma * 0.5
+  df["FC",]$sigma       <- df[3,]$sigma * 0.5
+
+  df$sigma <- df$sigma / df["AgCensus",]$sigma * cv_AgCensus
+
+  # add dummy values for false positive and neg rates
+  df$Fp <- 0
+  df$Fn <- 0
+  return(df)
+}
+
+
+## ---- add_uncert
+
+#' Function to add uncertainties to observations 
+#'
+#' @param obs A blag object containing the observations
+#' @param c_df_uncert A data frame containing the scaling variables for uncertainty 
+#' @return obs A blag object containing the observations with uncertainties
+#' @export
+#' @examples
+#' df <- add_uncert(obs, v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"))
+add_uncert <- function(obs, df_uncert){
+  
+  df_uncert$data_source <- rownames(df_uncert)
+  df_uncert <- df_uncert[, c("data_source", "sigma", "Fp", "Fn")]
+  obs$dt_B <- merge(obs$dt_B, df_uncert, all.x = TRUE, by = "data_source") 
+  obs$dt_G <- merge(obs$dt_G, df_uncert, all.x = TRUE, by = "data_source") 
+  obs$dt_L <- merge(obs$dt_L, df_uncert, all.x = TRUE, by = "data_source") 
+  obs$dt_A <- merge(obs$dt_A, df_uncert, all.x = TRUE, by = "data_source") 
+  obs$dt_D <- merge(obs$dt_D, df_uncert, all.x = TRUE, by = "data_source") 
+  
+  return(obs)
 }
 

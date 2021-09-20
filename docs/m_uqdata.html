@@ -364,215 +364,175 @@ div.tocify {
 
 
 <p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report"
+  data-toggle="collapse" data-target="#workflowr-report">
+  
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
+
 <div id="workflowr-report" class="collapse">
 <ul class="nav nav-tabs">
-<li class="active">
+  <li class="active">
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
-<li>
-<a data-toggle="tab" href="#checks">
-Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+  <li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
-<li>
+  <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
 </li>
 </ul>
+
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
-<p>
-<strong>Last updated:</strong> 2021-09-14
+  <p>
+<strong>Last updated:</strong> 2021-09-19
 </p>
-<p>
-<strong>Checks:</strong>
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-7
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-0
+  <p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
-<p>
-<strong>Knit directory:</strong>
-<code>luct/</code>
-<span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed.">
-</span>
+  <p>
+<strong>Knit directory:</strong> <code>luct/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
 </p>
-<p>
-This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
-analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
-1.6.2). The <em>Checks</em> tab describes the
-reproducibility checks that were applied when the results were created.
-The <em>Past versions</em> tab lists the development history.
+  <p>
+  
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
 <div id="checks" class="tab-pane fade">
-<div id="workflowr-checks" class="panel-group">
-<div class="panel panel-default">
+  <div class="panel-group" id="workflowr-checks">
+  <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you
-know the exact version of the code that produced these results.</p>
+  
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you'll want to first commit it to the Git repo. If you're still working on the analysis, you can ignore this warning. When you're finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Environment:</strong> empty
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global
-environment can affect the analysis in your R Markdown file in unknown ways.
-For reproduciblity it’s best to always run the code in an empty environment.</p>
+  
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it's best to always run the code in an empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201104code">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Seed:</strong> <code>set.seed(20201104)</code>
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201104code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20201104)</code> </a>
 </p>
 </div>
 <div id="strongSeedstrongcodesetseed20201104code" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20201104)</code> was run prior to running the code in the R Markdown file.
-Setting a seed ensures that any results that rely on randomness, e.g.
-subsampling or permutations, are reproducible.</p>
+  
+<p>The command <code>set.seed(20201104)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Session information:</strong> recorded
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
 </p>
 </div>
 <div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is
-critical for reproducibility.</p>
+  
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Cache:</strong> none
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident
-that you successfully produced the results during this run.</p>
+  
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>File paths:</strong> relative
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
 <div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project
-makes it easier to run your code on other machines.</p>
+  
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreec6752cc04cc382414a3903e44ad73bd89d0f4b0etargetblankc6752cca">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/c6752cc04cc382414a3903e44ad73bd89d0f4b0e" target="_blank">c6752cc</a>
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttreecb43b025c3d8f43ff72d6f0657bbd118bc98814ftargetblankcb43b02a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="ssh://git@github.com/NERC-CEH/luct/tree/cb43b025c3d8f43ff72d6f0657bbd118bc98814f" target="_blank">cb43b02</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttreec6752cc04cc382414a3903e44ad73bd89d0f4b0etargetblankc6752cca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttreecb43b025c3d8f43ff72d6f0657bbd118bc98814ftargetblankcb43b02a" class="panel-collapse collapse">
 <div class="panel-body">
+  
 <p>
-Great! You are using Git for version control. Tracking code development and
-connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
+
 <p>
-The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/c6752cc04cc382414a3903e44ad73bd89d0f4b0e" target="_blank">c6752cc</a>.
-See the <em>Past versions</em> tab to see a history of the changes made to the
-R Markdown and HTML files.
+The results in this page were generated with repository version <a href="ssh://git@github.com/NERC-CEH/luct/tree/cb43b025c3d8f43ff72d6f0657bbd118bc98814f" target="_blank">cb43b02</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
+
 <p>
-Note that you need to be careful to ensure that all relevant files for the
-analysis have been committed to Git prior to generating the results (you can
-use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only
-checks the R Markdown file, but you know if there are other scripts or data
-files that it depends on. Below is the status of the Git repository when the
-results were generated:
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
+
 <pre><code>
 Ignored files:
-    Ignored:    .Rhistory
-    Ignored:    .Rproj.user/
     Ignored:    _targets/
-    Ignored:    analysis/life_tables.xlsx
-    Ignored:    analysis/m_lifetables.pdf
-    Ignored:    analysis/m_uqdata.html
-    Ignored:    analysis/m_uqdata.pdf
     Ignored:    data-raw
     Ignored:    data/
+    Ignored:    log/
+    Ignored:    output/
+    Ignored:    output_priorHnl_iter600k/
+    Ignored:    output_priorUni_iter360k/
     Ignored:    renv/library/
-    Ignored:    renv/local/
     Ignored:    renv/staging/
 
 Untracked files:
-    Untracked:  R/luct_Fp_Fn.R
-    Untracked:  slurm/runLikU.job
-    Untracked:  slurm/runMCMC_Beta.job
-    Untracked:  slurm/runSampleU.job
-    Untracked:  slurm/runVectors.job
+    Untracked:  slurm/run_mcmc_beta.R
+    Untracked:  slurm/run_mcmc_beta.job
 
 Unstaged changes:
+    Modified:   R/luc_track.R
     Modified:   R/luct.R
     Modified:   _targets.R
-    Modified:   analysis/m_data_comparison.Rmd
+    Modified:   _targets_packages.R
+    Modified:   analysis/m_uqdata.Rmd
+    Modified:   renv.lock
 
 </code></pre>
+
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in
-this status report because it is ok for generated content to have uncommitted
-changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
 </p>
+
 </div>
 </div>
 </div>
@@ -580,13 +540,9 @@ changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
+  
 <p>
-These are the previous versions of the repository in which changes were made
-to the R Markdown (<code>analysis/m_uqdata.Rmd</code>) and HTML (<code>docs/m_uqdata.html</code>)
-files. If you’ve configured a remote Git repository (see
-<code>?wflow_git_remote</code>), click on the hyperlinks in the table below to
-view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/m_uqdata.Rmd</code>) and HTML (<code>docs/m_uqdata.html</code>) files. If you've configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -615,7 +571,24 @@ Message
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/72919f23ccdf6b13af5c5699de00637ab03e01cc/docs/m_uqdata.html" target="_blank">72919f2</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/b3d846cf92cb43c1c8c68d508f6608d827e433ae/docs/m_uqdata.html" target="_blank">b3d846c</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+<td>
+Data source exclusions target added
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/72919f23ccdf6b13af5c5699de00637ab03e01cc/docs/m_uqdata.html" target="_blank">72919f2</a>
 </td>
 <td>
 ADCEH
@@ -632,7 +605,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/NERC-CEH/luct/blob/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/analysis/m_uqdata.Rmd" target="_blank">1ea3ad7</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/analysis/m_uqdata.Rmd" target="_blank">1ea3ad7</a>
 </td>
 <td>
 ADCEH
@@ -649,7 +622,7 @@ Updating index
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/docs/m_uqdata.html" target="_blank">1ea3ad7</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/docs/m_uqdata.html" target="_blank">1ea3ad7</a>
 </td>
 <td>
 ADCEH
@@ -666,7 +639,7 @@ Updating index
 html
 </td>
 <td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/9a3642a8ce5900cbdc81be3784038a9d0050f6e0/docs/m_uqdata.html" target="_blank">9a3642a</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/9a3642a8ce5900cbdc81be3784038a9d0050f6e0/docs/m_uqdata.html" target="_blank">9a3642a</a>
 </td>
 <td>
 ADCEH
@@ -683,7 +656,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="https://github.com/NERC-CEH/luct/blob/0b3b4e1858e2324bf4e8606c6894080209a89d02/analysis/m_uqdata.Rmd" target="_blank">0b3b4e1</a>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/0b3b4e1858e2324bf4e8606c6894080209a89d02/analysis/m_uqdata.Rmd" target="_blank">0b3b4e1</a>
 </td>
 <td>
 ADCEH
@@ -698,182 +671,226 @@ Adding data uncertainty text
 </tbody>
 </table>
 </div>
+
 <hr>
 </div>
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<p>The Tracking Land-Use Change project uses a data assimilation approach to combining different data sources. Several different data sources provide observations of the transition matrix <span class="math inline">\(B\)</span>, as well as net and gross change in area of each land use (<span class="math inline">\(dA, G, L\)</span>). The current (WP-A) method treats all data sources as equally uncertain, and assumes the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these. We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but potentially complicated in practice, for the following reasons.</p>
+<p>The Tracking Land-Use Change project uses a data assimilation approach to combining different data sources. Several different data sources provide observations of the transition matrix <span class="math">\(B\)</span>, as well as net and gross change in area of each land use (<span class="math">\(D, G, L\)</span>). The current (WP-A) method treats all data sources as equally uncertain, and assumes the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these. We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but potentially complicated in practice, for the following reasons.</p>
 <ol style="list-style-type: decimal">
 <li><p>We can consider increasing levels of detail:</p>
 <ul>
-<li><p>variable-specific uncertainties (i.e. different for <span class="math inline">\(B, G, L\)</span> &amp; <span class="math inline">\(dA\)</span>)</p></li>
-<li><p>data source type-specific uncertainties (i.e. different for ground-based vs EO data)</p></li>
-<li><p>data set-specific uncertainties (i.e. different for CS, IACS, LCM etc.)</p></li>
-<li><p>land-use type-specific uncertainties (i.e. different for woods, crops, grass etc.)</p></li>
-<li><p>time-specific uncertainties (i.e. different for 1990, 2000 … 2019)</p></li>
+<li><p>variable-specific uncertainties (i.e. different for <span class="math">\(B, G, L\)</span> &amp; <span class="math">\(D\)</span>)</p></li>
+<li><p>data source type-specific uncertainties (i.e. different for ground-based vs EO data)</p></li>
+<li><p>data set-specific uncertainties (i.e. different for CS, IACS, LCM etc.)</p></li>
+<li><p>land-use type-specific uncertainties (i.e. different for woods, crops, grass etc.)</p></li>
+<li><p>time-specific uncertainties (i.e. different for 1990, 2000 ... 2019)</p></li>
 </ul></li>
-<li><p>Rather than continuous data with a simple <span class="math inline">\(\sigma\)</span> error term, the <span class="math inline">\(B\)</span> observations are count data in a 6 x 6-way classification. When considering land-use <em>change</em>, we need to compare the 36 elements of this classification from one data source with another (or the truth), so we have a 36 x 36 error matrix (or “confusion” matrix). This matrix has two distinct types of errors that we ideally want to distinguish: false positives and false negatives, or “user”/“commission” and “producer”/“omission” error/accuracy, in the EO terminology.</p></li>
-<li><p>We can specify uncertainty greater or lesser rigour: there are several possibilities for how we represent “uncertainty” in the mathematical model.</p></li>
-<li><p>We can estimate uncertainty subjectively, or base it more closely on data. There are also several possibilities for how we translate measures of uncertainty in the data in to the mathematical model.</p></li>
+<li><p>Rather than continuous data with a simple <span class="math">\(\sigma\)</span> error term, the <span class="math">\(B\)</span> observations are count data in a 6 x 6-way classification. When considering land-use <em>change</em>, we need to compare the 36 elements of this classification from one data source with another (or the truth), so we have a 36 x 36 error matrix (or &quot;confusion&quot; matrix). This matrix has two distinct types of errors that we ideally want to distinguish: false positives and false negatives, or &quot;user&quot;/&quot;commission&quot; and &quot;producer&quot;/&quot;omission&quot; error/accuracy, in the EO terminology.</p></li>
+<li>We can specify uncertainty greater or lesser rigour: there are several possibilities for how we represent &quot;uncertainty&quot; in the mathematical model.</li>
+<li>We can estimate uncertainty subjectively, or base it more closely on data. There are also several possibilities for how we translate measures of uncertainty in the data in to the mathematical model.</li>
 <li><p>None of the data sources represents absolute truth, and we have no clear reference data set against which to calibrate.</p></li>
 </ol>
 </div>
 <div id="representation-of-uncertainty" class="section level1">
 <h1><span class="header-section-number">2</span> Representation of uncertainty</h1>
-<p>The data sources are assimilated in the Bayesian method in the likelihood function, which includes a term <span class="math inline">\(\sigma^{obs}\)</span>, representing the standard deviatation in the probability density function for the observation. The observation is thus not assumed to be the true value, but subject to errors which make it deviate from this. Uncertainty is thus represented by the magnitude of <span class="math inline">\(\sigma^{obs}\)</span> - large values of <span class="math inline">\(\sigma^{obs}\)</span> represent high uncertainty.
-For each observation, a likelihood is calculated, assuming that measurement errors show a Gaussian distribution and are independent of each other.
-In mathematical notation, the likelihood of observing the area changing from land use <span class="math inline">\(i\)</span> to land use <span class="math inline">\(j\)</span>, <span class="math inline">\(\beta_{ij}^{\mathrm{obs}}\)</span>, is</p>
-<p><span class="math display">\[\begin{equation} \label{eq:likBeta}
- \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\beta_{ij}^{\mathrm{obs}} - \beta_{ij}^{\mathrm{pred}})^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
-\end{equation}\]</span></p>
-<p>where <span class="math inline">\(\beta_{ij}^{\mathrm{pred}}\)</span> is the corresponding prediction, and <span class="math inline">\(\sigma_{ij}^\mathrm{obs}\)</span> is the uncertainty in the observation. There are analagous terms for <span class="math inline">\(G, L\)</span> and <span class="math inline">\(\Delta A\)</span> which can all be multiplied. For example, the term for the likelihood of observing the net change in land use <span class="math inline">\(u\)</span>, <span class="math inline">\(\Delta A_{u}^{\mathrm{obs}}\)</span>, is</p>
-<p><span class="math display">\[\begin{equation} \label{eq:likNet}
- \mathcal{L} = \frac{1}{\sigma_{u}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\Delta A_{u}^{\mathrm{obs}} - \Delta A_{u}^{\mathrm{pred}})^2/2 {\sigma_{u}^\mathrm{obs}}^2)
-\end{equation}\]</span></p>
-<p>We currently assume that <em>relative</em> measurement uncertainty is the same for all observations, i.e. a constant proportion of the observed <span class="math inline">\(y\)</span> value. Thus, observations of large areas come with larger absolute uncertainty. The question now is how to estimate more specific uncertainties <span class="math inline">\(\sigma^\mathrm{obs}\)</span> for the different data sources, if not specific for each individual observation.
-We thus need to examine the basis for specifing these uncertainties, based on a proper quantitative analysis.</p>
+<p>The data sources are assimilated in the Bayesian method in the likelihood function, which includes a term <span class="math">\(\sigma^{obs}\)</span>, representing the standard deviatation in the probability density function for the observation. The observation is thus not assumed to be the true value, but subject to errors which make it deviate from this. Uncertainty is thus represented by the magnitude of <span class="math">\(\sigma^{obs}\)</span> - large values of <span class="math">\(\sigma^{obs}\)</span> represent high uncertainty. For each observation, a likelihood is calculated, assuming that measurement errors show a Gaussian distribution and are independent of each other. In mathematical notation, the likelihood of observing the area changing from land use <span class="math">\(i\)</span> to land use <span class="math">\(j\)</span>, <span class="math">\(\beta_{ij}^{\mathrm{obs}}\)</span>, is</p>
+
+<p>where <span class="math">\(\beta_{ij}^{\mathrm{pred}}\)</span> is the corresponding prediction, and <span class="math">\(\sigma_{ij}^\mathrm{obs}\)</span> is the uncertainty in the observation. There are analagous terms for <span class="math">\(G, L\)</span> and <span class="math">\(\Delta A\)</span> which can all be multiplied. For example, the term for the likelihood of observing the net change in land use <span class="math">\(u\)</span>, <span class="math">\(\Delta A_{u}^{\mathrm{obs}}\)</span>, is</p>
+
+<p>We currently assume that <em>relative</em> measurement uncertainty is the same for all observations, i.e. a constant proportion of the observed <span class="math">\(y\)</span> value. Thus, observations of large areas come with larger absolute uncertainty. The question now is how to estimate more specific uncertainties <span class="math">\(\sigma^\mathrm{obs}\)</span> for the different data sources, if not specific for each individual observation. We thus need to examine the basis for specifing these uncertainties, based on a proper quantitative analysis.</p>
 </div>
 <div id="defining-reference-data" class="section level1">
 <h1><span class="header-section-number">3</span> Defining reference data</h1>
-<p>A pre-cursor step is to define a reference data set with which we compare each data source, in the absence of ground-truth data.
-We could subjectively decide on a reference data set which we believe to be the most plausible or closest to the truth, based on judgement and prior knowledge. Some subjectivity is inevitable here, and would need to be justified and explicit.
-An alternative would be a version of the “leave-one-out” cross-validation idea: each data source is tested against all the other remaining data sources. With some subjective weighting applied to the data sources, the two ideas could be combined.</p>
+<p>A pre-cursor step is to define a reference data set with which we compare each data source, in the absence of ground-truth data. We could subjectively decide on a reference data set which we believe to be the most plausible or closest to the truth, based on judgement and prior knowledge. Some subjectivity is inevitable here, and would need to be justified and explicit. An alternative would be a version of the &quot;leave-one-out&quot; cross-validation idea: each data source is tested against all the other remaining data sources. With some subjective weighting applied to the data sources, the two ideas could be combined.</p>
 </div>
 <div id="options-for-improvement" class="section level1">
 <h1><span class="header-section-number">4</span> Options for improvement</h1>
 <p>We consider here some options for improving the representation of data set-specific uncertainty in the methodology. These are in increasing order of complexity, and are not mutually exclusive.</p>
 <ol style="list-style-type: decimal">
-<li><p>Most simply, we could base all <span class="math inline">\(\sigma^\mathrm{obs}\)</span> on the “lowest common denominator” data set, the time series of net area change <span class="math inline">\(\Delta A\)</span>.
-Irrespective of higher levels of detail, all data sources produce estimates of <span class="math inline">\(\Delta A\)</span>.
-If we define a reference data set, we can calculate a metric of agreement with this for all other data sets. Suitable metrics would be root-mean-square error (RMSE), mean-absolute error (MAE) and/or the correlation coefficient.
-We can use this metric as a scaling factor in estimating <span class="math inline">\(\sigma^\mathrm{obs}\)</span>, such that data sources with poor agreement receive high <span class="math inline">\(\sigma^\mathrm{obs}\)</span> (high uncertainty).
-Some subjectivity would come into deciding on the reference data set, which metrics to use, and the absolute values of <span class="math inline">\(\sigma^\mathrm{obs}\)</span>, but the relative uncertainties (and therefore weighting) would be based quantitatively on data.
-Extending this approach to <span class="math inline">\(G\)</span> and <span class="math inline">\(L\)</span> data would be straightforward.</p></li>
-<li><p>Similarily, but focussing on the <span class="math inline">\(B\)</span> data, if we define a reference data set, we can calculate confusion matrices. We can then calculate metrics of overall agreement, and there are many such metrics - accuracy, precision, prevalence, misclassification rate, etc. There is much debate about these metrics, but a reasonable choice in our case would be the <span class="math inline">\(\kappa\)</span> statistic:
-<span class="math display">\[\begin{equation} \label{eq:kappa}
-\kappa = 1-{\frac {1-p_{o}}{1-p_{e}}}
-\end{equation}\]</span>
-where <span class="math inline">\(p_{o}\)</span> is the relative observed agreement with the reference data (the number of grid cells correctly classified), and <span class="math inline">\(p_{e}\)</span> is the hypothetical probability of chance agreement (calculated from the products of the confusion matrix row sums and columns sums). With perfect agreement,<span class="math inline">\(\kappa = 1\)</span>; with no agreement beyond what would be expected by chance, <span class="math inline">\(\kappa = 0\)</span>. This gives a more robust measure than simple percentage agreement, with a convenient scaling.
-<span class="math inline">\(\kappa\)</span> does not translate into an exact value for <span class="math inline">\(\sigma^\mathrm{obs}\)</span>, but is clearly related. We can therefore use <span class="math inline">\(\kappa\)</span> as a scaling factor in estimating <span class="math inline">\(\sigma^\mathrm{obs}\)</span>, such that data sources with low <span class="math inline">\(\kappa\)</span> values (poor agreement) receive high <span class="math inline">\(\sigma^\mathrm{obs}\)</span> (high uncertainty).
-The same elements of subjectivity come into this approach, but the quantity of data and level of detail used is greater.
-If we have the predictive probabilities associated with each prediction, we can plot the “receiver operating characteristics” graph or ROC, and also the Area Under the Curve (AUC). This metric has several theoretical advantages, but is more complex to calculate.</p></li>
-<li><p>A fundamentally different approach is to explictly represent the false positive and false negative error terms in the likelihood function. False positives cause observations to over-estimate change, whilst false negatives produce an under-estimate. The estimated bias in the observation is a simple function of the false positive and false negative error rates (<span class="math inline">\(F_P\)</span> and <span class="math inline">\(F_N\)</span>) and the area (and number of grid cells) in which the false negative errors can occur, <span class="math inline">\(A_N\)</span>. The likelihood equation becomes:
-<span class="math display">\[\begin{equation} \label{eq:likBetaDelta}
- \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-((1-F_P) \beta_{ij}^{\mathrm{obs}} + A_N F_N - \beta_{ij}^{\mathrm{pred}})^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
-\end{equation}\]</span>
-This then calculates the likelihood of the observed change from land use <span class="math inline">\(i\)</span> to land use <span class="math inline">\(j\)</span>, given that the true value is <span class="math inline">\(\beta_{ij}^{\mathrm{pred}}\)</span>, and with given false positive and false negative rates <span class="math inline">\(F_P\)</span> and <span class="math inline">\(F_N\)</span>, and uncertainty <span class="math inline">\(\sigma_{ij}^\mathrm{obs}\)</span> in the observation. This approach can be implemented in increasingly complex ways:</p>
+<li><p>Most simply, we could base all <span class="math">\(\sigma^\mathrm{obs}\)</span> on the &quot;lowest common denominator&quot; data set, the time series of net area change <span class="math">\(\Delta A\)</span>. Irrespective of higher levels of detail, all data sources produce estimates of <span class="math">\(\Delta A\)</span>. If we define a reference data set, we can calculate a metric of agreement with this for all other data sets. Suitable metrics would be root-mean-square error (RMSE), mean-absolute error (MAE) and/or the correlation coefficient. We can use this metric as a scaling factor in estimating <span class="math">\(\sigma^\mathrm{obs}\)</span>, such that data sources with poor agreement receive high <span class="math">\(\sigma^\mathrm{obs}\)</span> (high uncertainty). Some subjectivity would come into deciding on the reference data set, which metrics to use, and the absolute values of <span class="math">\(\sigma^\mathrm{obs}\)</span>, but the relative uncertainties (and therefore weighting) would be based quantitatively on data. Extending this approach to <span class="math">\(G\)</span> and <span class="math">\(L\)</span> data would be straightforward.</p></li>
+<li>Similarily, but focussing on the <span class="math">\(B\)</span> data, if we define a reference data set, we can calculate confusion matrices. We can then calculate metrics of overall agreement, and there are many such metrics - accuracy, precision, prevalence, misclassification rate, etc. There is much debate about these metrics, but a reasonable choice in our case would be the <span class="math">\(\kappa\)</span> statistic:
+
+<p>where <span class="math">\(p_{o}\)</span> is the relative observed agreement with the reference data (the number of grid cells correctly classified), and <span class="math">\(p_{e}\)</span> is the hypothetical probability of chance agreement (calculated from the products of the confusion matrix row sums and columns sums). With perfect agreement,<span class="math">\(\kappa = 1\)</span>; with no agreement beyond what would be expected by chance, <span class="math">\(\kappa = 0\)</span>. This gives a more robust measure than simple percentage agreement, with a convenient scaling. <span class="math">\(\kappa\)</span> does not translate into an exact value for <span class="math">\(\sigma^\mathrm{obs}\)</span>, but is clearly related. We can therefore use <span class="math">\(\kappa\)</span> as a scaling factor in estimating <span class="math">\(\sigma^\mathrm{obs}\)</span>, such that data sources with low <span class="math">\(\kappa\)</span> values (poor agreement) receive high <span class="math">\(\sigma^\mathrm{obs}\)</span> (high uncertainty). The same elements of subjectivity come into this approach, but the quantity of data and level of detail used is greater. If we have the predictive probabilities associated with each prediction, we can plot the &quot;receiver operating characteristics&quot; graph or ROC, and also the Area Under the Curve (AUC). This metric has several theoretical advantages, but is more complex to calculate.</p></li>
+<li>A fundamentally different approach is to explictly represent the false positive and false negative error terms in the likelihood function. False positives cause observations to over-estimate change, whilst false negatives produce an under-estimate. The estimated bias in the observation is a simple function of the false positive and false negative error rates (<span class="math">\(F_P\)</span> and <span class="math">\(F_N\)</span>) and the area (and number of grid cells) in which the false negative errors can occur, <span class="math">\(A_N\)</span>. The likelihood equation becomes:
+
+<p>This then calculates the likelihood of the observed change from land use <span class="math">\(i\)</span> to land use <span class="math">\(j\)</span>, given that the true value is <span class="math">\(\beta_{ij}^{\mathrm{pred}}\)</span>, and with given false positive and false negative rates <span class="math">\(F_P\)</span> and <span class="math">\(F_N\)</span>, and uncertainty <span class="math">\(\sigma_{ij}^\mathrm{obs}\)</span> in the observation. This approach can be implemented in increasingly complex ways:</p>
 <ul>
 <li><p>estimating the false positive and false negative error rates based on some set of confusion matrices, and thereafter assuming them to be fixed and constant for a given data source;</p></li>
-<li><p>as above, but calculating false positive and false negative error rates specific to each type of land-use change (i.e. <span class="math inline">\(F_{Pij}\)</span> and <span class="math inline">\(F_{Nij}\)</span>), and potentially vaying in time;</p></li>
-<li><p>including the false positive and false negative error rates as unknown parameters to be calibrated, along with the <span class="math inline">\(B\)</span> and <span class="math inline">\(\sigma^{\mathrm{obs}}\)</span> values. This is the most sophisticated solution, as it properly represents the fact that these are not truly known, and allows the values to be an emergent property of the data, given prior information, rather than imposing our guesses. The exact number of these parameters to estimate could vary as above, whether specific to each data source, type of land-use change, and point in time.</p></li>
+<li><p>as above, but calculating false positive and false negative error rates specific to each type of land-use change (i.e. <span class="math">\(F_{Pij}\)</span> and <span class="math">\(F_{Nij}\)</span>), and potentially vaying in time;</p></li>
+<li><p>including the false positive and false negative error rates as unknown parameters to be calibrated, along with the <span class="math">\(B\)</span> and <span class="math">\(\sigma^{\mathrm{obs}}\)</span> values. This is the most sophisticated solution, as it properly represents the fact that these are not truly known, and allows the values to be an emergent property of the data, given prior information, rather than imposing our guesses. The exact number of these parameters to estimate could vary as above, whether specific to each data source, type of land-use change, and point in time.</p></li>
 </ul></li>
 </ol>
 </div>
 <div id="example" class="section level1">
 <h1><span class="header-section-number">5</span> Example</h1>
-<p>We can apply option 1 in its simplest form by basing the scaling factor for <span class="math inline">\(\sigma^\mathrm{obs}\)</span> on the net area change <span class="math inline">\(\Delta A\)</span>.
-We define the reference data set as the June Agricultural Census data for crops, grass and rough, and the FC data for forests.
-The table below shows two metrics, the RMSE and the correlation coefficient.
-We combine these in a multiplicative way (using <span class="math inline">\(1/(r^2+1)\)</span>) to give a single scaling factor for <span class="math inline">\(\sigma^\mathrm{obs}\)</span> (“sigma_scaling” in the table).
-The ranking shows that IACS has the lowest uncertainty and the Land Cover Crop Maps has the highest (bearing in mind all the imperfections in the reference data). This produces a quantitative means of accounting for the different relative uncertainties in these data sources.</p>
+<p>We can apply option 1 in its simplest form by basing the scaling factor for <span class="math">\(\sigma^\mathrm{obs}\)</span> on the net area change <span class="math">\(\Delta A\)</span>. We define the reference data set as the June Agricultural Census data for crops, grass and rough, and the FC data for forests. The table below shows two metrics, the RMSE and the correlation coefficient. We combine these in a multiplicative way (using <span class="math">\(1/(r^2+1)\)</span>) to give a single scaling factor for <span class="math">\(\sigma^\mathrm{obs}\)</span> (&quot;sigma_scaling&quot; in the table). The ranking shows that IACS has the lowest uncertainty and the Land Cover Crop Maps has the highest (bearing in mind all the imperfections in the reference data). This produces a quantitative means of accounting for the different relative uncertainties in these data sources.</p>
+<p><img src="figure/m_uqdata.Rmd/plot_ts-1.svg" width="672" style="display: block; margin: auto;" /></p>
 <table>
 <thead>
 <tr class="header">
 <th align="left"></th>
 <th align="right">RMSE</th>
 <th align="right">r2</th>
-<th align="right">sigma_scaling</th>
+<th align="right">sigma</th>
+<th align="right">Fp</th>
+<th align="right">Fn</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">IACS</td>
-<td align="right">449.7475</td>
-<td align="right">0.8337437</td>
-<td align="right">245.2619</td>
+<td align="left">AgCensus</td>
+<td align="right">0.0000</td>
+<td align="right">1.0000000</td>
+<td align="right">164.0017</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="left">CORINE</td>
-<td align="right">590.8654</td>
-<td align="right">-0.0119028</td>
-<td align="right">597.9831</td>
+<td align="left">FC</td>
+<td align="right">0.0000</td>
+<td align="right">1.0000000</td>
+<td align="right">164.0017</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="left">LCM</td>
-<td align="right">943.8205</td>
-<td align="right">0.1174771</td>
-<td align="right">844.5994</td>
+<td align="left">CORINE</td>
+<td align="right">497.1706</td>
+<td align="right">0.3402599</td>
+<td align="right">328.0034</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">CS</td>
-<td align="right">948.4324</td>
-<td align="right">0.0921650</td>
-<td align="right">868.3967</td>
+<td align="right">540.1346</td>
+<td align="right">0.2335046</td>
+<td align="right">414.0106</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">LCM</td>
+<td align="right">703.8324</td>
+<td align="right">0.1023783</td>
+<td align="right">631.7752</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">IACS</td>
+<td align="right">1118.9417</td>
+<td align="right">0.0397577</td>
+<td align="right">1074.4551</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">LCC</td>
-<td align="right">1272.6419</td>
-<td align="right">0.2041237</td>
-<td align="right">1056.9030</td>
+<td align="right">1340.3314</td>
+<td align="right">0.1350960</td>
+<td align="right">1159.2580</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">CROME</td>
+<td align="right">7899.3774</td>
+<td align="right">-0.0819340</td>
+<td align="right">8546.6052</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
+<p>An example is shown below.</p>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>Warning: Removed 178 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>Warning in qt((1 - level)/2, df): NaNs produced</code></pre>
+<pre><code>Warning: Removed 178 rows containing missing values (geom_point).</code></pre>
+<pre><code>Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+-Inf</code></pre>
+<p><img src="figure/m_uqdata.Rmd/plot_correspondence-1.svg" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="conclusions" class="section level1">
 <h1><span class="header-section-number">6</span> Conclusions</h1>
 <ul>
-<li>Representing data source-specific uncertainty is relatively straightforward in principle. We need to estimate appropriate <span class="math inline">\(\sigma\)</span> values for each data source and use these in the likelihood function.</li>
-<li>The most fundamental problem is accurately estimating <span class="math inline">\(\sigma\)</span> in the absence of any data which we regard as “true”, particularly for the <span class="math inline">\(B\)</span> matrices which are key. There is no immediate solution to this, and a pragmatic approach is to define a reference data set, with more or less subjectivity/expert judgement, and principles from cross-validation.</li>
-<li>A starting point would be to implement a simple method, whereby <span class="math inline">\(\sigma\)</span> for each data set is scaled according to metrics measuring its correspondence with reference data. This could be based on any or all of <span class="math inline">\(\Delta A, G, L\)</span> and <span class="math inline">\(B\)</span>.</li>
+<li>Representing data source-specific uncertainty is relatively straightforward in principle. We need to estimate appropriate <span class="math">\(\sigma\)</span> values for each data source and use these in the likelihood function.</li>
+<li>The most fundamental problem is accurately estimating <span class="math">\(\sigma\)</span> in the absence of any data which we regard as &quot;true&quot;, particularly for the <span class="math">\(B\)</span> matrices which are key. There is no immediate solution to this, and a pragmatic approach is to define a reference data set, with more or less subjectivity/expert judgement, and principles from cross-validation.</li>
+<li>A starting point would be to implement a simple method, whereby <span class="math">\(\sigma\)</span> for each data set is scaled according to metrics measuring its correspondence with reference data. This could be based on any or all of <span class="math">\(\Delta A, G, L\)</span> and <span class="math">\(B\)</span>.</li>
 <li>A better method is to estimate the biases and uncertainties as part of the data assimilation. With confusion matrices, we have a clear method for doing this, by explicitly representing the false positive and false negative error rates. The downside of this approach is that it is more complicated, involves estimating more parameters, and will have greater computation time. Pragmatically, we would propose starting with the simple method, and implementing and testing the more complex approach as time allows.</li>
 </ul>
-<pre><code>Computation time (excl. render): 0.64 sec elapsed</code></pre>
+<pre><code>Computation time (excl. render): 2.383 sec elapsed</code></pre>
 <br>
 <p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-Session information
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo"
+  data-toggle="collapse" data-target="#workflowr-sessioninfo"
+  style = "display: block;">
+  
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
 </button>
 </p>
+
 <div id="workflowr-sessioninfo" class="collapse">
+
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.4 (2021-02-15)
-Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 17763)
+<pre><code>R version 4.0.0 (2020-04-24)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
 
 Matrix products: default
+BLAS/LAPACK: /gpfs01/apps/eb/software/OpenBLAS/0.3.9-GCC-9.3.0/lib/libopenblas_zenp-r0.3.9.so
 
 locale:
-[1] LC_COLLATE=English_United Kingdom.1252 
-[2] LC_CTYPE=English_United Kingdom.1252   
-[3] LC_MONETARY=English_United Kingdom.1252
-[4] LC_NUMERIC=C                           
-[5] LC_TIME=English_United Kingdom.1252    
+[1] C
 
 attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
 
 other attached packages:
-[1] units_0.7-2   tidyr_1.1.3   dplyr_1.0.7   fs_1.5.0      here_1.0.1   
-[6] tictoc_1.0.1  targets_0.6.0
+ [1] ggplot2_3.3.5     units_0.7-2       data.table_1.14.0 tidyr_1.1.3      
+ [5] dplyr_1.0.7       qs_0.25.1         fs_1.5.0          here_1.0.1       
+ [9] tictoc_1.0.1      targets_0.6.0    
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.7        highr_0.9         pillar_1.6.2      compiler_4.0.4   
- [5] bslib_0.2.5.1     later_1.2.0       jquerylib_0.1.4   git2r_0.28.0     
- [9] workflowr_1.6.2   tools_4.0.4       digest_0.6.27     jsonlite_1.7.2   
-[13] evaluate_0.14     lifecycle_1.0.0   tibble_3.1.3      pkgconfig_2.0.3  
-[17] rlang_0.4.11      igraph_1.2.6      cli_3.0.1         yaml_2.2.1       
-[21] xfun_0.25         withr_2.4.2       stringr_1.4.0     knitr_1.33       
-[25] generics_0.1.0    vctrs_0.3.8       sass_0.4.0        tidyselect_1.1.1 
-[29] rprojroot_2.0.2   data.table_1.14.0 glue_1.4.2        R6_2.5.0         
-[33] processx_3.5.2    fansi_0.5.0       rmarkdown_2.10    bookdown_0.23    
-[37] purrr_0.3.4       callr_3.7.0       magrittr_2.0.1    whisker_0.4      
-[41] codetools_0.2-18  ps_1.6.0          promises_1.2.0.1  ellipsis_0.3.2   
-[45] htmltools_0.5.1.1 renv_0.14.0       httpuv_1.6.1      utf8_1.2.2       
-[49] stringi_1.7.3     crayon_1.4.1     </code></pre>
+ [1] tidyselect_1.1.1    xfun_0.25           bslib_0.2.5.1      
+ [4] purrr_0.3.4         lattice_0.20-41     splines_4.0.0      
+ [7] colorspace_2.0-2    vctrs_0.3.8         generics_0.1.0     
+[10] htmltools_0.5.1.1   mgcv_1.8-33         yaml_2.2.1         
+[13] utf8_1.2.2          rlang_0.4.11        jquerylib_0.1.4    
+[16] later_1.2.0         pillar_1.6.2        glue_1.4.2         
+[19] withr_2.4.2         lifecycle_1.0.0     stringr_1.4.0      
+[22] munsell_0.5.0       gtable_0.3.0        workflowr_1.6.2    
+[25] stringfish_0.15.2   codetools_0.2-18    evaluate_0.14      
+[28] labeling_0.4.2      RApiSerialize_0.1.0 knitr_1.33         
+[31] callr_3.7.0         httpuv_1.6.1        ps_1.6.0           
+[34] fansi_0.5.0         highr_0.9           Rcpp_1.0.7         
+[37] scales_1.1.1        renv_0.14.0         promises_1.2.0.1   
+[40] RcppParallel_5.1.4  jsonlite_1.7.2      farver_2.1.0       
+[43] digest_0.6.27       stringi_1.7.3       bookdown_0.23      
+[46] processx_3.5.2      grid_4.0.0          rprojroot_2.0.2    
+[49] cli_3.0.1           tools_4.0.0         magrittr_2.0.1     
+[52] sass_0.4.0          tibble_3.1.3        crayon_1.4.1       
+[55] whisker_0.4         pkgconfig_2.0.3     Matrix_1.3-2       
+[58] ellipsis_0.3.2      rmarkdown_2.10      R6_2.5.0           
+[61] nlme_3.1-152        igraph_1.2.6        git2r_0.28.0       
+[64] compiler_4.0.0     </code></pre>
 </div>
+
+
 </div>
 
 

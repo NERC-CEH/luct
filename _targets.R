@@ -32,7 +32,7 @@ tar_option_set(
   packages = c(
     "dplyr", "purrr", "units", "data.table", "ggplot2",
     "zoo", "mgcv", "reshape2", "readxl", "tidyr", "sp", "sf", "raster", #"rgeos", "ggforce", "plyr", 
-    "rgdal", "grid", "spCEH", "scico", "stars"),
+    "rgdal", "grid", "spCEH", "scico", "stars", "BayesianTools"),
   format = "qs",
   cue = tar_cue(
       mode = "thorough", #c("thorough", "always", "never"),
@@ -197,7 +197,7 @@ list(
       v_times  = c_level1_cor$v_times,
       v_fnames = c_level1_cor$v_fnames,
       name_data_source = "CORINE", names_u),
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "thorough")
   ),
 
   # Path to IACS SLURM job file
@@ -221,7 +221,7 @@ list(
       v_times  = c_level1_iacs$v_times,
       v_fnames = c_level1_iacs$v_fnames,
       name_data_source = "IACS", names_u),
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "thorough")
   ),
   
   # Path to LCC SLURM job file
@@ -245,7 +245,7 @@ list(
       v_times  = c_level1_lcc$v_times,
       v_fnames = c_level1_lcc$v_fnames,
       name_data_source = "LCC", names_u),
-    cue = tar_cue(mode = "never", depend = FALSE)
+    cue = tar_cue(mode = "thorough")
   ),
   
   # Path to LCM SLURM job file
@@ -269,29 +269,87 @@ list(
       v_times  = c_level1_lcm$v_times,
       v_fnames = c_level1_lcm$v_fnames,
       name_data_source = "LCM", names_u),
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "thorough")
+  ),
+        
+  # Run a SLURM job to process CROME data
+  tar_target(
+    c_level1_crome,
+    run_crome_job(c_crome_fname_job),
+    cue = tar_cue(mode = "thorough")
+  ),
+    
+  # Get BLAG from CROME Level1 output
+  tar_target(
+    c_blag_crome,
+    getBLAG_fromU(
+      v_times  = c_level1_crome$v_times,
+      v_fnames = c_level1_crome$v_fnames,
+      name_data_source = "CROME", names_u),
+    cue = tar_cue(mode = "thorough")
   ),
         
   # Combine BLAGs to give list of data tables with all obs
   tar_target(
     c_obs_all,
     combine_blags(
-      l_blags = list(c_blag_AgCensus, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm))
+      l_blags = list(c_blag_AgCensus, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm, c_blag_crome)),
+    cue = tar_cue(mode = "thorough")
   ),
             
   # Exclude some data sources which we do not want to use
   tar_target(
     c_obs,
     set_exclusions(
-      c_obs_all)
+      c_obs_all),
+    cue = tar_cue(mode = "thorough")
+  ),
+               
+  # Calculate the relative uncertainty for the data sources
+  tar_target(
+    c_df_uncert,
+    get_uncert_scaling(
+      c_obs, 
+      v_names_sources = 
+        c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
+        cv_AgCensus = 0.1)
   ),
                 
-  # Exclude some data sources which we do not want to use
+  # Add the relative uncertainties to the data sources
   tar_target(
-    pred_ls,
-    get_pred_ls(c_obs, start_year = 2017, end_year = 2019, n_u = 6)
+    c_obs_unc,
+    add_uncert(
+      c_obs, 
+      c_df_uncert)
   ),
-    
+                
+  # Predict the Beta matrix by least-squares
+  tar_target(
+    c_pred_ls,
+    get_pred_ls(c_obs, start_year = 1990, end_year = 2019),
+    cue = tar_cue(mode = "never")
+  ),
+                    
+  # # Predict the posterior Beta matrix by MCMC in serial
+  # tar_target(
+    # c_B_post,
+    # get_post_mcmc_serial(c_obs, c_pred_ls, start_year = 2017, end_year = 2019, n_iter = 1000)
+  # ),
+  
+  # # Path to MCMC_Beta SLURM job file
+  # tar_target(
+    # c_mcmc_fname_job,
+    # fs::path_rel(here("slurm", "run_mcmc_beta.job")),
+    # format = "file"
+  # ),
+
+  # # Run a SLURM job to estimate Beta by MCMC
+  # tar_target(
+    # c_mcmc_fname_out,
+    # run_mcmc_beta(c_mcmc_fname_job),
+    # cue = tar_cue(mode = "thorough")
+  # ),    
+  
   # # META pipeline targets ----
 
   # # Any META steps that are straight computation (not Rmd notebooks)
@@ -356,7 +414,8 @@ list(
       fs::path_rel(here("analysis", "m_CS_plot.Rmd"))
     },
     # Track the files returned by the command
-    format = "file"
+    format = "file",
+    cue = tar_cue(mode = "never")
   ),   # end m_AgCensus_plot
   
   ## m_02 Plot the CS data ----
@@ -378,10 +437,11 @@ list(
       fs::path_rel(here("analysis", "m_CS_plot.Rmd"))
     },
     # Track the files returned by the command
-    format = "file"
+    format = "file",
+    cue = tar_cue(mode = "thorough")
   ),   # end m_CS_plot
   
-  ## m_02 Plot the data comparison ----
+  ## m_03 Plot the data comparison ----
 
   # Report investigating how to read the raw CS data
   tar_target(
@@ -400,245 +460,30 @@ list(
       fs::path_rel(here("analysis", "m_data_comparison.Rmd"))
     },
     # Track the files returned by the command
-    format = "file"
-  )   # end m_data_comparison
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  ),   # end m_data_comparison
+  
+  ## m_04 Quantify relative uncertainties ----
+
+  # Report investigating how to read the raw CS data
+  tar_target(
+    m_uqdata,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("analysis", "m_uqdata.Rmd"))
+
+      # Build the report
+      workflowr::wflow_build(
+        here("analysis", "m_uqdata.Rmd")
+      )
+
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("analysis", "m_uqdata.Rmd"))
+    },
+    # Track the files returned by the command
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  )   # end m_uqdata
 )     # end target list
-
-  # # Report investigating how to exclude unwanted rows
-  # tar_target(
-    # m_01_2_exclusions,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_2_exclusions.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read,
-        # raw_entity_data_excl_status, raw_entity_data_excl_test
-      # )
-
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_2_exclusions.Rmd")
-      # )
-
-      # # Track the input Rmd file (and not the rendered HTML file).
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_2_exclusions.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # ),
-
-  # # Report investigating variable to drop because of no variation
-  # tar_target(
-    # m_01_3_drop_novar,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_3_drop_novar.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read,
-        # raw_entity_data_excl_status, raw_entity_data_excl_test,
-        # raw_entity_data_drop_novar
-      # )
-
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_3_drop_novar.Rmd")
-      # )
-
-      # # Track the input Rmd file (and not the rendered HTML file).
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_3_drop_novar.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # ),
-
-  # # Report investigating how to parse the date columns
-  # tar_target(
-    # m_01_4_parse_dates,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_4_parse_dates.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read,
-        # raw_entity_data_excl_status, raw_entity_data_excl_test,
-        # raw_entity_data_drop_novar,
-        # raw_entity_data_parse_dates
-      # )
-
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_4_parse_dates.Rmd")
-      # )
-
-      # # Track the input Rmd file (and not the rendered HTML file).
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_4_parse_dates.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # ),
-
-  # # Report investigating the administrative variables
-  # tar_target(
-    # m_01_5_check_admin,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_5_check_admin.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read,
-        # raw_entity_data_excl_status, raw_entity_data_excl_test,
-        # raw_entity_data_drop_novar,
-        # raw_entity_data_parse_dates,
-        # raw_entity_data_drop_admin
-      # )
-
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_5_check_admin.Rmd")
-      # )
-
-      # # Track the input Rmd file (and not the rendered HTML file).
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_5_check_admin.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # ),
-
-  # # Report investigating the residential variables
-  # tar_target(
-    # m_01_6_check_resid,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_6_check_resid.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read,
-        # raw_entity_data_excl_status, raw_entity_data_excl_test,
-        # raw_entity_data_drop_novar,
-        # raw_entity_data_parse_dates,
-        # raw_entity_data_drop_admin
-      # )
-
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_6_check_resid.Rmd")
-      # )
-
-      # # Track only the input Rmd file
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_6_check_resid.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # ),
-
-  # # Report investigating the demographic variables
-  # tar_target(
-    # m_01_7_check_demog,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_7_check_demog.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read,
-        # raw_entity_data_excl_status, raw_entity_data_excl_test,
-        # raw_entity_data_drop_novar,
-        # raw_entity_data_parse_dates,
-        # raw_entity_data_drop_admin,
-        # raw_entity_data_drop_demog
-      # )
-
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_7_check_demog.Rmd")
-      # )
-
-      # # Track only the input Rmd file
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_7_check_demog.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # ),
-
-  # # Report investigating the name variables
-  # tar_target(
-    # m_01_8_check_name,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_8_check_name.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read,
-        # raw_entity_data_excl_status, raw_entity_data_excl_test,
-        # raw_entity_data_drop_novar,
-        # raw_entity_data_parse_dates,
-        # raw_entity_data_drop_admin,
-        # raw_entity_data_drop_demog
-      # )
-
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_8_check_name.Rmd")
-      # )
-
-      # # Track only the input Rmd file
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_8_check_name.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # ),
-
-  # # Report investigating of cleaning the name variables
-  # tar_target(
-    # m_01_9_clean_vars,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_01_9_clean_vars.Rmd"))
-      # # Explicitly mention any functions used from R/functions.R
-      # list(
-        # raw_entity_data_read,
-        # raw_entity_data_excl_status, raw_entity_data_excl_test,
-        # raw_entity_data_drop_novar,
-        # raw_entity_data_parse_dates,
-        # raw_entity_data_drop_admin,
-        # raw_entity_data_drop_demog,
-        # # raw_entity_data_clean_age, raw_entity_data_clean_preprocess_char, raw_entity_data_clean_all_names,
-        # # raw_entity_data_clean_last_name, raw_entity_data_clean_middle_name, raw_entity_data_clean_first_name,
-        # # raw_entity_data_clean_postprocess_names, raw_entity_data_clean_all,
-        # raw_entity_data_make_clean
-      # )
-
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_01_9_clean_vars.Rmd")
-      # )
-
-      # # Track only the input Rmd file
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_01_9_clean_vars.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file"
-  # )
-
-  # ## m_02 xxx ----
-
-
-  # ## m_03 yyy ----
-
-
-    # # PUBLICATIONS targets ----
-
-  # # These should probably be dealt with by tarchetypes::tar_render.
-  # # I have not yet done this.
-
-
-# )
