@@ -1398,7 +1398,7 @@ get_uncert_scaling <- function(obs, v_names_sources =
   df$Ref[df$u == "woods"] <- df$FC[df$u == "woods"]
 
   v_rmse <- sapply(v_names_sources, get_rmse, df = df, v_ref = "Ref")
-  v_r2   <- sapply(v_names_sources, get_r2,   df = df, v_ref = "Ref")
+  v_r2   <- sapply(v_names_sources, get_r2, df = df, v_ref = "Ref")
 
   df <- data.frame(RMSE = v_rmse, r2 = v_r2, 
     # reduce RMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
@@ -1413,9 +1413,11 @@ get_uncert_scaling <- function(obs, v_names_sources =
 
   df$sigma <- df$sigma / df["AgCensus",]$sigma * cv_AgCensus
 
-  # add dummy values for false positive and neg rates
-  df$Fp <- 0
-  df$Fn <- 0
+  # add values for false positive and neg rates:
+
+  df_fpn <- readRDS("./analysis/df_fpn.rds")
+  df <- merge(df, df_fpn, by="row.names")
+  
   return(df)
 }
 
@@ -1442,4 +1444,23 @@ add_uncert <- function(obs, df_uncert){
   
   return(obs)
 }
+
+## ----- correct_blags
+
+#' Function to correct BLAG objects based on false positives and negatives added from add_uncert
+#' @param obs A blag object
+#' @param Fp false positive values (as returned from get_uncert)
+#' @return blag A blag object containing the updated observations based on the false positive and negative rates
+#' @export
+#' @examples 
+#' df <- correct_blag(obs, Fp = 0.772)
+
+correct_blag <- function(obs, Fp){
+  
+  obs$a_B <- obs$a_B * (1-Fp)
+  
+  obs <- getBLAG(obs$a_B)
+  return(obs)
+}
+
 
