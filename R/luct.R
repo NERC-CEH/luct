@@ -16,9 +16,9 @@ colour_u <- c("lightblue", "green", "pink", "purple", "orange", "midnightblue")
 # source("../R/luc_track.R")
 
 
-#' Function to remove units attribute from matrix or array objects 
+#' Function to remove units attribute from matrix or array objects
 #' Units attributes prevent some functions from working
-#' 
+#'
 #' @param x A vector, matrix or array.
 #' @return An object of the unchanged class but without units attribute.
 #' @export
@@ -30,7 +30,7 @@ remove_units <- function(x){
     return(y)
 }
 
-#' Function to calculate the gross gain in area 
+#' Function to calculate the gross gain in area
 #'  for each land use from a land-use transition matrix
 #'
 #' @param v_B A land-use transition matrix, or its vector form
@@ -46,7 +46,7 @@ getAreaGrossGain_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
   return(A_gain)
 }
 
-#' Function to calculate the gross loss in area 
+#' Function to calculate the gross loss in area
 #'  for each land use from a land-use transition matrix
 #'
 #' @param v_B A land-use transition matrix, or its vector form
@@ -62,7 +62,7 @@ getAreaGrossLoss_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
   return(A_loss)
 }
 
-#' Function to calculate the net change in area 
+#' Function to calculate the net change in area
 #'  for each land use from a land-use transition matrix
 #'
 #' @param v_B A land-use transition matrix, or its vector form
@@ -75,12 +75,12 @@ getAreaNetChange_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
   m_B <- matrix(v_B, n_u, n_u)
   diag(m_B) <- 0
   D_u <- colSums(m_B) - rowSums(m_B)
-  return(D_u)  
+  return(D_u)
 }
 
 ## ---- wrangle_AgCensus_Eng
 
-#' Function to wrangle AgCensus data 
+#' Function to wrangle AgCensus data
 #'  from text files to R objects
 #'
 #' @param v_fpath Vector of filepaths to data files
@@ -90,7 +90,7 @@ getAreaNetChange_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
 #' fpath1 = "./data-raw/AgCensus/England/AgCensus_England_ha_1900-2010.csv"
 #' fpath2 = "./data-raw/AgCensus/England/AgCensus_England_ha_1983-2019.csv"
 #' x <- wrangle_AgCensus_Eng(c(fpath1, fpath2))$df_A
-wrangle_AgCensus_Eng <- function(v_fpath = 
+wrangle_AgCensus_Eng <- function(v_fpath =
   c("./data-raw/AgCensus/England/AgCensus_England_ha_1900-2010.csv",
     "./data-raw/AgCensus/England/AgCensus_England_ha_1983-2019.csv")){
 
@@ -100,9 +100,9 @@ wrangle_AgCensus_Eng <- function(v_fpath =
   df$woods <-NA
   df$crops <- # crops are in columns 3-28
     rowSums(df[, 3:28], na.rm = TRUE)
-  df$grass <- 
+  df$grass <-
     df$Permanent.grass..excl.rough.grazing.
-  df$rough <- 
+  df$rough <-
     df$Total.rough.grazing
   df <- df[, c("year", "woods", "crops", "grass", "rough" )]
 
@@ -123,18 +123,18 @@ wrangle_AgCensus_Eng <- function(v_fpath =
   #df[is.na(df)] <- 0 # otherwise totals become NA
   #df[df == 0] <- NA # otherwise totals become NA
 
-  df$woods <- 
+  df$woods <-
     df$Woodland
-  df$crops <- 
-    df$Total.crops + 
+  df$crops <-
+    df$Total.crops +
     df$Uncropped.arable.land..No.set.aside.1983.1989...f.
-  # need more complex form for addition with NAs  
+  # need more complex form for addition with NAs
   df$grass <- rowSums(df[,c(
-    "Temporary.grass..sown.in.the.last.5.years.", 
-    "Land.used.for.outdoor.pigs..g.", 
+    "Temporary.grass..sown.in.the.last.5.years.",
+    "Land.used.for.outdoor.pigs..g.",
     "Grass.over.5.years.old")], na.rm=TRUE)
-  df$rough <- 
-    df$Common.rough.grazing..e. + 
+  df$rough <-
+    df$Common.rough.grazing..e. +
     df$Sole.right.rough.grazing
   df <- df[, c("year", "woods", "crops", "grass", "rough" )]
 
@@ -152,7 +152,7 @@ wrangle_AgCensus_Eng <- function(v_fpath =
   df <- rbind(df_hist, df)
 
   df_orig <- df # make a copy of original data
- 
+
   #<!--- { remove_steps -->
   knownChangePoint <- c(1983, 2009)
   ## 1977 and 2006 appear to be step changes but there is no record of a change in method
@@ -160,7 +160,7 @@ wrangle_AgCensus_Eng <- function(v_fpath =
   # need to repeat for all variables
   df <- drop_units(df) # gam doesn't work with units
   for (j in 2:(length(df))){   # for each variable except year
-  #j = 2  
+  #j = 2
     # go through all the columns except first (= year)
     # first, adjust for step changes where values are given under old and new basis
     for (i in length(knownChangePoint):1){
@@ -184,7 +184,7 @@ wrangle_AgCensus_Eng <- function(v_fpath =
         if ( sum(!is.na(df_pre[,j])) > 10 ){ # only do if >10 values, excluding NAs
           #k <- max(length(df_pre[,1])-1, 4)
           k <- min(length(df_pre[,1])-1, 10)
-          mod_pre  <- gam(df_pre[,j] ~ s(year, bs = "cr", k = k), data = df_pre) 
+          mod_pre  <- gam(df_pre[,j] ~ s(year, bs = "cr", k = k), data = df_pre)
           #k <- max(length(df_post[,1])-1, 4)
           #k <- min(length(df_post[,1])-1, 10)
           #mod_post <- gam(grassArea ~ s(year, bs = "cr", k = k), data = df_post)
@@ -218,7 +218,7 @@ wrangle_AgCensus_Eng <- function(v_fpath =
 
 ## ---- wrangle_AgCensus_Sco
 
-#' Function to wrangle AgCensus data 
+#' Function to wrangle AgCensus data
 #'  from text files to R objects
 #'
 #' @param v_fpath Vector of filepaths to data files
@@ -228,7 +228,7 @@ wrangle_AgCensus_Eng <- function(v_fpath =
 #' fpath1 = "./data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_1883-2014.csv"
 #' fpath2 = "./data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_2009-2019.csv"
 #' x <- wrangle_AgCensus_Sco(c(fpath1, fpath2))
-wrangle_AgCensus_Sco <- function(v_fpath = 
+wrangle_AgCensus_Sco <- function(v_fpath =
   c("./data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_1883-2014.csv",
     "./data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_2009-2019.csv")){
 
@@ -239,13 +239,13 @@ wrangle_AgCensus_Sco <- function(v_fpath =
   # read current data
   df <- read.csv(v_fpath[2], na.strings = c("n/a", ":", "b"))
 
-  df$woods <- 
+  df$woods <-
     df$Other.land..including.woodland..3.
-  df$crops <- 
+  df$crops <-
     df$Total.crops..fallow..and.set.aside.
-  df$grass <- 
+  df$grass <-
     df$Total.grass
-  df$rough <- 
+  df$rough <-
     df$Rough.grazing
   df <- df[, c("year", "woods", "crops", "grass", "rough" )]
 
@@ -253,7 +253,7 @@ wrangle_AgCensus_Sco <- function(v_fpath =
   # as a crude fix, assume the non-woods area stays constant after 2014
   # df_hist$woods[df_hist$year == 2014] # woods area in 2014
   # df$woods[df$year == 2014]           # woods + other non-woods area in 2014
-  area_NonWoods <- df$woods[df$year == 2014] - # the difference is the 
+  area_NonWoods <- df$woods[df$year == 2014] - # the difference is the
          df_hist$woods[df_hist$year == 2014]   # non-woods area
   df$woods <- df$woods - area_NonWoods  # subtract this from total woods + other non-woods reported after 2014
 
@@ -277,7 +277,7 @@ wrangle_AgCensus_Sco <- function(v_fpath =
   # need to repeat for all variables
   df <- drop_units(df) # gam doesn't work with units
   for (j in 2:(length(df))){   # for each variable except year
-  #j = 2  
+  #j = 2
     # go through all the columns except first (= year)
     # first, adjust for step changes where values are given under old and new basis
     for (i in length(knownChangePoint):1){
@@ -301,7 +301,7 @@ wrangle_AgCensus_Sco <- function(v_fpath =
         if ( sum(!is.na(df_pre[,j])) > 10 ){ # only do if >10 values, excluding NAs
           #k <- max(length(df_pre[,1])-1, 4)
           k <- min(length(df_pre[,1])-1, 10)
-          mod_pre  <- gam(df_pre[,j] ~ s(year, bs = "cr", k = k), data = df_pre) 
+          mod_pre  <- gam(df_pre[,j] ~ s(year, bs = "cr", k = k), data = df_pre)
           #k <- max(length(df_post[,1])-1, 4)
           #k <- min(length(df_post[,1])-1, 10)
           #mod_post <- gam(grassArea ~ s(year, bs = "cr", k = k), data = df_post)
@@ -336,7 +336,7 @@ wrangle_AgCensus_Sco <- function(v_fpath =
 
 ## ---- wrangle_AgCensus_Wal
 
-#' Function to wrangle AgCensus data 
+#' Function to wrangle AgCensus data
 #'  from text files to R objects
 #'
 #' @param v_fpath Vector of filepaths to data files
@@ -346,7 +346,7 @@ wrangle_AgCensus_Sco <- function(v_fpath =
 #' fpath1 = "./data-raw/AgCensus/Wales/AgCensus_Wales_ha_1867-2012.csv"
 #' fpath2 = "./data-raw/AgCensus/Wales/AgCensus_Wales_ha_1998-2019.csv"
 #' x <- wrangle_AgCensus_Wal(c(fpath1, fpath2))
-wrangle_AgCensus_Wal <- function(v_fpath = 
+wrangle_AgCensus_Wal <- function(v_fpath =
   c("./data-raw/AgCensus/Wales/AgCensus_Wales_ha_1867-2012.csv",
     "./data-raw/AgCensus/Wales/AgCensus_Wales_ha_1998-2019.csv")){
 
@@ -354,12 +354,12 @@ wrangle_AgCensus_Wal <- function(v_fpath =
   df <- read.csv(v_fpath[1], na.strings = c("n/a", ":", "b"))
 
   df$woods <- NA
-  df$crops <- 
+  df$crops <-
     df$Crops
-  df$grass <- 
-    df$Permanent.pasture + 
+  df$grass <-
+    df$Permanent.pasture +
     df$New.grass
-  df$rough <- 
+  df$rough <-
     df$Rough.grazing
   df <- df[, c("year", "woods", "crops", "grass", "rough" )]
   df_hist <- df # make a copy of original data
@@ -371,17 +371,17 @@ wrangle_AgCensus_Wal <- function(v_fpath =
   # summary(df)
   #df[is.na(df)] <- 0 # otherwise totals become NA
 
-  df$woods <- 
+  df$woods <-
     df$Woodland
   df$crops <- rowSums(df[,c(
-    "Section.sub.total", 
-    "Section.sub.total.1", 
+    "Section.sub.total",
+    "Section.sub.total.1",
     "Set.aside...total")], na.rm=TRUE)
-  df$grass <- 
-    df$Grassland.under.5.years.old + 
-    df$Grassland.over.5.years.old 
-  df$rough <- 
-    df$Common.rough.grazing + 
+  df$grass <-
+    df$Grassland.under.5.years.old +
+    df$Grassland.over.5.years.old
+  df$rough <-
+    df$Common.rough.grazing +
     df$Sole.rights.rough.grazing
   df <- df[, c("year", "woods", "crops", "grass", "rough" )]
 
@@ -409,7 +409,7 @@ wrangle_AgCensus_Wal <- function(v_fpath =
 
 ## ---- wrangle_AgCensus_NIr
 
-#' Function to wrangle AgCensus data 
+#' Function to wrangle AgCensus data
 #'  from text files to R objects
 #'
 #' @param fpath Filepath to text file
@@ -425,7 +425,7 @@ wrangle_AgCensus_NIr <- function(
   df <- read.csv(fpath, na.strings = c("n/a", ":", "b"))
 
   df$woods <- df$Woods.and.plantations
-  df$crops <- 
+  df$crops <-
     df$TOTAL.CROPS +
     df$Set.aside
   df$grass <- df$TOTAL.GRASS
@@ -450,7 +450,7 @@ wrangle_AgCensus_NIr <- function(
 
 ## ---- combine_AgCensus
 
-#' Function to wrangle AgCensus data 
+#' Function to wrangle AgCensus data
 #'  from text files to R objects
 #'
 #' @param l_df A list of data frames to combine
@@ -470,15 +470,15 @@ combine_AgCensus <- function(l_df = list(df_A_Eng, df_A_Sco, df_A_Wal, df_A_NIr)
 
   dt_D <- dt_A[, .(time, area = c(0, diff(area)), data_source), by = .(u)]
   dt_D <- dt_D[time >= 1900]
- 
-  return(list(dt_A = dt_A, dt_D = dt_D)) #, 
-              # df_A_Eng = l_df$df_A_Eng, df_A_Sco = l_df$df_A_Sco, 
+
+  return(list(dt_A = dt_A, dt_D = dt_D)) #,
+              # df_A_Eng = l_df$df_A_Eng, df_A_Sco = l_df$df_A_Sco,
               # df_A_Wal = l_df$df_A_Wal, df_A_NIr = l_df$df_A_NIr))
 }
 
 ## ---- wrangle_CS
 
-#' Function to wrangle Countryside Survey data 
+#' Function to wrangle Countryside Survey data
 #'  from text files to R objects
 #'
 #' @param fpath Filepath to text file
@@ -567,7 +567,7 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   levels(dt_B$u_from) <- names_u
   levels(dt_B$u_to)   <- names_u
   #dt_B <- subset(dt_B, year > 1970 & year < 2020)
-  # dt_B <- subset(dt_B, year == 1970 | 
+  # dt_B <- subset(dt_B, year == 1970 |
     # year == 1980 | year == 1990 | year == 2000)
 
   ## ----CSplotG, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied area gains $\\mathbf{G}$ to each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
@@ -601,9 +601,9 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   dt_G$data_source <- "CS"
   dt_L$data_source <- "CS"
 
-  dt_D$time <- dt_D$year; dt_D$year <- NULL 
-  dt_B$time <- dt_B$year; dt_B$year <- NULL 
-  dt_G$time <- dt_G$year; dt_G$year <- NULL 
+  dt_D$time <- dt_D$year; dt_D$year <- NULL
+  dt_B$time <- dt_B$year; dt_B$year <- NULL
+  dt_G$time <- dt_G$year; dt_G$year <- NULL
   dt_L$time <- dt_L$year; dt_L$year <- NULL
 
   dt_D$area <- set_units(dt_D$area, km^2)
@@ -614,24 +614,24 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   dt_D$area <- set_units(dt_D$area, m^2)
   dt_B$area <- set_units(dt_B$area, m^2)
   dt_G$area <- set_units(dt_G$area, m^2)
-  dt_L$area <- set_units(dt_L$area, m^2) 
+  dt_L$area <- set_units(dt_L$area, m^2)
 
   dt_D$area <- drop_units(dt_D$area)
   dt_B$area <- drop_units(dt_B$area)
   dt_G$area <- drop_units(dt_G$area)
-  dt_L$area <- drop_units(dt_L$area) 
+  dt_L$area <- drop_units(dt_L$area)
 
   dt_D_cs <- dt_D
   dt_B_cs <- dt_B
   dt_G_cs <- dt_G
-  dt_L_cs <- dt_L 
+  dt_L_cs <- dt_L
   return(list(dt_D = dt_D, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
 }
 
 
 ## ---- wrangle_FC
 
-#' Function to wrangle FC time series data 
+#' Function to wrangle FC time series data
 #'  from text files to R objects
 #'
 #' @param v_fpath Vector of filepaths to data files
@@ -641,7 +641,7 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
 #' fpath1 = "./data-raw/FC/timeSeries/forest_planting_byYear_UK.csv"
 #' fpath2 = "./data-raw/FC/timeSeries/Deforestation_Areas_for_CEH_1990-2019.xlsx"
 #' x <- wrangle_FC(c(fpath1, fpath2))
-wrangle_FC <- function(v_fpath = 
+wrangle_FC <- function(v_fpath =
   c("./data-raw/FC/timeSeries/forest_planting_byYear_UK.csv",
     "./data-raw/FC/timeSeries/Deforestation_Areas_for_CEH_1990-2019.xlsx")){
 
@@ -675,20 +675,20 @@ wrangle_FC <- function(v_fpath =
   dt_D$area <- dt$area.y - dt$area.x
   dt_D$area <- set_units(dt_D$area, m^2)
   dt_D$area <- drop_units(dt_D$area)
-  
+
   # initialise a copy for absolute area
   dt_A  <- dt_D
   # assume initial area of forest in 1990 worked out previously - check this
   initArea <- (36312.07 * 1e6) - sum(dt_D$area)
   dt_A$area <- initArea + cumsum(dt_D$area)
-  
+
   return(list(dt_A = dt_A, dt_D = dt_D, dt_G = dt_G, dt_L = dt_L))
 }
 
 
 ## ---- run_corine_job
 
-#' Function to run Corine processing job 
+#' Function to run Corine processing job
 #'  from raw tif files to R objects
 #'
 #' @param fname_job File path to SLURM job file for CORINE processing
@@ -713,7 +713,7 @@ run_corine_job <- function(fname_job = "./slurm/process_CORINE.job"){
 
 ## ---- run_iacs_job
 
-#' Function to run IACS processing job 
+#' Function to run IACS processing job
 #'  from raw tif files to R objects
 #'
 #' @param fname_job File path to SLURM job file for IACS processing
@@ -738,7 +738,7 @@ run_iacs_job <- function(fname_job = "./slurm/process_IACS.job"){
 
 ## ---- run_FC_job
 
-#' Function to run FC processing job 
+#' Function to run FC processing job
 #'  from raw shp files to R objects
 #'
 #' @return A log file path
@@ -751,13 +751,13 @@ run_FC_job <- function(fname_code = "slurm/process_FC.R"){
   # submit the jobs and get the time to identify the output files from this batch
   err <- system(cmd)
   # and return the path of the first output file
-  return(fname_out = "data/FC/Level1/r_PlYear_100m.tif")  
+  return(fname_out = "data/FC/Level1/r_PlYear_100m.tif")
 }
 
 
 ## ---- run_lcc_job
 
-#' Function to run LCC processing job 
+#' Function to run LCC processing job
 #'  from raw tif files to R objects
 #'
 #' @param fname_job File path to SLURM job file for LCC processing
@@ -782,7 +782,7 @@ run_lcc_job <- function(fname_job = "./slurm/process_LCC.job"){
 
 ## ---- run_lcm_job
 
-#' Function to run LCM processing job 
+#' Function to run LCM processing job
 #'  from raw tif files to R objects
 #'
 #' @param fname_job File path to SLURM job file for LCM processing
@@ -809,7 +809,7 @@ run_lcm_job <- function(fname_job = "./slurm/process_LCM.job"){
 
 ## ---- run_crome_job
 
-#' Function to run CROME processing job 
+#' Function to run CROME processing job
 #'  from raw tif files to R objects
 #'
 #' @param fname_job File path to SLURM job file for CROME processing
@@ -853,8 +853,8 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
   dt$area <-  set_units(dt$area, km^2)
   dt$area <- drop_units(dt$area)
   dt_B <- dt
-  
-  # re-ordering by (u_to, u_from) (not u_from, u_to) allows 
+
+  # re-ordering by (u_to, u_from) (not u_from, u_to) allows
   # the default vector to matrix conversion to work (where byrow = FALSE)
   dt_B <- arrange(dt_B, time, data_source, u_to, u_from)
 
@@ -864,14 +864,14 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
   dt$area <-  set_units(dt$area, km^2)
   dt$area <- drop_units(dt$area)
   dt_G <- dt
-  
+
   # L time series
   dt <- rbindlist(lapply(l_blags, '[[', "dt_L"), use.names=TRUE)
   dt$area <-  set_units(dt$area, m^2)
   dt$area <-  set_units(dt$area, km^2)
   dt$area <- drop_units(dt$area)
-  dt_L <- dt  
-  
+  dt_L <- dt
+
   # D time series
   dt <- rbindlist(lapply(l_blags, '[[', "dt_D"), use.names=TRUE)
   dt$area <-  set_units(dt$area, m^2)
@@ -885,7 +885,7 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
   dt$area <-  set_units(dt$area, km^2)
   dt$area <- drop_units(dt$area)
   dt_A <- dt
-  
+
   return(list(dt_A = dt_A, dt_D = dt_D, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
 }
 
@@ -937,12 +937,12 @@ set_exclusions <- function(obs){
   # exclude these data sources for rough
   data_sources_toExclude <- c("IACS", "LCC")
   obs$dt_A$useData[obs$dt_A$u == "rough" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-    
+
   # exclude these data sources for urban
   obs$dt_A$useData[obs$dt_A$u == "urban" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_G$useData[obs$dt_G$u == "urban" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == "urban" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
-    
+
   # exclude these data sources for other
   obs$dt_A$useData[obs$dt_A$u == "other" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_G$useData[obs$dt_G$u == "other" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
@@ -959,8 +959,8 @@ set_exclusions <- function(obs){
 
 ## ---- get_loglik
 
-#' Define a function to calculate the log-likelihood (loglik) 
-#' for observations and a given $B$ matrix. 
+#' Define a function to calculate the log-likelihood (loglik)
+#' for observations and a given $B$ matrix.
 #'
 #' @param v_B Beta matrix as a vector
 #' @return The RMSE from comparison of predictions versus observations
@@ -976,15 +976,15 @@ set_exclusions <- function(obs){
 #' rmse   <- get_loglik(v_B, use_rmse = TRUE)
 #' rmse   <- get_loglik(v_B, obs$dt_B, obs$dt_G, obs$dt_L, obs$dt_D, use_rmse = TRUE)
 #' loglik <- get_loglik(v_B, obs$dt_B, obs$dt_G, obs$dt_L, obs$dt_D)
-get_loglik <- function(v_B, 
-    #dt_B_obs, dt_G_obs, dt_L_obs, dt_D_obs, 
+get_loglik <- function(v_B,
+    #dt_B_obs, dt_G_obs, dt_L_obs, dt_D_obs,
     n_u = sqrt(length(v_B)), use_rmse = FALSE){
   m_B_pred  <- matrix(v_B, n_u, n_u)
   dt_B_pred <- data.table(u_from = rep(names_u, n_u), u_to = rep(names_u, each = n_u), pred  = as.vector(m_B_pred))
   dt_G_pred <- data.table(u = names_u, pred  = getAreaGrossGain_fromBeta(m_B_pred, n_u))
   dt_L_pred <- data.table(u = names_u, pred  = getAreaGrossLoss_fromBeta(m_B_pred, n_u))
   dt_D_pred <- data.table(u = names_u, pred = getAreaNetChange_fromBeta(m_B_pred, n_u))
-  
+
   dt_B <- merge(dt_B_obs, dt_B_pred, by = c("u_from", "u_to"))
   dt_G <- merge(dt_G_obs, dt_G_pred, by = "u")
   dt_L <- merge(dt_L_obs, dt_L_pred, by = "u")
@@ -997,10 +997,10 @@ get_loglik <- function(v_B,
     resid_B <- dt_B[, area - pred]
 
     RMSE_D <- sqrt(mean(resid_D^2, na.rm = TRUE)) # * wt_D
-    RMSE_G <- sqrt(mean(resid_G^2, na.rm = TRUE)) # * wt_G 
-    RMSE_L <- sqrt(mean(resid_L^2, na.rm = TRUE)) # * wt_L 
-    RMSE_B <- sqrt(mean(resid_B^2, na.rm = TRUE)) # * wt_B 
-    
+    RMSE_G <- sqrt(mean(resid_G^2, na.rm = TRUE)) # * wt_G
+    RMSE_L <- sqrt(mean(resid_L^2, na.rm = TRUE)) # * wt_L
+    RMSE_B <- sqrt(mean(resid_B^2, na.rm = TRUE)) # * wt_B
+
     v_RMSE <- c(RMSE_D, RMSE_B, RMSE_G, RMSE_L)
     # if no data, these will be NaN, which need to be NA
     v_RMSE[is.nan(v_RMSE)] <- NA
@@ -1023,8 +1023,8 @@ get_loglik <- function(v_B,
 
 ## ---- get_pred_ls
 
-#' Define a function to calculate the least-squares predictions 
-#' for the $B$ matrix, and associated G, L, and D data tables. 
+#' Define a function to calculate the least-squares predictions
+#' for the $B$ matrix, and associated G, L, and D data tables.
 #'
 #' @param v_B Beta matrix as a vector
 #' @return A blag object for the least-squares predictions
@@ -1049,7 +1049,7 @@ get_pred_ls <- function(
   # use LCM as initial values
   v_B <- obs$dt_B[time == 2019 & data_source == "LCM"]$area
   v_B[is.na(v_B)] <- 0
-  m_B <- matrix(v_B, 
+  m_B <- matrix(v_B,
     nrow = n_u, ncol = n_u, dimnames = list(names_u, names_u))
   a_B_pred <- array(m_B, c(n_u, n_u, n_t))
 
@@ -1081,23 +1081,23 @@ get_pred_ls <- function(
     dt_D_obs <<- obs$dt_D[time == i_time]
 
     # minimise the RMSE
-    fit <- optim(v_B_ini, get_loglik, 
-      # dt_B_obs = dt_B_obs, dt_G_obs = dt_G_obs, 
+    fit <- optim(v_B_ini, get_loglik,
+      # dt_B_obs = dt_B_obs, dt_G_obs = dt_G_obs,
       # dt_L_obs = dt_L_obs, dt_D_obs = dt_D_obs,
-      use_rmse = TRUE,      
-      method = "L-BFGS-B", 
+      use_rmse = TRUE,
+      method = "L-BFGS-B",
       lower = 0, control = list(factr = 1e9, maxit = 1000, trace = 2))
 
     # # alternatively, maximise the log-likelihood instead
     # # use_rmse = FALSE (default) and set fnscale = -1 to maximise
     # # seems slower
-    # fit <- optim(fit$par, get_loglik, 
-      # dt_B_obs = dt_B_obs, dt_G_obs = dt_G_obs, 
-      # dt_L_obs = dt_L_obs, dt_D_obs = dt_D_obs,  
-      # method = "L-BFGS-B", 
+    # fit <- optim(fit$par, get_loglik,
+      # dt_B_obs = dt_B_obs, dt_G_obs = dt_G_obs,
+      # dt_L_obs = dt_L_obs, dt_D_obs = dt_D_obs,
+      # method = "L-BFGS-B",
       # lower = 0, control = list(fnscale = -1, factr = 1e9, maxit = 1000, trace = 2))
 
-   # fit <- optim(fit$par, getRMSE, method = "L-BFGS-B", 
+   # fit <- optim(fit$par, getRMSE, method = "L-BFGS-B",
      # lower = 0, control = list(factr = 1e3, maxit = 1000, trace = 2))
 
     # compare B
@@ -1110,9 +1110,9 @@ get_pred_ls <- function(
 
   print(paste0("time elapsed (mins): ", round(Sys.time() - start_time, 3)))
 
-  # derive the Losses And Gains from the Beta matrix 
+  # derive the Losses And Gains from the Beta matrix
   pred <- getBLAG(a_B_pred, names_u = names_u, name_data_source = "pred_ls",
-    v_times = v_times)  
+    v_times = v_times)
 
   # not needed I think
   # # Beta matrix
@@ -1130,8 +1130,8 @@ get_pred_ls <- function(
 
 ## ---- get_post_mcmc_serial
 
-#' Define a function to calculate the least-squares predictions 
-#' for the $B$ matrix, and associated G, L, and D data tables. 
+#' Define a function to calculate the least-squares predictions
+#' for the $B$ matrix, and associated G, L, and D data tables.
 #'
 #' @param v_B Beta matrix as a vector
 #' @return A blag object for the least-squares predictions
@@ -1154,7 +1154,7 @@ get_post_mcmc_serial <- function(
   n_t <- length(v_times)
   # allocate an empty list to store an mcmc output object for each time step
   l_mcmcOut <- vector("list", n_t)
-  
+
   # this duplicates reordering in combine_blags
   # but the additional check is probably a good idea
   # as the order determines vector to matrix conversion ordering
@@ -1167,24 +1167,24 @@ get_post_mcmc_serial <- function(
   # v_B_prior[is.na(v_B_prior)] <- 0
   # v_sd_prior <- 0.1*v_B_prior + 0.1
   ## probably over-complicated
-  # prior <- createTruncatedNormalPrior(mean = v_B_prior, sd = v_sd_prior, 
+  # prior <- createTruncatedNormalPrior(mean = v_B_prior, sd = v_sd_prior,
     # lower = rep(0, length(v_B_prior)), upper = 3*max(v_B_prior)+10)
   # or just uniform ** or half-normal
   prior <- createUniformPrior(
-    lower = rep(    0, n_u^2), 
+    lower = rep(    0, n_u^2),
     upper = rep(10000, n_u^2))
-  setUp <- createBayesianSetup(get_loglik, 
+  setUp <- createBayesianSetup(get_loglik,
     prior = prior, parallel = FALSE)
 
-  # Initial values for chains 
-  # get LS predictions as a starting point 
+  # Initial values for chains
+  # get LS predictions as a starting point
   v_B_ini <- pred_ls$dt_B[time == 2019, area]
   m_starter <- matrix(rep(v_B_ini, n_chains), nrow = n_chains, byrow = TRUE)
   m_starter[2,] <- rep(0, n_u^2)         # all zeroes
   m_starter[3,] <- runif(n_u^2, 0, 1000) # random
 
   # initialise array for predicted B parameters
-  m_B <- matrix(0, 
+  m_B <- matrix(0,
     nrow = n_u, ncol = n_u, dimnames = list(names_u, names_u))
   a_B_pred <- array(m_B, c(n_u, n_u, n_t))
 
@@ -1218,8 +1218,8 @@ get_post_mcmc_serial <- function(
 
 ## ---- get_post_mcmc_parallel
 
-#' Define a function to calculate the least-squares predictions 
-#' for the $B$ matrix, and associated G, L, and D data tables. 
+#' Define a function to calculate the least-squares predictions
+#' for the $B$ matrix, and associated G, L, and D data tables.
 #'
 #' @param v_B Beta matrix as a vector
 #' @return A blag object for the least-squares predictions
@@ -1234,7 +1234,7 @@ get_post_mcmc_parallel <- function(
   start_year = 2015,
   end_year = 2019,
   n_iter = 10,
-  # we want three processors to each run one chain, with the 3 internal chains 
+  # we want three processors to each run one chain, with the 3 internal chains
   n_chains = 1, # on the same core (DREAMz uses 3 internal chains by default)
   n_cores  = 3, # number of cores to use
   thin = round(max(1, n_iter/1000))
@@ -1244,7 +1244,7 @@ get_post_mcmc_parallel <- function(
   n_t <- length(v_times)
   # allocate an empty list to store an mcmc output object for each time step
   l_mcmcOut <- vector("list", n_t)
-  
+
   # this duplicates reordering in combine_blags
   # but the additional check is probably a good idea
   # as the order determines vector to matrix conversion ordering
@@ -1257,17 +1257,17 @@ get_post_mcmc_parallel <- function(
   # v_B_prior[is.na(v_B_prior)] <- 0
   # v_sd_prior <- 0.1*v_B_prior + 0.1
   ## probably over-complicated
-  # prior <- createTruncatedNormalPrior(mean = v_B_prior, sd = v_sd_prior, 
+  # prior <- createTruncatedNormalPrior(mean = v_B_prior, sd = v_sd_prior,
     # lower = rep(0, length(v_B_prior)), upper = 3*max(v_B_prior)+10)
   # or just uniform ** or half-normal
   prior <- createUniformPrior(
-    lower = rep(    0, n_u^2), 
+    lower = rep(    0, n_u^2),
     upper = rep(10000, n_u^2))
-  setUp <- createBayesianSetup(get_loglik, 
+  setUp <- createBayesianSetup(get_loglik,
     prior = prior, parallel = FALSE)
 
-  # Initial values for chains 
-  # get LS predictions as a starting point 
+  # Initial values for chains
+  # get LS predictions as a starting point
   v_B_ini <- pred_ls$dt_B[time == 2019, area]
   m_starter <- matrix(rep(v_B_ini, n_cores), nrow = n_cores, byrow = TRUE)
   m_starter[2,] <- rep(0, n_u^2)         # all zeroes
@@ -1275,7 +1275,7 @@ get_post_mcmc_parallel <- function(
 
 
   # initialise array for predicted B parameters
-  m_B <- matrix(0, 
+  m_B <- matrix(0,
     nrow = n_u, ncol = n_u, dimnames = list(names_u, names_u))
   a_B_pred <- array(m_B, c(n_u, n_u, n_t))
 
@@ -1306,7 +1306,7 @@ get_post_mcmc_parallel <- function(
 
 ## ---- run_mcmc_job
 
-#' Function to run MCMC processing job 
+#' Function to run MCMC processing job
 #'  for Beta matrix
 #'
 #' @param fname_job File path to SLURM job file for LCM processing
@@ -1331,7 +1331,7 @@ run_mcmc_job <- function(fname_job = "./slurm/run_mcmc_beta.job"){
 
 ## ---- get_rmse
 
-#' Function to run MCMC processing job 
+#' Function to run MCMC processing job
 #'  for Beta matrix
 #'
 #' @param df A data frame containing the variables
@@ -1354,7 +1354,7 @@ get_rmse <- function(df = df, v, v_ref = "Ref"){
 
 ## ---- get_r2
 
-#' Function to run MCMC processing job 
+#' Function to run MCMC processing job
 #'  for Beta matrix
 #'
 #' @param df A data frame containing the variables
@@ -1377,20 +1377,20 @@ get_r2 <- function(df = df, v, v_ref = "Ref"){
 
 ## ---- get_uncert_scaling
 
-#' Function to run MCMC processing job 
+#' Function to run MCMC processing job
 #'  for Beta matrix
 #'
 #' @param obs A blag object containing the observations
 #' @param v_names_sources A character vector for the names of the data sources
 #' @param cv_AgCensus Numeric Coefficient of variation assumed for AgCensus
-#' @return df A data frame containing the scaling variables for uncertainty 
+#' @return df A data frame containing the scaling variables for uncertainty
 #' @export
 #' @examples
 #' df <- get_uncert_scaling(obs, v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"))
-get_uncert_scaling <- function(obs, v_names_sources = 
+get_uncert_scaling <- function(obs, v_names_sources =
   c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
   cv_AgCensus = 0.1){
-  
+
   dt_D <- obs$dt_D
   df <- pivot_wider(dt_D, names_from = data_source, values_from = area)
   df <- subset(df, time >= 1990 & time <= 2020)
@@ -1400,13 +1400,13 @@ get_uncert_scaling <- function(obs, v_names_sources =
   v_rmse <- sapply(v_names_sources, get_rmse, df = df, v_ref = "Ref")
   v_r2   <- sapply(v_names_sources, get_r2, df = df, v_ref = "Ref")
 
-  df <- data.frame(RMSE = v_rmse, r2 = v_r2, 
+  df <- data.frame(RMSE = v_rmse, r2 = v_r2,
     # reduce RMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
     sigma = v_rmse * abs(1 - v_r2))
 
   df <- df[order(df$sigma),]
   # AgCensus and FC form the reference, so are rows 1:2 when ordered
-  # guess sigma for these as half the lowest value, which will be row 3 
+  # guess sigma for these as half the lowest value, which will be row 3
   # very arbitrary assumption, to be improved upon
   df["AgCensus",]$sigma <- df[3,]$sigma * 0.5
   df["FC",]$sigma       <- df[3,]$sigma * 0.5
@@ -1417,50 +1417,49 @@ get_uncert_scaling <- function(obs, v_names_sources =
 
   df_fpn <- readRDS("./analysis/df_fpn.rds")
   df <- merge(df, df_fpn, by="row.names")
-  
+
   return(df)
 }
 
 
 ## ---- add_uncert
 
-#' Function to add uncertainties to observations 
+#' Function to add uncertainties to observations
 #'
 #' @param obs A blag object containing the observations
-#' @param c_df_uncert A data frame containing the scaling variables for uncertainty 
+#' @param c_df_uncert A data frame containing the scaling variables for uncertainty
 #' @return obs A blag object containing the observations with uncertainties
 #' @export
 #' @examples
 #' df <- add_uncert(obs, v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"))
 add_uncert <- function(obs, df_uncert){
-  
+
   df_uncert$data_source <- rownames(df_uncert)
   df_uncert <- df_uncert[, c("data_source", "sigma", "Fp", "Fn")]
-  obs$dt_B <- merge(obs$dt_B, df_uncert, all.x = TRUE, by = "data_source") 
-  obs$dt_G <- merge(obs$dt_G, df_uncert, all.x = TRUE, by = "data_source") 
-  obs$dt_L <- merge(obs$dt_L, df_uncert, all.x = TRUE, by = "data_source") 
-  obs$dt_A <- merge(obs$dt_A, df_uncert, all.x = TRUE, by = "data_source") 
-  obs$dt_D <- merge(obs$dt_D, df_uncert, all.x = TRUE, by = "data_source") 
-  
+  obs$dt_B <- merge(obs$dt_B, df_uncert, all.x = TRUE, by = "data_source")
+  obs$dt_G <- merge(obs$dt_G, df_uncert, all.x = TRUE, by = "data_source")
+  obs$dt_L <- merge(obs$dt_L, df_uncert, all.x = TRUE, by = "data_source")
+  obs$dt_A <- merge(obs$dt_A, df_uncert, all.x = TRUE, by = "data_source")
+  obs$dt_D <- merge(obs$dt_D, df_uncert, all.x = TRUE, by = "data_source")
+
   return(obs)
 }
 
-## ----- correct_blags
+## ----- correct_lag
 
-#' Function to correct BLAG objects based on false positives and negatives added from add_uncert
-#' @param obs A blag object
-#' @param Fp false positive values (as returned from get_uncert)
-#' @return blag A blag object containing the updated observations based on the false positive and negative rates
+#' Function to correct L,A & G in BLAG objects based on false positives added from add_uncert
+#' @param obs A blag object that has already had the function add_uncert applied to it (providing the Fp column)
+#' @param df_Fp dataframe returned from get_uncert including false positive values
+#' @return obs A blag object containing the updated observations based on the false positive and negative rates
 #' @export
-#' @examples 
-#' df <- correct_blag(obs, Fp = 0.772)
+#' @examples
+#' df <- correct_lag(obs, Fp = 0.772)
 
-correct_blag <- function(obs, Fp){
-  
-  obs$a_B <- obs$a_B * (1-Fp)
-  
+correct_lag <- function(obs){
+
+  s <- 1 - mean(obs$dt_B$Fp)
+  obs$a_B <-obs$a_B * s
+
   obs <- getBLAG(obs$a_B)
   return(obs)
 }
-
-
