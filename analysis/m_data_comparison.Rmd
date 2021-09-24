@@ -146,7 +146,7 @@ Examining the gross losses shows a similar picture(Figure \@ref(fig:DCplotL)). A
 <!--- { DCplotD -->
 ```{r DCplotD, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net change in area of each land use $\\Delta \\mathbf{A}$ observed by different data sources."}
 # D time series
-p <- ggplot(obs$dt_D[time > 1690 & time < 2120 & area != 0], 
+p <- ggplot(obs$dt_D[time >= 1950 & time <= 2020 & area != 0], 
   aes(time, area, colour = data_source))
 p <- p + geom_line()
 p <- p + geom_point()

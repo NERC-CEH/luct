@@ -20,7 +20,7 @@ library(fs) # file system operations
 # All the functions to calculate the targets are defined here.
 source(here::here("R", "luc_track.R"))
 source(here::here("R", "luct.R"))
-
+source(here::here("R", "luct_AgCensus.R"))
 
 # Set target-specific options such as packages.
 # It is recommended to load here all the packages required by functions managed only by {targets}.
@@ -48,6 +48,14 @@ list(
 
   # CORE pipeline targets ----
 
+  # Path to historical UK AgCensus data file
+  tar_target(
+    c_file_agc_hist,
+    fs::path_rel(here("data-raw/AgCensus",
+      "all_LU_stats_FULLSERIES_km2.csv")),
+    format = "file"
+  ),
+  
   # Path to raw AgCensus_Eng data file
   tar_target(
     c_file_AgCensus_Eng,
@@ -86,39 +94,59 @@ list(
     format = "file"
   ),
 
-  # Wrangle AgCensus_Eng data
+  # Wrangle historical AgCensus data
   tar_target(
-    c_df_A_AgCensus_Eng,
-    wrangle_AgCensus_Eng(c_file_AgCensus_Eng)
+    c_agc_hist,
+    wrangle_AgCensus_historical(c_file_agc_hist)
+  ),
+  
+  # Process AgCensus_Eng data
+  tar_target(
+    c_agc_en,
+    process_AgCensus_Eng(c_file_AgCensus_Eng, c_agc_hist)
   ),
 
-  # Wrangle AgCensus_Sco data
+  # Process AgCensus_Sco data
   tar_target(
-    c_df_A_AgCensus_Sco,
-    wrangle_AgCensus_Sco(c_file_AgCensus_Sco)
+    c_agc_sc,
+    process_AgCensus_Sco(c_file_AgCensus_Sco, c_agc_hist)
   ),
 
-  # Wrangle AgCensus_Wal data
+  # Process AgCensus_Wal data
   tar_target(
-    c_df_A_AgCensus_Wal,
-    wrangle_AgCensus_Wal(c_file_AgCensus_Wal)
+    c_agc_wa,
+    process_AgCensus_Wal(c_file_AgCensus_Wal, c_agc_hist)
   ),
 
-  # Wrangle AgCensus_NIr data
+  # Process AgCensus_NIr data
   tar_target(
-    c_df_A_AgCensus_NIr,
-    wrangle_AgCensus_NIr(c_file_AgCensus_NIr)
+    c_agc_ni,
+    process_AgCensus_NIr(c_file_AgCensus_NIr, c_agc_hist)
   ),
 
   # Combine AgCensus data
   tar_target(
     c_blag_AgCensus,
-    combine_AgCensus(l_df = list(c_df_A_AgCensus_Eng$df_A, 
-                                 c_df_A_AgCensus_Sco$df_A, 
-                                 c_df_A_AgCensus_Wal$df_A, 
-                                 c_df_A_AgCensus_NIr$df_A))
+    combine_AgCensus(l_df = list(c_agc_en$df_long, 
+                                 c_agc_sc$df_long, 
+                                 c_agc_wa$df_long, 
+                                 c_agc_ni$df_long),
+                                 l_country = "UK")
   ),
 
+  # Path to MODIS data file
+  tar_target(
+    c_file_MODIS,
+    fs::path_rel(here("data-raw/MODIS", "FAOStat_Artificial_land_surface_MODIS.csv")),
+    format = "file"
+  ),
+
+  # Wrangle MODIS data
+  tar_target(
+    c_blag_MODIS,
+    wrangle_MODIS_urban(fpath = c_file_MODIS)
+  ),
+  
   # Path to raw CS data file
   tar_target(
     c_file_CS,
@@ -197,7 +225,7 @@ list(
       v_times  = c_level1_cor$v_times,
       v_fnames = c_level1_cor$v_fnames,
       name_data_source = "CORINE", names_u),
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   ),
 
   # Path to IACS SLURM job file
@@ -221,7 +249,7 @@ list(
       v_times  = c_level1_iacs$v_times,
       v_fnames = c_level1_iacs$v_fnames,
       name_data_source = "IACS", names_u),
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   ),
   
   # Path to LCC SLURM job file
@@ -245,7 +273,7 @@ list(
       v_times  = c_level1_lcc$v_times,
       v_fnames = c_level1_lcc$v_fnames,
       name_data_source = "LCC", names_u),
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   ),
   
   # Path to LCM SLURM job file
@@ -266,7 +294,7 @@ list(
   tar_target(
     c_level1_lcm_masked,
     apply_mask(c_level1_lcm),
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   ),
     
   # Get BLAG from LCM Level1 output
@@ -293,14 +321,14 @@ list(
       v_times  = c_level1_crome$v_times,
       v_fnames = c_level1_crome$v_fnames,
       name_data_source = "CROME", names_u),
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   ),
         
   # Combine BLAGs to give list of data tables with all obs
   tar_target(
     c_obs_all,
     combine_blags(
-      l_blags = list(c_blag_AgCensus, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm, c_blag_crome)),
+      l_blags = list(c_blag_AgCensus, c_blag_MODIS, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm, c_blag_crome)),
     cue = tar_cue(mode = "thorough")
   ),
             

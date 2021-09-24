@@ -186,6 +186,7 @@ p
 ```
 
 ```{r, metrics, eval = TRUE, echo = FALSE}
+dt_D$country <- NULL
 df <- pivot_wider(dt_D, names_from = data_source, values_from = area)
 df <- subset(df, time >= 1990 & time <= 2020)
 df$Ref <- df$AgCensus
@@ -218,7 +219,8 @@ An example is shown below.
 
 ```{r, plot_correspondence, eval = TRUE, echo = FALSE}
 # Plot correspondence
-p <- ggplot(df, aes(Ref, CROME, colour = u))
+p <- ggplot(df, aes(LCC, CROME, colour = u))
+#p <- ggplot(df, aes(AgCensus, IACS, colour = u))
 p <- p + geom_point()
 p <- p + stat_smooth(method = "lm")
 p <- p + geom_abline()

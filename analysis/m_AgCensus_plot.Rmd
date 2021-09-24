@@ -32,10 +32,10 @@ tictoc::tic("Computation time (excl. render)")
 
 # Get the path to the raw entity data file
 # This is a target managed by {targets}
-l_df_AgCensus_Eng  <- tar_read(c_df_A_AgCensus_Eng)
-l_df_AgCensus_Sco  <- tar_read(c_df_A_AgCensus_Sco)
-l_df_AgCensus_Wal  <- tar_read(c_df_A_AgCensus_Wal)
-l_df_AgCensus_NIr  <- tar_read(c_df_A_AgCensus_NIr)
+l_df_AgCensus_Eng  <- tar_read(c_agc_en)
+l_df_AgCensus_Sco  <- tar_read(c_agc_sc)
+l_df_AgCensus_Wal  <- tar_read(c_agc_wa)
+l_df_AgCensus_NIr  <- tar_read(c_agc_ni)
 
 dt_A_UK  <- tar_read(c_blag_AgCensus)$dt_A
 dt_D_UK <- tar_read(c_blag_AgCensus)$dt_D
@@ -57,10 +57,9 @@ knitr::read_chunk("R/luct.R")
 
 <!--- { ACplotEngland -->
 ```{r ACplotEngland, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land use from the June Agricultural Census in England, 1980-2019. Points show uncorrected data; lines show corrected data; Green vertical lines show known step changes; Red vertical lines show suspected step changes which have been adjusted for."}
-p <- ggplot(l_df_AgCensus_Eng$df_A, aes(time, area))
+p <- ggplot(l_df_AgCensus_Eng$df_long, aes(time, area))
 # p <- p + geom_vline (xintercept =   knownChangePoint, colour = "green")
 # p <- p + geom_vline (xintercept = unknownChangePoint, colour = "red")
-p <- p + geom_point(data = l_df_AgCensus_Eng$df_A_orig)
 p <- p + geom_line()
 p <- p + ggtitle(label = "Land use in England from Agricultural Census",
  subtitle = "Black lines show uncorrected data; Coloured lines show corrected data
@@ -74,10 +73,9 @@ p + facet_wrap(~ u, scales = "free_y")
 
 <!--- { ACplotScotland -->
 ```{r ACplotScotland, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land use from the June Agricultural Census in Scotland, 1980-2019. Points show uncorrected data; lines show corrected data; Green vertical lines show known step changes; Red vertical lines show suspected step changes which have been adjusted for."}
-p <- ggplot(l_df_AgCensus_Sco$df_A, aes(time, area))
+p <- ggplot(l_df_AgCensus_Sco$df_long, aes(time, area))
 # p <- p + geom_vline (xintercept =   knownChangePoint, colour = "green")
 # p <- p + geom_vline (xintercept = unknownChangePoint, colour = "red")
-p <- p + geom_point(data = l_df_AgCensus_Sco$df_A_orig)
 p <- p + geom_line()
 p <- p + ggtitle(label = "Land use in Scotland from Agricultural Census",
  subtitle = "Black lines show uncorrected data; Coloured lines show corrected data
@@ -91,7 +89,7 @@ p + facet_wrap(~ u, scales = "free_y")
 
 <!--- { ACplotWales -->
 ```{r ACplotWales, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land use from the June Agricultural Census in Wales, 1980-2019."}
-p <- ggplot(l_df_AgCensus_Wal$df_A, aes(time, area))
+p <- ggplot(l_df_AgCensus_Wal$df_long, aes(time, area))
 p <- p + geom_line()
 p <- p + geom_point()
 p <- p + ggtitle(label = "Land use in Wales from Agricultural Census")
@@ -104,7 +102,7 @@ p + facet_wrap(~ u, scales = "free_y")
 
 <!--- { plotNIreland -->
 ```{r plotNIreland, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land use from the June Agricultural Census in Northern Ireland, 1980-2019."}
-p <- ggplot(l_df_AgCensus_NIr$df_A, aes(time, area))
+p <- ggplot(l_df_AgCensus_NIr$df_long, aes(time, area))
 p <- p + geom_line()
 p <- p + geom_point()
 p <- p + xlim(1981, 2020)
