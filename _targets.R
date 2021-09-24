@@ -30,7 +30,7 @@ options(tidyverse.quiet = TRUE)
 options(bitmapType='cairo')
 tar_option_set(
   packages = c(
-    "dplyr", "purrr", "units", "data.table", "ggplot2",
+    "dplyr", "purrr", "units", "data.table", "ggplot2", "stringr",
     "zoo", "mgcv", "reshape2", "readxl", "tidyr", "sp", "sf", "raster", #"rgeos", "ggforce", "plyr", 
     "rgdal", "grid", "spCEH", "scico", "stars", "BayesianTools"),
   format = "qs",
@@ -262,14 +262,21 @@ list(
     cue = tar_cue(mode = "thorough")
   ),
     
+  # Apply a land mask to the LCM data
+  tar_target(
+    c_level1_lcm_masked,
+    apply_mask(c_level1_lcm),
+    cue = tar_cue(mode = "thorough")
+  ),
+    
   # Get BLAG from LCM Level1 output
   tar_target(
     c_blag_lcm,
     getBLAG_fromU(
-      v_times  = c_level1_lcm$v_times,
-      v_fnames = c_level1_lcm$v_fnames,
+      v_times  = c_level1_lcm_masked$v_times,
+      v_fnames = c_level1_lcm_masked$v_fnames,
       name_data_source = "LCM", names_u),
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   ),
         
   # Run a SLURM job to process CROME data

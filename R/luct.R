@@ -211,7 +211,7 @@ wrangle_AgCensus_Eng <- function(v_fpath =
   names(df_long) <- c("time", "u", "area" )
   notDuplictates <- (df_long$time - as.integer(df_long$time)) == 0
   df_long <- df_long[notDuplictates, ]
-  df_long$country <- "E"
+  df_long$country <- "En"
   df_A_Eng <- df_long
   return(list(df_A = df_A_Eng, df_A_orig = df_long_orig))
 }
@@ -329,7 +329,7 @@ wrangle_AgCensus_Sco <- function(v_fpath =
   names(df_long_orig) <- c("time", "u", "area" )
   notDuplictates <- (df_long$time - as.integer(df_long$time)) == 0
   df_long <- df_long[notDuplictates, ]
-  df_long$country <- "S"
+  df_long$country <- "Sc"
   df_A_Sco <- df_long
   return(list(df_A = df_A_Sco, df_A_orig = df_long_orig))
 }
@@ -402,7 +402,7 @@ wrangle_AgCensus_Wal <- function(v_fpath =
   names(df_long) <- c("time", "u", "area" )
   notDuplictates <- (df_long$time - as.integer(df_long$time)) == 0
   df_long <- df_long[notDuplictates, ]
-  df_long$country <- "W"
+  df_long$country <- "Wa"
   df_A_Wal <- df_long
   return(list(df_A = df_A_Wal, df_A_orig = df_A_Wal))
 }
@@ -443,7 +443,7 @@ wrangle_AgCensus_NIr <- function(
   names(df_long) <- c("time", "u", "area" )
   notDuplictates <- (df_long$time - as.integer(df_long$time)) == 0
   df_long <- df_long[notDuplictates, ]
-  df_long$country <- "N"
+  df_long$country <- "NI"
   df_A_NIr <- df_long
   return(list(df_A = df_A_NIr, df_A_orig = df_A_NIr))
 }
@@ -806,7 +806,44 @@ run_lcm_job <- function(fname_job = "./slurm/process_LCM.job"){
   ))
 }
 
+## ---- apply_mask
 
+#' Function to mask Level1 raster files 
+#'  with a consistent land mask
+#'
+#' @param level1 List with vector of times and file path for Level 1 files
+#' @param res Numeric Resolution of raster files in metres
+#' @return The same level1 object; side effect is that the files have been re-written
+#' @export
+#' @examples
+#' fname_job = "./slurm/process_LCM.job"
+#' x <- apply_mask(level1, res = 100)
+apply_mask <- function(level1, res = 100){
+  level1$v_fnames <- str_replace(level1$v_fnames, "1000", as.character(res))
+  
+  n_files <- length(level1$v_fnames)
+  n_values_raw    <- vector(mode = "integer", length = n_files)
+  n_values_masked <- vector(mode = "integer", length = n_files)
+  fname <- paste0("./data-raw/mask/r_land_", res, "m.tif")
+  r_mask <- raster(fname)
+  # plot(r_mask)
+  # plot(r)
+  n <- cellStats(!is.na(r_mask), sum)
+  
+  for (i in 1:n_files){
+  #i = 1
+    fname <- level1$v_fnames[i] # paste0("./data/LCM/Level1/r_U_lcm_1000m_", v_times, ".tif")
+    r <- raster(fname)
+    n_values_raw[i] <- cellStats(!is.na(r), sum)
+    r <- mask(r, r_mask)
+    n_values_masked[i] <- cellStats(!is.na(r), sum)
+    writeRaster(r, fname, overwrite = TRUE)
+  }
+  # plot(n_values_raw / n * 100)
+  # points(n_values_masked / n * 100, col = "red")
+  
+  return(level1)
+}
 ## ---- run_crome_job
 
 #' Function to run CROME processing job 
