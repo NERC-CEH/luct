@@ -373,7 +373,7 @@ list(
   # Predict the Beta matrix by least-squares
   tar_target(
     c_pred_ls,
-    get_pred_ls(c_obs_corr, start_year = 1990, end_year = 2019),
+    get_pred_ls(c_obs_unc, start_year = 1990, end_year = 2019),
     cue = tar_cue(mode = "never")
   ),
                     
@@ -383,19 +383,21 @@ list(
     # get_post_mcmc_serial(c_obs, c_pred_ls, start_year = 2017, end_year = 2019, n_iter = 1000)
   # ),
   
-  # # Path to MCMC_Beta SLURM job file
-  # tar_target(
-    # c_mcmc_fname_job,
-    # fs::path_rel(here("slurm", "run_mcmc_beta.job")),
-    # format = "file"
-  # ),
+  # Path to MCMC_Beta SLURM job file
+  tar_target(
+    c_mcmc_fname_job,
+    fs::path_rel(here("slurm", "run_mcmc_beta.job")),
+    format = "file"
+  ),
 
-  # # Run a SLURM job to estimate Beta by MCMC
-  # tar_target(
-    # c_mcmc_fname_out,
-    # run_mcmc_beta(c_mcmc_fname_job),
-    # cue = tar_cue(mode = "thorough")
-  # ),    
+  # Run a SLURM job to estimate Beta by MCMC
+  tar_target(
+    c_mcmc_fname_Bmap,
+    run_mcmc_beta_job(c_mcmc_fname_job, c_obs_unc),
+    cue = tar_cue(mode = "thorough"),
+    format = "file"
+  ),    
+
   
   # # META pipeline targets ----
 

@@ -39,7 +39,7 @@ obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
 
 ## ---- estimate_B_by_MCMC_parallel, eval=recalc, echo=FALSE--------------------
 # Parallelise over years, finding the posterior distribution of the $B$ matrix by MCMC.
-n_iter <- 600000
+n_iter <- 60000
 thin <- 10 # round(max(1, n_iter/20))
 # we want three processors to each run one chain, with the 3 internal chains 
 n_chains <- 1 # on the same core (DREAMz uses 3 internal chains by default)
@@ -80,7 +80,7 @@ m_starter[n_cores,] <- runif(n_u^2, 0, 1000) # random
 
 settings <- list(iterations = n_iter, thin = thin,  
   nrChains = n_chains, startValue = m_starter, 
-  burnin  = 12000, message = FALSE)
+  burnin  = min(ceiling(n_iter/20), 12000), message = FALSE)
  
 # Start cluster with n_cores cores for n chains and export BayesianTools library
 cl <- parallel::makeCluster(n_cores)
@@ -118,4 +118,3 @@ parallel::stopCluster(cl)
 # guessing still true with SLURM job scheduler
 i_time
 quit(save = "no")
-

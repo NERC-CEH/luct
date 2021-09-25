@@ -683,10 +683,10 @@ get_loglik <- function(v_B,
     # v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = 0.1*abs(dt_G$area), log = T)
     # v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = 0.1*abs(dt_L$area), log = T)
     # v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = 0.1*abs(dt_D$area), log = T)
-    v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = dt_B$sigma*abs(dt_B$area), log = T)
-    v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = dt_G$sigma*abs(dt_G$area), log = T)
-    v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = dt_L$sigma*abs(dt_L$area), log = T)
-    v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = dt_D$sigma*abs(dt_D$area), log = T)
+    v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp), mean = dt_B$pred, sd = dt_B$sigma*abs(dt_B$area), log = T)
+    v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp), mean = dt_G$pred, sd = dt_G$sigma*abs(dt_G$area), log = T)
+    v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp), mean = dt_L$pred, sd = dt_L$sigma*abs(dt_L$area), log = T)
+    v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp), mean = dt_D$pred, sd = dt_D$sigma*abs(dt_D$area), log = T)
     loglik <- sum(v_llik_D, v_llik_G, v_llik_L, v_llik_B, na.rm = TRUE)
     return(loglik)
   }
@@ -986,18 +986,19 @@ get_post_mcmc_parallel <- function(
 #' @export
 #' @examples
 #' fname_job = "./slurm/process_LCM.job"
-#' x <- run_lcm_job(fname_job)
-run_mcmc_job <- function(fname_job = "./slurm/run_mcmc_beta.job"){
+#' x <- run_mcmc_beta_job(fname_job, obs)
+run_mcmc_beta_job <- function(
+    fname_job = "./slurm/run_mcmc_beta.job", 
+    obs
+  ){
   cmd <- paste0("sbatch ", fname_job)
   # submit the jobs to the SLURM queue
   err <- system(cmd)
   # and return the years and paths of the output files
-  # these need to match slurm/process_LCM.R - no programmed check they are consistent
-  v_times <- c(1990, 2015, 2017, 2018, 2019)
-  return(list(
-    v_times = v_times,
-    v_fnames = paste0("./data/MCMC/")
-  ))
+  # these should match slurm/run_mcmc_beta.R, but not essential - only ones that are tracked
+  v_times <- 1991:2019
+  v_fnames <- fs::path_rel(here("output", paste0("mcmcB_map", v_times, ".qs")))
+  return(v_fnames)
 }
 
 
