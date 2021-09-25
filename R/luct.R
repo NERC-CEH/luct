@@ -487,52 +487,84 @@ run_crome_job <- function(fname_job = "./slurm/process_CROME.job"){
 #' x <- combine_blags(l_blags)
 combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm)){
   # B matrix
-  dt <- rbindlist(lapply(l_blags, '[[', "dt_B"), use.names=TRUE, fill=TRUE)
-  dt$area <-  set_units(dt$area, m^2)
-  dt$area <-  set_units(dt$area, km^2)
-  dt$area <- drop_units(dt$area)
-  dt_B <- dt
+  dt_B <- rbindlist(lapply(l_blags, '[[', "dt_B"), use.names=TRUE, fill=TRUE)
   
   # re-ordering by (u_to, u_from) (not u_from, u_to) allows 
   # the default vector to matrix conversion to work (where byrow = FALSE)
   dt_B <- arrange(dt_B, time, data_source, u_to, u_from)
 
   # G time series
-  dt <- rbindlist(lapply(l_blags, '[[', "dt_G"), use.names=TRUE, fill=TRUE)
-  dt$area <-  set_units(dt$area, m^2)
-  dt$area <-  set_units(dt$area, km^2)
-  dt$area <- drop_units(dt$area)
-  dt_G <- dt
+  dt_G <- rbindlist(lapply(l_blags, '[[', "dt_G"), use.names=TRUE, fill=TRUE)
   
   # L time series
-  dt <- rbindlist(lapply(l_blags, '[[', "dt_L"), use.names=TRUE, fill=TRUE)
-  dt$area <-  set_units(dt$area, m^2)
-  dt$area <-  set_units(dt$area, km^2)
-  dt$area <- drop_units(dt$area)
-  dt_L <- dt  
+  dt_L <- rbindlist(lapply(l_blags, '[[', "dt_L"), use.names=TRUE, fill=TRUE)
   
   # D time series
-  dt <- rbindlist(lapply(l_blags, '[[', "dt_D"), use.names=TRUE, fill=TRUE)
-  dt$area <-  set_units(dt$area, m^2)
-  dt$area <-  set_units(dt$area, km^2)
-  dt$area <- drop_units(dt$area)
-  dt_D <- dt
+  dt_D <- rbindlist(lapply(l_blags, '[[', "dt_D"), use.names=TRUE, fill=TRUE)
 
   # A time series
-  dt <- rbindlist(lapply(l_blags, '[[', "dt_A"), use.names=TRUE, fill=TRUE)
-  dt$area <-  set_units(dt$area, m^2)
-  dt$area <-  set_units(dt$area, km^2)
-  dt$area <- drop_units(dt$area)
-  dt_A <- dt
+  dt_A <- rbindlist(lapply(l_blags, '[[', "dt_A"), use.names=TRUE, fill=TRUE)
+    
+  return(list(dt_B = dt_B, dt_G = dt_G, dt_L = dt_L, dt_A = dt_A, dt_D = dt_D))
+}
+
+
+## ---- convert_units
+
+#' Function to convert units of area
+#'  in BLAG objects in all the data tables
+#'
+#' @param blag A blag object
+#' @return A blag object
+#' @export
+#' @examples
+#' x <- convert_units(blag, old_unit = "m^2", new_unit = "km^2")
+convert_units <- function(blag, old_unit = "m^2", new_unit = "km^2"){
+  # set the mode of set_units() to read character variables
+  units_options(set_units_mode = "standard")
+
+  # B matrix
+  blag$dt_B$area <-  set_units(blag$dt_B$area, old_unit)
+  blag$dt_B$area <-  set_units(blag$dt_B$area, new_unit)
+  blag$dt_B$area <- drop_units(blag$dt_B$area)
   
-  return(list(dt_A = dt_A, dt_D = dt_D, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
+  # re-ordering by (u_to, u_from) (not u_from, u_to) allows 
+  # the default vector to matrix conversion to work (where byrow = FALSE)
+  blag$dt_B <- arrange(blag$dt_B, time, data_source, u_to, u_from)
+
+  # G time series
+  blag$dt_G$area <-  set_units(blag$dt_G$area, old_unit)
+  blag$dt_G$area <-  set_units(blag$dt_G$area, new_unit)
+  blag$dt_G$area <- drop_units(blag$dt_G$area)
+  
+  # L time series
+  blag$dt_L$area <-  set_units(blag$dt_L$area, old_unit)
+  blag$dt_L$area <-  set_units(blag$dt_L$area, new_unit)
+  blag$dt_L$area <- drop_units(blag$dt_L$area)
+  
+  # D time series
+  blag$dt_D$area <-  set_units(blag$dt_D$area, old_unit)
+  blag$dt_D$area <-  set_units(blag$dt_D$area, new_unit)
+  blag$dt_D$area <- drop_units(blag$dt_D$area)
+
+  # A time series - may not always be present
+  if (length(blag$dt_A) > 0){
+    blag$dt_A$area <-  set_units(blag$dt_A$area, old_unit)
+    blag$dt_A$area <-  set_units(blag$dt_A$area, new_unit)
+    blag$dt_A$area <- drop_units(blag$dt_A$area)  
+  }
+
+  # set the mode of set_units() back to default
+  units_options(set_units_mode = "symbols")
+  
+  return(blag)
 }
 
 
 ## ---- set_exclusions
 
-#' Function to combine observations
-#'  in BLAG objects to produce a single data table
+#' Function to exclude observations
+#'  in BLAG objects for specific data source x land use combinations
 #'
 #' @param l_blags List of blag objects to combine
 #' @return A blag object
@@ -542,11 +574,12 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
 #' unique(obs$dt_A$data_source[obs$dt_A$u == "other"])
 #' obs <- set_exclusions(obs)
 #' unique(obs$dt_A$data_source[obs$dt_A$u == "other"])
+##* WIP obs should be replaced with blag
 set_exclusions <- function(obs){
 
   # zeroes are actually missing values
   # should remove earlier
-  obs$dt_A$area[obs$dt_A$area == 0]    <- NA
+  # obs$dt_A$area[obs$dt_A$area == 0]    <- NA
   obs$dt_D$area[obs$dt_D$area == 0]    <- NA
   obs$dt_D$area[is.nan(obs$dt_D$area)] <- NA
   obs$dt_G$area[obs$dt_G$area == 0]    <- NA
@@ -557,38 +590,38 @@ set_exclusions <- function(obs){
 
   unique(obs$dt_D$data_source); unique(obs$dt_B$data_source)
 
-  obs$dt_A$useData <- TRUE
+  # obs$dt_A$useData <- TRUE
   obs$dt_G$useData <- TRUE
   obs$dt_L$useData <- TRUE
   obs$dt_D$useData <- TRUE
 
   # exclude these data sources for woods
   data_sources_toExclude <- c("AgCensus", "IACS", "LCC", "CROME")
-  obs$dt_A$useData[obs$dt_A$u == "woods" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  # obs$dt_A$useData[obs$dt_A$u == "woods" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_G$useData[obs$dt_G$u == "woods" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == "woods" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_D$useData[obs$dt_D$u == "woods" & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
 
   # exclude these data sources for grass
   data_sources_toExclude <- c("IACS")
-  obs$dt_A$useData[obs$dt_A$u == "grass" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  # obs$dt_A$useData[obs$dt_A$u == "grass" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
 
   # exclude these data sources for rough
   data_sources_toExclude <- c("IACS", "LCC")
-  obs$dt_A$useData[obs$dt_A$u == "rough" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  # obs$dt_A$useData[obs$dt_A$u == "rough" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
     
   # exclude these data sources for urban
-  obs$dt_A$useData[obs$dt_A$u == "urban" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  # obs$dt_A$useData[obs$dt_A$u == "urban" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_G$useData[obs$dt_G$u == "urban" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == "urban" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
     
   # exclude these data sources for other
-  obs$dt_A$useData[obs$dt_A$u == "other" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  # obs$dt_A$useData[obs$dt_A$u == "other" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_G$useData[obs$dt_G$u == "other" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == "other" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
 
   obs$dt_D <- subset(obs$dt_D, useData)
-  obs$dt_A <- subset(obs$dt_A, useData)
+  # obs$dt_A <- subset(obs$dt_A, useData)
   obs$dt_G <- subset(obs$dt_G, useData)
   obs$dt_L <- subset(obs$dt_L, useData)
 
@@ -968,10 +1001,10 @@ run_mcmc_job <- function(fname_job = "./slurm/run_mcmc_beta.job"){
 }
 
 
-## ---- get_rmse
+## ---- get_nrmse
 
-#' Function to run MCMC processing job 
-#'  for Beta matrix
+#' Function to RMSE normalised by range 
+#'  for values with mean near zero
 #'
 #' @param df A data frame containing the variables
 #' @param v A character string for the name of the test variable
@@ -979,15 +1012,17 @@ run_mcmc_job <- function(fname_job = "./slurm/run_mcmc_beta.job"){
 #' @return Numeric The root-mean-square error
 #' @export
 #' @examples
-#' rmse <- get_rmse(df = df, v = "IACS", v_ref = "Ref")
-get_rmse <- function(df = df, v, v_ref = "Ref"){
+#' nrmse <- get_nrmse(df = df, v = "IACS", v_ref = "Ref")
+get_nrmse <- function(df = df, v, v_ref = "Ref"){
   v     <- df[[v]]
   v_ref <- df[[v_ref]]
   resid <- v - v_ref
   rmse <- sqrt(mean(resid^2, na.rm = TRUE))
+  nrmse <- rmse / 
+    (max(v_ref, na.rm = TRUE) - min(v_ref, na.rm = TRUE))
   # if no data, these will be NaN, which need to be NA
-  rmse[is.nan(rmse)] <- NA
-  return(rmse)
+  nrmse[is.nan(nrmse)] <- NA
+  return(nrmse)
 }
 
 
@@ -1025,23 +1060,35 @@ get_r2 <- function(df = df, v, v_ref = "Ref"){
 #' @return df A data frame containing the scaling variables for uncertainty 
 #' @export
 #' @examples
-#' df <- get_uncert_scaling(obs, v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"))
-get_uncert_scaling <- function(obs, v_names_sources = 
-  c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
-  cv_AgCensus = 0.1){
+#' df_uncert <- get_uncert_scaling(obs,   v_names_sources = 
+#'   c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
+#'   v_interval_length_sources = 
+#'   c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
+#'   cv_AgCensus = 0.1
+#'   )
+#' df_uncert
+get_uncert_scaling <- function(obs, 
+  v_names_sources = 
+  c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
+  v_interval_length_sources = 
+  c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
+  cv_AgCensus = 0.1
+  ){
   
   dt_D <- obs$dt_D
+  dt_D$country <- NULL
   df <- pivot_wider(dt_D, names_from = data_source, values_from = area)
   df <- subset(df, time >= 1990 & time <= 2020)
   df$Ref <- df$AgCensus
   df$Ref[df$u == "woods"] <- df$FC[df$u == "woods"]
+  df$Ref[df$u == "urban"] <- df$LCM[df$u == "urban"]
 
-  v_rmse <- sapply(v_names_sources, get_rmse, df = df, v_ref = "Ref")
+  v_nrmse <- sapply(v_names_sources, get_nrmse, df = df, v_ref = "Ref")
   v_r2   <- sapply(v_names_sources, get_r2,   df = df, v_ref = "Ref")
 
-  df <- data.frame(RMSE = v_rmse, r2 = v_r2, 
-    # reduce RMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
-    sigma = v_rmse * abs(1 - v_r2))
+  df <- data.frame(intvl_lth = v_interval_length_sources, NRMSE = v_nrmse, r2 = v_r2, 
+    # reduce NRMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
+    sigma = v_nrmse * abs(1 - v_r2))
 
   df <- df[order(df$sigma),]
   # AgCensus and FC form the reference, so are rows 1:2 when ordered
@@ -1051,10 +1098,19 @@ get_uncert_scaling <- function(obs, v_names_sources =
   df["FC",]$sigma       <- df[3,]$sigma * 0.5
 
   df$sigma <- df$sigma / df["AgCensus",]$sigma * cv_AgCensus
+  
+  df$sigma <- df$sigma * sqrt(df$intvl_lth)
 
-  # add dummy values for false positive and neg rates
-  df$Fp <- 0
-  df$Fn <- 0
+  # add values for false positive and neg rates:
+
+  df_fpn <- readRDS("./data/df_fpn.rds")
+  df <- merge(df, df_fpn, all.x = TRUE, by="row.names")
+  names(df)[names(df) == "Row.names"] <- "data_source"
+  df$Fp[is.na(df$Fp)] <- 0
+  df$Fn[is.na(df$Fn)] <- 0
+  df$sigma[is.na(df$sigma)] <- median(df$sigma, na.rm = TRUE)
+
+  df <- df[order(df$sigma),]
   return(df)
 }
 
@@ -1068,17 +1124,99 @@ get_uncert_scaling <- function(obs, v_names_sources =
 #' @return obs A blag object containing the observations with uncertainties
 #' @export
 #' @examples
-#' df <- add_uncert(obs, v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"))
+#' obs <- add_uncert(obs, df_uncert)
 add_uncert <- function(obs, df_uncert){
   
-  df_uncert$data_source <- rownames(df_uncert)
+  #df_uncert$data_source <- rownames(df_uncert)
   df_uncert <- df_uncert[, c("data_source", "sigma", "Fp", "Fn")]
   obs$dt_B <- merge(obs$dt_B, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_G <- merge(obs$dt_G, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_L <- merge(obs$dt_L, df_uncert, all.x = TRUE, by = "data_source") 
-  obs$dt_A <- merge(obs$dt_A, df_uncert, all.x = TRUE, by = "data_source") 
+  #obs$dt_A <- merge(obs$dt_A, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_D <- merge(obs$dt_D, df_uncert, all.x = TRUE, by = "data_source") 
   
   return(obs)
 }
 
+## ----- correct_blag
+
+#' Function to correct B, L, A & G in BLAG objects based on false positives added from add_uncert
+#' @param obs A blag object that has already had the function add_uncert applied to it (providing the Fp column)
+#' @param df_Fp dataframe returned from get_uncert including false positive values
+#' @return obs A blag object containing the updated observations based on the false positive and negative rates
+#' @export
+#' @examples
+#' obs_corr <- correct_blag(data_source_in = "FC", blag = c_obs_unc)
+#' obs_corr_uncert <- add_uncert(obs_corr, df_uncert)
+correct_blag <- function(data_source_in, blag){
+
+  # subset to a single data source
+  #dt_B <- blag$dt_B[data_source == data_source_in]
+  dt_B <- subset(blag$dt_B, data_source == data_source_in)
+
+  # only correct if B matrix exists - not all data sources
+  if (nrow(dt_B) > 0){
+    # apply the correction
+    dt_B$area <- dt_B$area * (1 - dt_B$Fp)
+    
+    v_times <- unique(dt_B$time)
+    n_t     <- length(v_times)
+    n_u <- length(names_u)
+    a_B <- array(0, c(n_u, n_u, n_t))
+    
+    for (i in 1:length(v_times)){
+    #i = 3
+      v_B <- dt_B[time == v_times[i], area]
+      a_B[, , i] <- matrix(v_B, n_u, n_u)
+    }
+
+    # calc gross gain from B; MARGIN = 3 because that is the time dimension
+    dt_G <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaGrossGain_fromBeta, n_u = 6)))
+    names(dt_G) <- names_u
+    dt_G <- data.table(time = as.numeric(rownames(dt_G)), dt_G)
+    dt_G <- melt(dt_G, id=c("time"), variable.name = "u", value.name = "area")
+    dt_G$year <- v_times[dt_G$time]
+
+    # calc gross loss from B; MARGIN = 3 because that is the time dimension
+    dt_L <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaGrossLoss_fromBeta, n_u = 6)))
+    names(dt_L) <- names_u
+    dt_L <- data.table(time = as.numeric(rownames(dt_L)), dt_L)
+    dt_L <- melt(dt_L, id=c("time"), variable.name = "u", value.name = "area")
+    dt_L$year <- v_times[dt_L$time]
+
+    # dt_D_cs, ## this is D not A**
+    # calc net change from B; MARGIN = 3 because that is the time dimension
+    dt_D <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaNetChange_fromBeta, n_u = 6)))
+    names(dt_D) <- names_u
+    dt_D <- data.table(time = as.numeric(rownames(dt_D)), dt_D)
+    dt_D <- melt(dt_D, id=c("time"), variable.name = "u", value.name = "area")
+    dt_D$year <- v_times[dt_D$time]
+
+    dt_D$data_source <- data_source_in
+    dt_G$data_source <- data_source_in
+    dt_L$data_source <- data_source_in
+
+    dt_D$time <- dt_D$year; dt_D$year <- NULL 
+    dt_G$time <- dt_G$year; dt_G$year <- NULL 
+    dt_L$time <- dt_L$year; dt_L$year <- NULL
+    
+    dt_B <- as.data.table(dt_B)
+    dt_G <- as.data.table(dt_G)
+    dt_L <- as.data.table(dt_L)
+    dt_D <- as.data.table(dt_D)
+    return(list(dt_D = dt_D, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
+  } else {
+    return(blag)
+  }
+}
+
+#' @examples
+#' v_data_source = c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME")
+#' v_data_source_to_correct = c( "CORINE", "CROME", "CS", "IACS", "LCC", "LCM" )
+#' v_data_source <- c("IACS", "LCC", "CROME")
+#' obs_corr <- get_correct_blag(v_data_source, blag = c_obs_unc)
+ get_correct_blag <- function(v_data_source, blag){
+  l_blags <- lapply(v_data_source, FUN = correct_blag, blag = blag)
+  blag <- combine_blags(l_blags)
+  return(blag)
+}

@@ -367,7 +367,7 @@ div.tocify {
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report"
   data-toggle="collapse" data-target="#workflowr-report">
   
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 
@@ -377,7 +377,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
   <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
   <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -387,10 +387,10 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
   <p>
-<strong>Last updated:</strong> 2021-09-24
+<strong>Last updated:</strong> 2021-09-25
 </p>
   <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
   <p>
 <strong>Knit directory:</strong> <code>luct/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -407,13 +407,13 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
   <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
   
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you'll want to first commit it to the Git repo. If you're still working on the analysis, you can ignore this warning. When you're finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -485,10 +485,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttree7061641017d9cf4219d90a8fa2f29ad400a43c0ctargetblank7061641a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="ssh://git@github.com/NERC-CEH/luct/tree/7061641017d9cf4219d90a8fa2f29ad400a43c0c" target="_blank">7061641</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttreede9785fdfcd96e18028b52718974246f6afb142dtargetblankde9785fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="ssh://git@github.com/NERC-CEH/luct/tree/de9785fdfcd96e18028b52718974246f6afb142d" target="_blank">de9785f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttree7061641017d9cf4219d90a8fa2f29ad400a43c0ctargetblank7061641a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttreede9785fdfcd96e18028b52718974246f6afb142dtargetblankde9785fa" class="panel-collapse collapse">
 <div class="panel-body">
   
 <p>
@@ -496,7 +496,7 @@ Great! You are using Git for version control. Tracking code development and conn
 </p>
 
 <p>
-The results in this page were generated with repository version <a href="ssh://git@github.com/NERC-CEH/luct/tree/7061641017d9cf4219d90a8fa2f29ad400a43c0c" target="_blank">7061641</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="ssh://git@github.com/NERC-CEH/luct/tree/de9785fdfcd96e18028b52718974246f6afb142d" target="_blank">de9785f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 
 <p>
@@ -518,25 +518,14 @@ Ignored files:
     Ignored:    renv/staging/
 
 Untracked files:
-    Untracked:  R/luct_AgCensus.R
-    Untracked:  _targets/objects/c_agc_en
-    Untracked:  _targets/objects/c_agc_hist
-    Untracked:  _targets/objects/c_agc_ni
-    Untracked:  _targets/objects/c_agc_sc
-    Untracked:  _targets/objects/c_agc_wa
-    Untracked:  _targets/objects/c_blag_MODIS
+    Untracked:  _targets/objects/c_obs_km2
 
 Unstaged changes:
     Modified:   R/luct.R
     Modified:   _targets.R
     Modified:   _targets/meta/meta
-    Modified:   _targets/objects/c_blag_AgCensus
-    Modified:   _targets/objects/c_df_uncert
     Modified:   _targets/objects/c_obs
     Modified:   _targets/objects/c_obs_all
-    Modified:   analysis/m_AgCensus_plot.Rmd
-    Modified:   analysis/m_data_comparison.Rmd
-    Modified:   analysis/m_uqdata.Rmd
 
 </code></pre>
 
@@ -577,6 +566,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/analysis/m_data_comparison.Rmd" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+Historical AgCensus data added and new processing targets in R/luct_AgCensus.R
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/m_data_comparison.html" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+Historical AgCensus data added and new processing targets in R/luct_AgCensus.R
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -856,6 +879,17 @@ Date
   </tr>
   </thead>
   <tbody>
+  <tr>
+  <td>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_data_comparison.Rmd/DCplotA-1.png" target="_blank">de9785f</a>
+</td>
+  <td>
+plevy
+</td>
+  <td>
+2021-09-24
+</td>
+  </tr>
   <tr>
   <td>
 <a href="ssh://git@github.com/NERC-CEH/luct/blob/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/figure/m_data_comparison.Rmd/DCplotA-1.png" target="_blank">e0c2903</a>
@@ -1237,6 +1271,17 @@ Date
   <tbody>
   <tr>
   <td>
+<a href="ssh://git@github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_data_comparison.Rmd/DCplotD-1.png" target="_blank">de9785f</a>
+</td>
+  <td>
+plevy
+</td>
+  <td>
+2021-09-24
+</td>
+  </tr>
+  <tr>
+  <td>
 <a href="ssh://git@github.com/NERC-CEH/luct/blob/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/figure/m_data_comparison.Rmd/DCplotD-1.png" target="_blank">e0c2903</a>
 </td>
   <td>
@@ -1296,7 +1341,7 @@ ADCEH
 </div>
 <div id="timing" class="section level1 unnumbered">
 <h1>Timing</h1>
-<pre><code>Computation time (excl. render): 5.142 sec elapsed</code></pre>
+<pre><code>Computation time (excl. render): 5.323 sec elapsed</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo"

@@ -331,22 +331,34 @@ list(
       l_blags = list(c_blag_AgCensus, c_blag_MODIS, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm, c_blag_crome)),
     cue = tar_cue(mode = "thorough")
   ),
+              
+  # Convert area in BLAGs from m2 to km2
+  tar_target(
+    c_obs_km2,
+    convert_units(
+      c_obs_all, 
+      old_unit = "m^2", 
+      new_unit = "km^2"),
+    cue = tar_cue(mode = "thorough")
+  ),
             
   # Exclude some data sources which we do not want to use
   tar_target(
     c_obs,
     set_exclusions(
-      c_obs_all),
+      c_obs_km2),
     cue = tar_cue(mode = "thorough")
   ),
-               
+  
   # Calculate the relative uncertainty for the data sources
   tar_target(
     c_df_uncert,
     get_uncert_scaling(
       c_obs, 
-      v_names_sources = 
-        c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
+        v_names_sources = 
+        c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
+        v_interval_length_sources = 
+        c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
         cv_AgCensus = 0.1)
   ),
                 
@@ -361,7 +373,7 @@ list(
   # Predict the Beta matrix by least-squares
   tar_target(
     c_pred_ls,
-    get_pred_ls(c_obs, start_year = 1990, end_year = 2019),
+    get_pred_ls(c_obs_corr, start_year = 1990, end_year = 2019),
     cue = tar_cue(mode = "never")
   ),
                     
