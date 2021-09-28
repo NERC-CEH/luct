@@ -24,7 +24,8 @@ pred_ls <- tar_read(c_pred_ls)
 # be 1 more than the number of processors requested 
 # e.g. for 2015-2019, n_t = 5, n_p = 4
 #v_times <- 1750:2019 # 1750:1779
-v_times <- 1990:2019 # 1750:1779
+#v_times <- 1950:2019
+v_times <- 1990:2020
 n_t <- length(v_times)
 
 i <- as.numeric(commandArgs(trailingOnly = TRUE))[1]
@@ -39,7 +40,7 @@ obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
 
 ## ---- estimate_B_by_MCMC_parallel, eval=recalc, echo=FALSE--------------------
 # Parallelise over years, finding the posterior distribution of the $B$ matrix by MCMC.
-n_iter <- 60000
+n_iter <- 600000
 thin <- 10 # round(max(1, n_iter/20))
 # we want three processors to each run one chain, with the 3 internal chains 
 n_chains <- 1 # on the same core (DREAMz uses 3 internal chains by default)
@@ -49,15 +50,15 @@ n_cores  <- 3 # number of cores to use
 # x <- seq(0, 10000, by = 10)
 # y <- dnorm(x, mean = 0, sd = 3000)
 # plot(x, y, ylim = c(0, max(y)))
-prior <- createTruncatedNormalPrior(
-   mean = rep(0, n_u^2), 
-   sd   = rep(3000, n_u^2), 
-   lower = rep(0, n_u^2),
-   upper = rep(10000, n_u^2))
+# prior <- createTruncatedNormalPrior(
+   # mean = rep(0, n_u^2), 
+   # sd   = rep(3000, n_u^2), 
+   # lower = rep(0, n_u^2),
+   # upper = rep(10000, n_u^2))
 # # Prior: uniform
-# prior <- createUniformPrior(
-  # lower = rep(    0, n_u^2), 
-  # upper = rep(6000, n_u^2))
+prior <- createUniformPrior(
+  lower = rep(    0, n_u^2), 
+  upper = rep(6000, n_u^2))
   
 setUp <- createBayesianSetup(get_loglik, prior = prior, parallel = FALSE)
 

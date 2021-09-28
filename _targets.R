@@ -344,7 +344,7 @@ list(
             
   # Exclude some data sources which we do not want to use
   tar_target(
-    c_obs,
+    c_obs_exc,
     set_exclusions(
       c_obs_km2),
     cue = tar_cue(mode = "thorough")
@@ -354,26 +354,41 @@ list(
   tar_target(
     c_df_uncert,
     get_uncert_scaling(
-      c_obs, 
+      c_obs_exc, 
         v_names_sources = 
         c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
         v_interval_length_sources = 
         c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
-        cv_AgCensus = 0.1)
+       # this gives a way of removing effect of data sources: long int_lth means effects is reduced by sqrt(n)
+       #c( 1,          1,       8,    1,    1e6,   1e6,      1e6,   1e6,    1e6),
+        v_start_year_source = 
+        c( 1750,       2001,    1950, 1900, 1990,  2000,     2015,  2004,   2016),
+        cv_AgCensus = 0.1),
+    cue = tar_cue(mode = "thorough")
   ),
                 
+  # Interpolate NAs in BLAGs
+  tar_target(
+    c_obs_filled,
+    interpolate_blag(
+      c_obs_exc, 
+      start_year = 1950, 
+      end_year   = 2020),
+    cue = tar_cue(mode = "thorough")
+  ),
+
   # Add the relative uncertainties to the data sources
   tar_target(
     c_obs_unc,
     add_uncert(
-      c_obs, 
+      c_obs_filled, 
       c_df_uncert)
   ),
                 
   # Predict the Beta matrix by least-squares
   tar_target(
     c_pred_ls,
-    get_pred_ls(c_obs_unc, start_year = 1990, end_year = 2019),
+    get_pred_ls(c_obs_unc, start_year = 1990, end_year = 2020),
     cue = tar_cue(mode = "never")
   ),
                     
@@ -394,6 +409,19 @@ list(
   tar_target(
     c_mcmc_fname_Bmap,
     run_mcmc_beta_job(c_mcmc_fname_job, c_obs_unc),
+    cue = tar_cue(mode = "thorough"),
+    format = "file"
+  ),    
+
+  # Plot the results and write summary output
+  tar_target(
+    c_post_B,
+    get_post_plots(
+      end_time = 2020, # 2019 only just now?
+      v_mcmc_fname_Bmap = c_mcmc_fname_Bmap,
+      obs_unc = c_obs_unc, 
+      obs_exc = c_obs_exc, 
+      blag_lcm = c_blag_lcm), 
     cue = tar_cue(mode = "thorough"),
     format = "file"
   ),    
@@ -488,51 +516,51 @@ list(
     # Track the files returned by the command
     format = "file",
     cue = tar_cue(mode = "thorough")
-  ),   # end m_CS_plot
+  )   # end m_CS_plot
   
   ## m_03 Plot the data comparison ----
 
-  # Report investigating how to read the raw CS data
-  tar_target(
-    m_data_comparison,
-    command = {
-      # Scan for targets of tar_read() and tar_load()
-      !!tar_knitr_deps_expr(here("analysis", "m_data_comparison.Rmd"))
+  # # Report investigating how to read the raw CS data
+  # tar_target(
+    # m_data_comparison,
+    # command = {
+      # # Scan for targets of tar_read() and tar_load()
+      # !!tar_knitr_deps_expr(here("analysis", "m_data_comparison.Rmd"))
 
-      # Build the report
-      workflowr::wflow_build(
-        here("analysis", "m_data_comparison.Rmd")
-      )
+      # # Build the report
+      # workflowr::wflow_build(
+        # here("analysis", "m_data_comparison.Rmd")
+      # )
 
-      # Track the input Rmd file (and not the rendered HTML file).
-      # Make the path relative to keep the project portable.
-      fs::path_rel(here("analysis", "m_data_comparison.Rmd"))
-    },
-    # Track the files returned by the command
-    format = "file",
-    cue = tar_cue(mode = "thorough")
-  ),   # end m_data_comparison
+      # # Track the input Rmd file (and not the rendered HTML file).
+      # # Make the path relative to keep the project portable.
+      # fs::path_rel(here("analysis", "m_data_comparison.Rmd"))
+    # },
+    # # Track the files returned by the command
+    # format = "file",
+    # cue = tar_cue(mode = "never")
+  # ),   # end m_data_comparison
   
   ## m_04 Quantify relative uncertainties ----
 
-  # Report investigating how to read the raw CS data
-  tar_target(
-    m_uqdata,
-    command = {
-      # Scan for targets of tar_read() and tar_load()
-      !!tar_knitr_deps_expr(here("analysis", "m_uqdata.Rmd"))
+  # # Report investigating how to read the raw CS data
+  # tar_target(
+    # m_uqdata,
+    # command = {
+      # # Scan for targets of tar_read() and tar_load()
+      # !!tar_knitr_deps_expr(here("analysis", "m_uqdata.Rmd"))
 
-      # Build the report
-      workflowr::wflow_build(
-        here("analysis", "m_uqdata.Rmd")
-      )
+      # # Build the report
+      # workflowr::wflow_build(
+        # here("analysis", "m_uqdata.Rmd")
+      # )
 
-      # Track the input Rmd file (and not the rendered HTML file).
-      # Make the path relative to keep the project portable.
-      fs::path_rel(here("analysis", "m_uqdata.Rmd"))
-    },
-    # Track the files returned by the command
-    format = "file",
-    cue = tar_cue(mode = "thorough")
-  )   # end m_uqdata
+      # # Track the input Rmd file (and not the rendered HTML file).
+      # # Make the path relative to keep the project portable.
+      # fs::path_rel(here("analysis", "m_uqdata.Rmd"))
+    # },
+    # # Track the files returned by the command
+    # format = "file",
+    # cue = tar_cue(mode = "thorough")
+  # )   # end m_uqdata
 )     # end target list

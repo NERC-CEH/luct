@@ -521,7 +521,7 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
 #' x <- convert_units(blag, old_unit = "m^2", new_unit = "km^2")
 convert_units <- function(blag, old_unit = "m^2", new_unit = "km^2"){
   # set the mode of set_units() to read character variables
-  units_options(set_units_mode = "standard")
+  units::units_options(set_units_mode = "standard")
 
   # B matrix
   blag$dt_B$area <-  set_units(blag$dt_B$area, old_unit)
@@ -555,7 +555,7 @@ convert_units <- function(blag, old_unit = "m^2", new_unit = "km^2"){
   }
 
   # set the mode of set_units() back to default
-  units_options(set_units_mode = "symbols")
+  units::units_options(set_units_mode = "symbols")
   
   return(blag)
 }
@@ -566,16 +566,28 @@ convert_units <- function(blag, old_unit = "m^2", new_unit = "km^2"){
 #' Function to exclude observations
 #'  in BLAG objects for specific data source x land use combinations
 #'
-#' @param l_blags List of blag objects to combine
-#' @return A blag object
+#' @param obs A blag object
+#' @param data_sources_toInclude A vector of data sources to include
+#' @return A blag object with data sources excluded
 #' @export
 #' @examples
-#' obs <- tar_read(c_obs)
+#' obs_km2 <- tar_read(c_obs_km2)
 #' unique(obs$dt_A$data_source[obs$dt_A$u == "other"])
-#' obs <- set_exclusions(obs)
+#' obs_exc <- set_exclusions(obs_km2, data_sources_toInclude = 
+#'   c("AgCensus", "CS", "FC", "MODIS")) # WP-A subset
+#' obs_exc <- set_exclusions(obs_km2)
 #' unique(obs$dt_A$data_source[obs$dt_A$u == "other"])
 ##* WIP obs should be replaced with blag
-set_exclusions <- function(obs){
+set_exclusions <- function(
+  obs,
+  data_sources_toInclude = c("AgCensus", "CORINE", "CROME", "CS", "FC",
+                           "IACS",     "LCC",    "LCM",   "MODIS")
+  ){
+  # subset to only the data sets we want to include
+  obs$dt_B <- obs$dt_B[data_source %in% data_sources_toInclude]
+  obs$dt_G <- obs$dt_G[data_source %in% data_sources_toInclude]
+  obs$dt_L <- obs$dt_L[data_source %in% data_sources_toInclude]
+  obs$dt_D <- obs$dt_D[data_source %in% data_sources_toInclude]
 
   # zeroes are actually missing values
   # should remove earlier
@@ -683,10 +695,12 @@ get_loglik <- function(v_B,
     # v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = 0.1*abs(dt_G$area), log = T)
     # v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = 0.1*abs(dt_L$area), log = T)
     # v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = 0.1*abs(dt_D$area), log = T)
-    v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp), mean = dt_B$pred, sd = dt_B$sigma*abs(dt_B$area), log = T)
-    v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp), mean = dt_G$pred, sd = dt_G$sigma*abs(dt_G$area), log = T)
-    v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp), mean = dt_L$pred, sd = dt_L$sigma*abs(dt_L$area), log = T)
-    v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp), mean = dt_D$pred, sd = dt_D$sigma*abs(dt_D$area), log = T)
+
+    # crude treatment of Fn rate ~ 1/3 positive of Fp rate
+    v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = dt_B$sigma*abs(dt_B$area), log = T)
+    v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = dt_G$sigma*abs(dt_G$area), log = T)
+    v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = dt_L$sigma*abs(dt_L$area), log = T)
+    v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = dt_D$sigma_D, log = T)
     loglik <- sum(v_llik_D, v_llik_G, v_llik_L, v_llik_B, na.rm = TRUE)
     return(loglik)
   }
@@ -1061,10 +1075,12 @@ get_r2 <- function(df = df, v, v_ref = "Ref"){
 #' @return df A data frame containing the scaling variables for uncertainty 
 #' @export
 #' @examples
-#' df_uncert <- get_uncert_scaling(obs,   v_names_sources = 
+#' df_uncert <- get_uncert_scaling(obs_exc,   v_names_sources = 
 #'   c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
 #'   v_interval_length_sources = 
 #'   c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
+#'   v_start_year_source = 
+#'   c( 1750,       2001,    1950, 1900, 1990,  1990,     2015,  2004,   2016),
 #'   cv_AgCensus = 0.1
 #'   )
 #' df_uncert
@@ -1073,6 +1089,8 @@ get_uncert_scaling <- function(obs,
   c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
   v_interval_length_sources = 
   c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
+  v_start_year_source = 
+  c( 1750,       2001,    1950, 1900, 1990,  2000,     2015,  2004,   2016),
   cv_AgCensus = 0.1
   ){
   
@@ -1087,7 +1105,9 @@ get_uncert_scaling <- function(obs,
   v_nrmse <- sapply(v_names_sources, get_nrmse, df = df, v_ref = "Ref")
   v_r2   <- sapply(v_names_sources, get_r2,   df = df, v_ref = "Ref")
 
-  df <- data.frame(intvl_lth = v_interval_length_sources, NRMSE = v_nrmse, r2 = v_r2, 
+  df <- data.frame(intvl_lth = v_interval_length_sources, 
+    start_year_source = v_start_year_source, 
+    NRMSE = v_nrmse, r2 = v_r2, 
     # reduce NRMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
     sigma = v_nrmse * abs(1 - v_r2))
 
@@ -1098,14 +1118,39 @@ get_uncert_scaling <- function(obs,
   df["AgCensus",]$sigma <- df[3,]$sigma * 0.5
   df["FC",]$sigma       <- df[3,]$sigma * 0.5
 
+  # all values are relative to AGCensus, assuming it has 10 % uncertainty
   df$sigma <- df$sigma / df["AgCensus",]$sigma * cv_AgCensus
   
+  # add a term to account for non-annual data
+  # each year is a sample from the popn of years included
+  # like estimating sd from se with n years in sample
   df$sigma <- df$sigma * sqrt(df$intvl_lth)
 
-  # add values for false positive and neg rates:
 
+  # sigma for D has to be in absolute terms, not relative
+  # find the mean magnitude of D by data source
+  dt_D_mean <- obs$dt_D[, mean(abs(area), na.rm = TRUE), by = data_source][, .(data_source = data_source, D_mean = V1)]
+
+  ##### one-off calc - can  be moved to a meta notebook
+  ##### start
+  # D values are average to zero, so need absolute uncert, not relative
+  dt_G_mean <- obs$dt_G[, mean(abs(area), na.rm = TRUE), by = data_source][, .(data_source = data_source, G_mean = V1)]
+  dt_L_mean <- obs$dt_L[, mean(abs(area), na.rm = TRUE), by = data_source][, .(data_source = data_source, L_mean = V1)]
+  dt_GL <- merge(dt_G_mean, dt_L_mean) 
+  dt <- merge(dt_D_mean, dt_GL, all.x = TRUE, by = "data_source") 
+  # gross fluxes are ~3 times larger than net on average
+  GL_to_D <- mean(mean(dt[, G_mean / D_mean], na.rm = TRUE),
+    mean(dt[, L_mean / D_mean], na.rm = TRUE))
+  ##### end
+  ##### one-off calc - can  be moved to a meta notebook
+  
+  df <- merge(df, dt_D_mean, all.x = TRUE, by.x = "row.names", by.y = "data_source")
+  # and calc abs value of sigma; multipier because G & L 3 times larger than D
+  df$sigma_D <- sqrt((df$sigma * df$D_mean * GL_to_D)^2 * 2)
+
+  # add values for false positive and neg rates:
   df_fpn <- readRDS("./data/df_fpn.rds")
-  df <- merge(df, df_fpn, all.x = TRUE, by="row.names")
+  df <- merge(df, df_fpn, all.x = TRUE, by.x = "Row.names", by.y = "row.names")
   names(df)[names(df) == "Row.names"] <- "data_source"
   df$Fp[is.na(df$Fp)] <- 0
   df$Fn[is.na(df$Fn)] <- 0
@@ -1125,17 +1170,36 @@ get_uncert_scaling <- function(obs,
 #' @return obs A blag object containing the observations with uncertainties
 #' @export
 #' @examples
-#' obs <- add_uncert(obs, df_uncert)
+#' obs_unc <- add_uncert(obs_filled, df_uncert)
 add_uncert <- function(obs, df_uncert){
   
   #df_uncert$data_source <- rownames(df_uncert)
-  df_uncert <- df_uncert[, c("data_source", "sigma", "Fp", "Fn")]
+  df_uncert <- df_uncert[, c("data_source", "sigma", "sigma_D", "start_year_source", "Fp", "Fn")]
   obs$dt_B <- merge(obs$dt_B, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_G <- merge(obs$dt_G, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_L <- merge(obs$dt_L, df_uncert, all.x = TRUE, by = "data_source") 
   #obs$dt_A <- merge(obs$dt_A, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_D <- merge(obs$dt_D, df_uncert, all.x = TRUE, by = "data_source") 
   
+  # scale sigma to account for data interpolated prior to start date for data source
+  # if time is before start of data, sigma increase with time^2; otherwise multiplier = 1
+  obs$dt_B$sigma_time_term <- pmax(obs$dt_B$start_year_source - obs$dt_B$time + 1, 1)^2
+  obs$dt_G$sigma_time_term <- pmax(obs$dt_G$start_year_source - obs$dt_G$time + 1, 1)^2
+  obs$dt_L$sigma_time_term <- pmax(obs$dt_L$start_year_source - obs$dt_L$time + 1, 1)^2
+  obs$dt_D$sigma_time_term <- pmax(obs$dt_D$start_year_source - obs$dt_D$time + 1, 1)^2
+                         
+  obs$dt_B$sigma <- obs$dt_B$sigma   * obs$dt_B$sigma_time_term
+  obs$dt_G$sigma <- obs$dt_G$sigma   * obs$dt_G$sigma_time_term
+  obs$dt_L$sigma <- obs$dt_L$sigma   * obs$dt_L$sigma_time_term
+  # note option to rename sigma_D to sigma here, so we can use same terms afterwards
+  # but possibly more confusing, as they are different units (abs vs relative)
+  obs$dt_D$sigma_D <- obs$dt_D$sigma_D * obs$dt_D$sigma_time_term
+    
+  obs$dt_B <- obs$dt_B[!is.na(area)]
+  obs$dt_G <- obs$dt_G[!is.na(area)]
+  obs$dt_L <- obs$dt_L[!is.na(area)]
+  obs$dt_D <- obs$dt_D[!is.na(area)]
+    
   return(obs)
 }
 
@@ -1220,4 +1284,478 @@ correct_blag <- function(data_source_in, blag){
   l_blags <- lapply(v_data_source, FUN = correct_blag, blag = blag)
   blag <- combine_blags(l_blags)
   return(blag)
+}
+
+
+## ----- interpolate_blag
+
+#' Function to interpolate B, L, A & G in BLAG objects to remove missing values
+#' @param obs A blag object that has already had the function add_uncert applied to it (providing the Fp column)
+#' @param start_year Start year for filling NA values 
+#' @param end_year   End year for filling NA values 
+#' @return obs A blag object containing the interpolated data
+#' @export
+#' @examples
+#' blag <- obs
+#' obs_filled <- interpolate_blag(obs_exc, start_year = 1950, end_year = 2020)
+interpolate_blag <- function(blag, start_year = 1950, end_year = 2020){
+  # define generic functions
+  # G, L, & D grouped by u
+  # B grouped by u_from and u_to
+  
+  fill_na_B <- function(dt){
+    # subset to time period
+    dt <- dt[time >= start_year & time <= end_year]
+    # remove previously interpolated CS data
+    dt <- dt[!(data_source == "CS" & time %% 10 != "0")]
+    # convert time to a factor with all levels 
+    dt <- dt[, time := factor(time, levels = start_year:end_year)]
+    # add all the missing factor combinations
+    dt <- as.data.table(complete(dt, data_source, u_from, u_to, time))
+    dt <- dt[, time := as.integer(as.character(time))]
+    # interpolate missing values
+    dt <- dt[, area:= na.approx(area, na.rm = FALSE), by = .(data_source, u_from, u_to)]
+    # fill in trailing missing values
+    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = TRUE), by = .(data_source, u_from, u_to)]
+    # fill in leading missing values
+    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = FALSE), by = .(data_source, u_from, u_to)]
+    return(dt)
+  }
+
+  # make a generic function
+  fill_na_GLD <- function(dt){
+    # subset to time period
+    dt <- dt[time >= start_year & time <= end_year]
+    # remove previously interpolated CS data
+    dt <- dt[!(data_source == "CS" & time %% 10 != "0")]
+    # convert time to a factor with all levels 
+    dt <- dt[, time := factor(time, levels = start_year:end_year)]
+    # add all the missing factor combinations
+    dt <- as.data.table(complete(dt, data_source, u, time))
+    dt <- dt[, time := as.integer(as.character(time))]
+    # interpolate missing values
+    dt <- dt[, area:= na.approx(area, na.rm = FALSE), by = .(data_source, u)]
+    # fill in trailing missing values
+    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = TRUE), by = .(data_source, u)]
+    # fill in leading missing values
+    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = FALSE), by = .(data_source, u)]
+    return(dt)
+  }
+
+  blag$dt_B <- fill_na_B(blag$dt_B)
+  blag$dt_G <- fill_na_GLD(blag$dt_G)
+  blag$dt_L <- fill_na_GLD(blag$dt_L)
+  blag$dt_D <- fill_na_GLD(blag$dt_D)
+  
+  # dim(blag$dt_B)
+  # summary(blag$dt_B)
+  
+  return(blag)
+}
+
+
+## ----- get_post_plots
+
+#' Function to interpolate B, L, A & G in BLAG objects to remove missing values
+#' @param obs A blag object that has already had the function add_uncert applied to it (providing the Fp column)
+#' @param start_year Start year for filling NA values 
+#' @param end_year   End year for filling NA values 
+#' @return obs A blag object containing the interpolated data
+#' @export
+#' @examples
+#' blag <- obs
+#' obs_filled <- get_post_plots(obs_exc, start_year = 1950, end_year = 2020)
+
+get_post_plots <- function(
+  start_time = 1950,
+  end_time   = 2020,
+  v_times = start_time:end_time,
+  dir_output = "output",
+  v_mcmc_fname_Bmap = paste0(dir_output, "/mcmcB_", v_times, ".qs"),
+  fig_start_time = 1990,
+  fig_end_time   = 2020,
+  obs_unc = obs_unc,
+  obs_exc = obs_exc,
+  v_data_source = unique(obs_exc$dt_D$data_source),
+  blag_lcm = blag_lcm,
+  rethin = 10,
+  start  = 9000
+  ){
+  
+  obs_exc$dt_B <- obs_exc$dt_B[data_source %in% v_data_source]
+  obs_exc$dt_G <- obs_exc$dt_G[data_source %in% v_data_source]
+  obs_exc$dt_L <- obs_exc$dt_L[data_source %in% v_data_source]
+  obs_exc$dt_D <- obs_exc$dt_D[data_source %in% v_data_source]
+  
+  n_t <- length(v_times)
+  fname <- here(dir_output, "mcmcB_2019.qs")
+  out <- qread(fname)
+  # Combine the chains
+  out <- createMcmcSamplerList(out)
+  #str(out, max.level = 2)
+  # extract a sample matrix just to get dimensions
+  sample <- getSample(out, start = start, thin = rethin)
+  n_s <- dim(sample)[1] # num samples
+  names_q <- c("2.5%", "50%", "97.5%")
+  n_q <- length(names_q)  # num quantiles = c(0.025, 0.5, 0.975)
+
+  # declare arrays to store predictions
+  a_sample    <- array(data = NA, dim = c(n_s, n_u^2, n_t))
+  a_B_post    <- array(data = NA, dim = c(n_u, n_u, n_t, n_s))
+  a_B_map    <- array(data = NA, dim = c(n_u, n_u, n_t))
+  a_A_post    <- array(data = 0, dim = c(n_u, n_s, n_t),
+    dimnames = list(names_u, 1:n_s, v_times))
+  a_A_post_map <- array(data = 0, dim = c(n_u, n_t),
+    dimnames = list(names_u, v_times))
+  # set last element to observed area:
+  a_A_post[,,n_t] <- matrix(rep(as.numeric(blag_lcm$dt_A_wide[time == 2019, 1:6]), n_s), ncol=n_s, nrow=n_u)
+  a_A_post_map[,n_t] <- as.numeric(blag_lcm$dt_A_wide[time == 2019, 1:6])
+  a_A_post_q  <- array(data = NA, dim = c(n_q, n_u, n_t),
+    dimnames = list(names_q, names_u, v_times))
+  a_D_post     <- array(data = NA, dim = c(n_u, n_s, n_t))
+  a_D_post_q   <- array(data = NA, dim = c(n_q, n_u, n_t),
+    dimnames = list(names_q, names_u, v_times))
+  a_D_post_map <- array(data = NA, dim = c(n_u, n_t),
+    dimnames = list(names_u, v_times))
+  # posterior estimates of Area gross gain and loss
+  a_G_post     <- array(data = NA, dim = c(n_u, n_s, n_t))
+  a_L_post     <- array(data = NA, dim = c(n_u, n_s, n_t))
+  # quantiles for gains and losses
+  a_G_post_q   <- array(data = NA, dim = c(n_q, n_u, n_t),
+    dimnames = list(names_q, names_u, v_times))
+  a_L_post_q   <- array(data = NA, dim = c(n_q, n_u, n_t),
+    dimnames = list(names_q, names_u, v_times))
+  a_G_post_map <- array(data = NA, dim = c(n_u, n_t),
+    dimnames = list(names_u, v_times))
+  a_L_post_map <- array(data = NA, dim = c(n_u, n_t),
+    dimnames = list(names_u, v_times))
+  # quantiles for B parameter
+  names_u_matrix <- paste(rep(names_u, n_u), "_to_", rep(names_u, each = n_u), sep="")
+  # needed to set facet_wrap order as we want, otherwise does it byrow 
+  names_u_matrix_byrow <- paste(rep(names_u, each = n_u), "_to_", rep(names_u, n_u), sep="")
+
+  a_B_post_q   <- array(data = NA, dim = c(n_q, n_u^2, n_t),
+    dimnames = list(names_q, names_u_matrix, v_times))
+  a_B_post_map <- a_B_post_q[2,,]
+
+  for (t in 2:n_t){
+  #t = 29
+    fname <- here(dir_output, paste0("mcmcB_", v_times[t], ".qs"))
+    out <- qread(fname)
+    
+    # Combine the chains
+    out <- createMcmcSamplerList(out)
+
+    a_sample[,,t] <- getSample(out, start = start, thin = rethin)
+    for (s in 1:n_s){ # must be a vectorised way of doing this - re-order dimensions?
+      a_B_post[,,t,s] <- matrix(a_sample[s,,t], n_u, n_u)
+    }
+    a_D_post_q[,,t] <- getPredictiveIntervals(a_sample[,,t], getAreaNetChange_fromBeta, quantiles = c(0.025, 0.5, 0.975))$posteriorPredictiveCredibleInterval
+    # get the Maxiumum APosteriori parameter vector
+    v_B_map <- MAP(out)$parametersMAP
+    # and save MAP prediction values to array
+    a_B_map[,,t] <- matrix(v_B_map, n_u, n_u)
+    a_B_post_map[,t] <- v_B_map
+    # and MAP predictions
+    a_D_post_map[,t] <- getAreaNetChange_fromBeta(v_B_map)
+    
+    a_D_post[,,t] <- apply(a_sample[,,t], FUN = getAreaNetChange_fromBeta, MARGIN = 1)
+    a_A_post[,,t-1] <-  a_A_post[,,t] - a_D_post[,,t]
+    a_A_post_map[,t-1] <-  a_A_post_map[,t] - a_D_post_map[,t]
+
+    a_G_post_q[,,t] <- getPredictiveIntervals(a_sample[,,t], getAreaGrossGain_fromBeta, quantiles = c(0.025, 0.5, 0.975))$posteriorPredictiveCredibleInterval
+    a_L_post_q[,,t] <- getPredictiveIntervals(a_sample[,,t], getAreaGrossLoss_fromBeta, quantiles = c(0.025, 0.5, 0.975))$posteriorPredictiveCredibleInterval
+    # and MAP predictions
+    a_G_post_map[,t] <- getAreaGrossGain_fromBeta(v_B_map)
+    a_L_post_map[,t] <- getAreaGrossLoss_fromBeta(v_B_map)
+    # and quantiles for B parameters
+    a_B_post_q[,,t] <- getCredibleIntervals(a_sample[,,t], quantiles = c(0.025, 0.5, 0.975))
+  }
+
+  # processing MCMC chain output
+  # quantiles of area prediction from net change
+  df_D_post_q025 <- data.frame(v_times, t(a_D_post_q[1,,]))
+  df_D_post_q50  <- data.frame(v_times, t(a_D_post_q[2,,]))
+  df_D_post_q975 <- data.frame(v_times, t(a_D_post_q[3,,]))
+  df_D_post_map  <- data.frame(v_times, t(a_D_post_map))
+                        # melt(dt_G, id=c("time", "dtime"), variable.name = "u", value.name = "area")
+  df_D_post_q025_long <- melt(df_D_post_q025, id=c("v_times"), variable.name = "u")
+  df_D_post_q50_long  <- melt(df_D_post_q50 , id=c("v_times"), variable.name = "u")
+  df_D_post_q975_long <- melt(df_D_post_q975, id=c("v_times"), variable.name = "u")
+  df_D_post_map_long  <- melt(df_D_post_map,  id=c("v_times"), variable.name = "u")
+
+  names(df_D_post_q025_long)[3] <- "area_q025"
+  names(df_D_post_q50_long)[3]  <- "area_q50"
+  names(df_D_post_q975_long)[3] <- "area_q975"
+  names(df_D_post_map_long)[3]  <- "area_MAP"
+
+  df_D_post_long <- merge(df_D_post_q025_long, df_D_post_q50_long)
+  df_D_post_long <- merge(df_D_post_long, df_D_post_q975_long)
+  df_D_post_long <- merge(df_D_post_long, df_D_post_map_long)
+
+  #names(df_D_post_long)
+  df_D_post_long$time <- df_D_post_long$v_times
+  df_D_post_long$v_times <- NULL
+
+  #show_col(hue_pal()(10))
+  # "#F8766D" "#7CAE00" "#00BFC4" "#C77CFF"
+  v_col <- hue_pal()(10) # number of data sources plus MAP
+  v_col[10] <- "#000000"
+
+  colour_scale <- scale_colour_manual(name="", 
+    values=c("Maximum a posterior" = v_col[10],
+    "AgCensus"            = v_col[1], 
+    "CORINE"              = v_col[2],
+    "CROME"               = v_col[3],
+    "CS"                  = v_col[4],
+    "FC"                  = v_col[5],
+    "IACS"                = v_col[6],
+    "LCC"                 = v_col[7],
+    "LCM"                 = v_col[8],
+    "MODIS"               = v_col[9]))
+  fill_scale <- scale_fill_manual(name="", 
+    values=c("95% CI"              = v_col[10],
+    "AgCensus"            = v_col[1], 
+    "CORINE"              = v_col[2],
+    "CROME"               = v_col[3],
+    "CS"                  = v_col[4],
+    "FC"                  = v_col[5],
+    "IACS"                = v_col[6],
+    "LCC"                 = v_col[7],
+    "LCM"                 = v_col[8],
+    "MODIS"               = v_col[9]))
+
+  # plot D
+  p <- ggplot(subset(df_D_post_long, time >= fig_start_time & time < fig_end_time), 
+    aes(time, area_q50)) + theme_bw()
+  p <- p + colour_scale
+  p <- p + fill_scale
+  # the interpolated observations
+  p <- p + geom_ribbon(data = obs_unc$dt_D[time >= fig_start_time & time < fig_end_time],     
+    aes(y    = area*(1-Fp), 
+    ymin = area*(1-Fp) - sigma/5, 
+    ymax = area*(1-Fp) + sigma/5, fill = data_source), alpha = 0.5)
+  p <- p + geom_line  (data = obs_unc$dt_D[time >= fig_start_time & time < fig_end_time],     
+    aes(y = area*(1-Fp), colour = data_source))
+  # the UNinterpolated observations    
+  p <- p + geom_point (data = obs_exc$dt_D[time >= fig_start_time & time < fig_end_time], 
+    aes(y = area, colour = data_source))
+  # the predictions
+  p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975,  fill = "95% CI"), 
+    alpha = 0.4)
+  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  p <- p + ylab(expression(paste(Area~km^2)))
+  p <- p + ggtitle("Net Change")
+  p <- p + facet_wrap(~ u, scales = "free_y")
+  #p <- p + ylim(NA, 1000)
+  p
+  p_D <- p
+  #ggsave(p, file = paste0(dir_output, "D_ts_UK.png"))
+
+  #<!--- { DA2plotG -->
+  # quantiles of area prediction from gross change
+  df_G_post_q025 <- data.frame(v_times, t(a_G_post_q[1,,]))
+  df_G_post_q50  <- data.frame(v_times, t(a_G_post_q[2,,]))
+  df_G_post_q975 <- data.frame(v_times, t(a_G_post_q[3,,]))
+  df_G_post_map  <- data.frame(v_times, t(a_G_post_map))
+                        # melt(dt_G, id=c("time", "dtime"), variable.name = "u", value.name = "area")
+  df_G_post_q025_long <- melt(df_G_post_q025, id=c("v_times"), variable.name = "u")
+  df_G_post_q50_long  <- melt(df_G_post_q50 , id=c("v_times"), variable.name = "u")
+  df_G_post_q975_long <- melt(df_G_post_q975, id=c("v_times"), variable.name = "u")
+  df_G_post_map_long  <- melt(df_G_post_map,  id=c("v_times"), variable.name = "u")
+
+  names(df_G_post_q025_long)[3] <- "area_q025"
+  names(df_G_post_q50_long)[3]  <- "area_q50"
+  names(df_G_post_q975_long)[3] <- "area_q975"
+  names(df_G_post_map_long)[3]  <- "area_MAP"
+
+  df_G_post_long <- merge(df_G_post_q025_long, df_G_post_q50_long)
+  df_G_post_long <- merge(df_G_post_long, df_G_post_q975_long)
+  df_G_post_long <- merge(df_G_post_long, df_G_post_map_long)
+
+  df_G_post_long$time <- df_G_post_long$v_times
+  df_G_post_long$v_times <- NULL
+
+  #### new version
+  # plot G
+  p <- ggplot(subset(df_G_post_long, time >= fig_start_time & time < fig_end_time), aes(time, area_q50)) + theme_bw()
+  p <- p + colour_scale
+  p <- p + fill_scale
+  # the interpolated observations    
+  p <- p + geom_ribbon(data = obs_unc$dt_G[time >= fig_start_time & time < fig_end_time],     
+    aes(y = area*(1-Fp),         
+     ymin = area*(1-Fp) - sigma/5,         
+     ymax = area*(1-Fp) + sigma/5, fill = data_source), alpha = 0.3)
+  p <- p + geom_line(data = obs_unc$dt_G[time >= fig_start_time & time < fig_end_time],     
+    aes(y = area*(1-Fp), colour = data_source))
+  # the UNinterpolated observations    
+  p <- p + geom_point (data = obs_exc$dt_G[time >= fig_start_time & time < fig_end_time], 
+    aes(y = area, colour = data_source))
+  # the predictions
+  p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975,  fill = "95% CI"), 
+    alpha = 0.4)
+  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  p <- p + ylab(expression(paste(Area~km^2)))
+  p <- p + ggtitle("Gross Gain")
+  p <- p + facet_wrap(~ u, scales = "free_y")
+  p
+  p_G <- p
+  
+  #<!--- { DA2plotL -->
+  # quantiles of area prediction from gross change
+  df_L_post_q025 <- data.frame(v_times, t(a_L_post_q[1,,]))
+  df_L_post_q50  <- data.frame(v_times, t(a_L_post_q[2,,]))
+  df_L_post_q975 <- data.frame(v_times, t(a_L_post_q[3,,]))
+  df_L_post_map  <- data.frame(v_times, t(a_L_post_map))
+                        # melt(dt_G, id=c("time", "dtime"), variable.name = "u", value.name = "area")
+  df_L_post_q025_long <- melt(df_L_post_q025, id=c("v_times"), variable.name = "u")
+  df_L_post_q50_long  <- melt(df_L_post_q50 , id=c("v_times"), variable.name = "u")
+  df_L_post_q975_long <- melt(df_L_post_q975, id=c("v_times"), variable.name = "u")
+  df_L_post_map_long  <- melt(df_L_post_map,  id=c("v_times"), variable.name = "u")
+
+  names(df_L_post_q025_long)[3] <- "area_q025"
+  names(df_L_post_q50_long)[3]  <- "area_q50"
+  names(df_L_post_q975_long)[3] <- "area_q975"
+  names(df_L_post_map_long)[3]  <- "area_MAP"
+
+  df_L_post_long <- merge(df_L_post_q025_long, df_L_post_q50_long)
+  df_L_post_long <- merge(df_L_post_long, df_L_post_q975_long)
+  df_L_post_long <- merge(df_L_post_long, df_L_post_map_long)
+
+  df_L_post_long$time <- df_L_post_long$v_times
+  df_L_post_long$v_times <- NULL
+
+  #### new version
+  # plot L
+  p <- ggplot(subset(df_L_post_long, time >= fig_start_time & time < fig_end_time), aes(time, area_q50)) + theme_bw()
+  p <- p + colour_scale
+  p <- p + fill_scale
+  # the interpolated observations    
+  p <- p + geom_ribbon(data = obs_unc$dt_L[time >= fig_start_time & time < fig_end_time],     
+    aes(y  = area*(1-Fp),         
+      ymin = area*(1-Fp) - sigma/5,         
+      ymax = area*(1-Fp) + sigma/5, fill = data_source), alpha = 0.3)
+  p <- p + geom_line(data = obs_unc$dt_L[time >= fig_start_time & time < fig_end_time],     
+    aes(y = area*(1-Fp), colour = data_source))
+  # the UNinterpolated observations    
+  p <- p + geom_point (data = obs_exc$dt_L[time >= fig_start_time & time < fig_end_time], 
+    aes(y = area, colour = data_source))
+  # the predictions
+  p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975,  fill = "95% CI"), 
+    alpha = 0.4)
+  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  p <- p + ylab(expression(paste(Area~km^2)))
+  p <- p + ggtitle("Gross Loss")
+  p <- p + facet_wrap(~ u, scales = "free_y")
+  p
+  p_L <- p
+  
+  #<!--- { DA2plotB -->
+  # quantiles of area prediction from gross change
+  df_B_post_q025 <- data.frame(v_times, t(a_B_post_q[1,,]))
+  df_B_post_q50  <- data.frame(v_times, t(a_B_post_q[2,,]))
+  df_B_post_q975 <- data.frame(v_times, t(a_B_post_q[3,,]))
+  df_B_post_map  <- data.frame(v_times, t(a_B_post_map))
+  #df_B_post_map <- t(apply(a_B_post[,,], FUN = as.vector, MARGIN = 3))
+
+                        # melt(dt_G, id=c("time", "dtime"), variable.name = "u", value.name = "area")
+  df_B_post_q025_long <- melt(df_B_post_q025, id=c("v_times"), variable.name = "u")
+  df_B_post_q50_long  <- melt(df_B_post_q50 , id=c("v_times"), variable.name = "u")
+  df_B_post_q975_long <- melt(df_B_post_q975, id=c("v_times"), variable.name = "u")
+  df_B_post_map_long  <- melt(df_B_post_map,  id=c("v_times"), variable.name = "u")
+
+  names(df_B_post_q025_long)[3] <- "area_q025"
+  names(df_B_post_q50_long)[3]  <- "area_q50"
+  names(df_B_post_q975_long)[3] <- "area_q975"
+  names(df_B_post_map_long)[3]  <- "area_MAP"
+
+  df_B_post_long <- merge(df_B_post_q025_long, df_B_post_q50_long)
+  df_B_post_long <- merge(df_B_post_long, df_B_post_q975_long)
+  df_B_post_long <- merge(df_B_post_long, df_B_post_map_long)
+
+  # get the unchanging areas on the diagonal and set to NA
+  names_diag <- names_u_matrix[c(1,8,15,22,29,36)]
+  ind <- df_B_post_long$u %in% names_diag
+  df_B_post_long[ind,] <- NA
+  df_B_post_long <- na.omit(df_B_post_long)
+
+  # split the land use change in to from and to
+  fromTo <- reshape2::colsplit(string= as.character(df_B_post_long$u), 
+    pattern="_to_", names=c("u_from", "u_to"))
+  df_B_post_long <- data.frame(df_B_post_long, fromTo)
+
+  df_B_post_long <- within(df_B_post_long, 
+    land_use_change <- factor(u, 
+    levels = names_u_matrix_byrow))
+  df_B_post_long <- within(df_B_post_long, 
+    u_from <- factor(u_from, 
+    levels = names_u))
+  df_B_post_long <- within(df_B_post_long, 
+    u_to <- factor(u_to, 
+    levels = names_u))
+  #with(df_B_post_long, levels(u_from))
+
+  df_B_post_long$time <- df_B_post_long$v_times
+  df_B_post_long$v_times <- NULL
+
+  # p <- ggplot(df_B_post_long, aes(time, area_q50))
+  # p <- p + colour_scale
+  # p <- p + fill_scale
+  # p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975, 
+       # fill = "95% CI"), alpha = 0.3)
+  # # p <- p + geom_point(data = obs_unc$dt_B[time >= 1990 & time < 2020], 
+    # # aes(y = area*(1-Fp), colour = data_source))
+  # p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  # p <- p + ylab(expression(paste(Area~km^2))) + xlab("Year")
+  # p <- p + facet_grid(u_from ~ u_to, scales = "free_y")
+  # p
+  #ggsave(p, file = paste0(runDir, "beluc_B_UK.png"))
+
+  #### new version
+  # plot B
+  p <- ggplot(subset(df_B_post_long, time >= fig_start_time & time < fig_end_time), aes(time, area_q50)) + theme_bw()
+  p <- p + colour_scale
+  p <- p + fill_scale
+  # the interpolated observations    
+  p <- p + geom_ribbon(data = obs_unc$dt_B[time >= fig_start_time & time < fig_end_time],     
+    aes(y  = area*(1-Fp),         
+      ymin = area*(1-Fp) - sigma/50,         
+      ymax = area*(1-Fp) + sigma/50, fill = data_source), alpha = 0.3)
+  p <- p + geom_line(data = obs_unc$dt_B[time >= fig_start_time & time < fig_end_time],     
+    aes(y = area*(1-Fp), colour = data_source))
+  # the UNinterpolated observations    
+  p <- p + geom_point (data = obs_exc$dt_B[time >= fig_start_time & time < fig_end_time], 
+    aes(y = area, colour = data_source))
+  # the predictions
+  p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975,  fill = "95% CI"), 
+    alpha = 0.4)
+  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  p <- p + ylab(expression(paste(Area~km^2)))
+  p <- p + ggtitle("Beta matrix")
+  p <- p + facet_grid(u_from ~ u_to, scales = "free_y")
+  p
+  p_B <- p
+  
+  pdf(file = paste0(dir_output, "/post_plots_UK.pdf"))
+   print(p_B)
+   print(p_G)
+   print(p_L)
+   print(p_D)
+  dev.off()
+
+  saveRDS(  post$df_B, file = paste0(dir_output, "/df_B_post.rds"))
+  saveRDS(  post$df_G, file = paste0(dir_output, "/df_G_post.rds"))
+  saveRDS(  post$df_L, file = paste0(dir_output, "/df_L_post.rds"))
+  saveRDS(  post$df_D, file = paste0(dir_output, "/df_D_post.rds"))
+  write.csv(post$df_B, file = paste0(dir_output, "/df_B_post.csv"), row.names = FALSE)
+  write.csv(post$df_G, file = paste0(dir_output, "/df_G_post.csv"), row.names = FALSE)
+  write.csv(post$df_L, file = paste0(dir_output, "/df_L_post.csv"), row.names = FALSE)
+  write.csv(post$df_D, file = paste0(dir_output, "/df_D_post.csv"), row.names = FALSE)
+
+  return(list(p_B = p_B, p_G = p_G, p_L = p_L, p_D = p_D,
+    df_B = df_B_post_long,
+    df_G = df_G_post_long,
+    df_L = df_L_post_long,
+    df_D = df_D_post_long
+    ))
 }
