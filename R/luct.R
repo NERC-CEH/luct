@@ -600,42 +600,68 @@ set_exclusions <- function(
   obs$dt_L$area[is.nan(obs$dt_L$area)] <- NA
   obs$dt_B$area[obs$dt_B$area == 0] <- NA
 
-  unique(obs$dt_D$data_source); unique(obs$dt_B$data_source)
+  # unique(obs$dt_D$data_source); 
+  # unique(obs$dt_B$data_source)
+  # summary(obs$dt_B)
+  # table(obs$dt_B[u_from == "crops", data_source])
 
-  # obs$dt_A$useData <- TRUE
+  obs$dt_B$useData <- TRUE
   obs$dt_G$useData <- TRUE
   obs$dt_L$useData <- TRUE
   obs$dt_D$useData <- TRUE
 
+  # 1.
+  u_to_exclude <- "woods"
   # exclude these data sources for woods
   data_sources_toExclude <- c("AgCensus", "IACS", "LCC", "CROME")
-  # obs$dt_A$useData[obs$dt_A$u == "woods" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-  obs$dt_G$useData[obs$dt_G$u == "woods" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
-  obs$dt_L$useData[obs$dt_L$u == "woods" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
-  obs$dt_D$useData[obs$dt_D$u == "woods" & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_B$useData[(obs$dt_B$u_from == u_to_exclude | obs$dt_B$u_to == u_to_exclude) 
+                                          & obs$dt_B$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_G$useData[obs$dt_G$u == u_to_exclude & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_L$useData[obs$dt_L$u == u_to_exclude & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_D$useData[obs$dt_D$u == u_to_exclude & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
 
+  # 2. no crops sources excluded
+  u_to_exclude <- "crops"
+  # 3. no grass sources excluded
+  u_to_exclude <- "grass"
   # exclude these data sources for grass
-  data_sources_toExclude <- c("IACS")
-  # obs$dt_A$useData[obs$dt_A$u == "grass" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
+  #data_sources_toExclude <- c("IACS")
 
+  # 4.
+  u_to_exclude <- "rough"
   # exclude these data sources for rough
+  ##* WIP - are we sure about these?
   data_sources_toExclude <- c("IACS", "LCC")
-  # obs$dt_A$useData[obs$dt_A$u == "rough" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-    
-  # exclude these data sources for urban
-  # obs$dt_A$useData[obs$dt_A$u == "urban" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-  obs$dt_G$useData[obs$dt_G$u == "urban" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
-  obs$dt_L$useData[obs$dt_L$u == "urban" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
-    
-  # exclude these data sources for other
-  # obs$dt_A$useData[obs$dt_A$u == "other" & obs$dt_A$data_source %in% data_sources_toExclude] <- FALSE
-  obs$dt_G$useData[obs$dt_G$u == "other" & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
-  obs$dt_L$useData[obs$dt_L$u == "other" & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_B$useData[(obs$dt_B$u_from == u_to_exclude | obs$dt_B$u_to == u_to_exclude) 
+                                          & obs$dt_B$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_G$useData[obs$dt_G$u == u_to_exclude & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_L$useData[obs$dt_L$u == u_to_exclude & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_D$useData[obs$dt_D$u == u_to_exclude & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
 
-  obs$dt_D <- subset(obs$dt_D, useData)
-  # obs$dt_A <- subset(obs$dt_A, useData)
+  # 5.
+  u_to_exclude <- "urban"
+  # exclude these data sources for urban
+  data_sources_toExclude <- c("IACS", "LCC")
+  obs$dt_B$useData[(obs$dt_B$u_from == u_to_exclude | obs$dt_B$u_to == u_to_exclude) 
+                                          & obs$dt_B$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_G$useData[obs$dt_G$u == u_to_exclude & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_L$useData[obs$dt_L$u == u_to_exclude & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_D$useData[obs$dt_D$u == u_to_exclude & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
+  # 6.
+  u_to_exclude <- "other"
+  # exclude these data sources for other
+  data_sources_toExclude <- c("IACS", "LCC")
+  obs$dt_B$useData[(obs$dt_B$u_from == u_to_exclude | obs$dt_B$u_to == u_to_exclude) 
+                                          & obs$dt_B$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_G$useData[obs$dt_G$u == u_to_exclude & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_L$useData[obs$dt_L$u == u_to_exclude & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
+  obs$dt_D$useData[obs$dt_D$u == u_to_exclude & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
+
+  # now subset based on the useData variable set above
   obs$dt_G <- subset(obs$dt_G, useData)
   obs$dt_L <- subset(obs$dt_L, useData)
+  obs$dt_D <- subset(obs$dt_D, useData)
+  obs$dt_B <- subset(obs$dt_B, useData)
 
   return(obs)
 }
@@ -691,16 +717,17 @@ get_loglik <- function(v_B,
     return(sum(v_RMSE, na.rm = TRUE))
   } else {
     # use constant CV for sigma in obs; could use mult_sd <- c(0.05, 0.1, 0.1, 0.4, 0.3, 0.2)
-    # v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = 0.1*abs(dt_B$area), log = T)
-    # v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = 0.1*abs(dt_G$area), log = T)
-    # v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = 0.1*abs(dt_L$area), log = T)
-    # v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = 0.1*abs(dt_D$area), log = T)
+    v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = 0.1*abs(dt_B$area), log = T)
+    v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = 0.1*abs(dt_G$area), log = T)
+    v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = 0.1*abs(dt_L$area), log = T)
+    v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = 0.1*abs(dt_D$area), log = T)
 
-    # crude treatment of Fn rate ~ 1/3 positive of Fp rate
-    v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = dt_B$sigma*abs(dt_B$area), log = T)
-    v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = dt_G$sigma*abs(dt_G$area), log = T)
-    v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = dt_L$sigma*abs(dt_L$area), log = T)
-    v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = dt_D$sigma_D, log = T)
+    # # crude treatment of Fn rate ~ 1/3 positive of Fp rate
+    # v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = max(100, dt_B$sigma*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = max(100, dt_G$sigma*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = max(100, dt_L$sigma*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = max(100, dt_D$sigma*abs(dt_D$area)), log = T)
+    
     loglik <- sum(v_llik_D, v_llik_G, v_llik_L, v_llik_B, na.rm = TRUE)
     return(loglik)
   }
@@ -1000,9 +1027,10 @@ get_post_mcmc_parallel <- function(
 #' @export
 #' @examples
 #' fname_job = "./slurm/process_LCM.job"
-#' x <- run_mcmc_beta_job(fname_job, obs)
+#' x <- run_mcmc_beta_job(fname_job, v_times = 2011:2020, obs)
 run_mcmc_beta_job <- function(
     fname_job = "./slurm/run_mcmc_beta.job", 
+    v_times = 1950:2020, # needs to match run_mcmc_beta.R, line 28
     obs
   ){
   cmd <- paste0("sbatch ", fname_job)
@@ -1010,7 +1038,6 @@ run_mcmc_beta_job <- function(
   err <- system(cmd)
   # and return the years and paths of the output files
   # these should match slurm/run_mcmc_beta.R, but not essential - only ones that are tracked
-  v_times <- 1991:2019
   v_fnames <- fs::path_rel(here("output", paste0("mcmcB_map", v_times, ".qs")))
   return(v_fnames)
 }
@@ -1170,15 +1197,15 @@ get_uncert_scaling <- function(obs,
 #' @return obs A blag object containing the observations with uncertainties
 #' @export
 #' @examples
-#' obs_unc <- add_uncert(obs_filled, df_uncert)
-add_uncert <- function(obs, df_uncert){
+#' obs_unc <- add_uncert(obs_filled, fname_df_uncert)
+add_uncert <- function(obs, fname_df_uncert){
   
   #df_uncert$data_source <- rownames(df_uncert)
+  df_uncert <- qread(fname_df_uncert)
   df_uncert <- df_uncert[, c("data_source", "sigma", "sigma_D", "start_year_source", "Fp", "Fn")]
   obs$dt_B <- merge(obs$dt_B, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_G <- merge(obs$dt_G, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_L <- merge(obs$dt_L, df_uncert, all.x = TRUE, by = "data_source") 
-  #obs$dt_A <- merge(obs$dt_A, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_D <- merge(obs$dt_D, df_uncert, all.x = TRUE, by = "data_source") 
   
   # scale sigma to account for data interpolated prior to start date for data source
@@ -1188,9 +1215,10 @@ add_uncert <- function(obs, df_uncert){
   obs$dt_L$sigma_time_term <- pmax(obs$dt_L$start_year_source - obs$dt_L$time + 1, 1)^2
   obs$dt_D$sigma_time_term <- pmax(obs$dt_D$start_year_source - obs$dt_D$time + 1, 1)^2
                          
-  obs$dt_B$sigma <- obs$dt_B$sigma   * obs$dt_B$sigma_time_term
-  obs$dt_G$sigma <- obs$dt_G$sigma   * obs$dt_G$sigma_time_term
-  obs$dt_L$sigma <- obs$dt_L$sigma   * obs$dt_L$sigma_time_term
+  obs$dt_B$sigma <- obs$dt_B$sigma * obs$dt_B$sigma_time_term
+  obs$dt_G$sigma <- obs$dt_G$sigma * obs$dt_G$sigma_time_term
+  obs$dt_L$sigma <- obs$dt_L$sigma * obs$dt_L$sigma_time_term
+  obs$dt_D$sigma <- obs$dt_D$sigma * obs$dt_D$sigma_time_term
   # note option to rename sigma_D to sigma here, so we can use same terms afterwards
   # but possibly more confusing, as they are different units (abs vs relative)
   obs$dt_D$sigma_D <- obs$dt_D$sigma_D * obs$dt_D$sigma_time_term
@@ -1379,8 +1407,16 @@ get_post_plots <- function(
   v_data_source = unique(obs_exc$dt_D$data_source),
   blag_lcm = blag_lcm,
   rethin = 10,
-  start  = 9000
+  start  = 9000,
+  do_mcmc_diag_plots = TRUE,
+  mcmc_diag_plot_year = 2015
   ){
+  
+  # subset observations to those of interest
+  obs_unc$dt_B <- obs_unc$dt_B[data_source %in% v_data_source]
+  obs_unc$dt_G <- obs_unc$dt_G[data_source %in% v_data_source]
+  obs_unc$dt_L <- obs_unc$dt_L[data_source %in% v_data_source]
+  obs_unc$dt_D <- obs_unc$dt_D[data_source %in% v_data_source]  
   
   obs_exc$dt_B <- obs_exc$dt_B[data_source %in% v_data_source]
   obs_exc$dt_G <- obs_exc$dt_G[data_source %in% v_data_source]
@@ -1388,7 +1424,8 @@ get_post_plots <- function(
   obs_exc$dt_D <- obs_exc$dt_D[data_source %in% v_data_source]
   
   n_t <- length(v_times)
-  fname <- here(dir_output, "mcmcB_2019.qs")
+  # v_times[2] because we don't use the first time point
+  fname <- here(dir_output, paste0("mcmcB_", v_times[2], ".qs"))
   out <- qread(fname)
   # Combine the chains
   out <- createMcmcSamplerList(out)
@@ -1439,7 +1476,7 @@ get_post_plots <- function(
   a_B_post_map <- a_B_post_q[2,,]
 
   for (t in 2:n_t){
-  #t = 29
+  #t = 5
     fname <- here(dir_output, paste0("mcmcB_", v_times[t], ".qs"))
     out <- qread(fname)
     
@@ -1743,14 +1780,56 @@ get_post_plots <- function(
    print(p_D)
   dev.off()
 
-  saveRDS(  post$df_B, file = paste0(dir_output, "/df_B_post.rds"))
-  saveRDS(  post$df_G, file = paste0(dir_output, "/df_G_post.rds"))
-  saveRDS(  post$df_L, file = paste0(dir_output, "/df_L_post.rds"))
-  saveRDS(  post$df_D, file = paste0(dir_output, "/df_D_post.rds"))
-  write.csv(post$df_B, file = paste0(dir_output, "/df_B_post.csv"), row.names = FALSE)
-  write.csv(post$df_G, file = paste0(dir_output, "/df_G_post.csv"), row.names = FALSE)
-  write.csv(post$df_L, file = paste0(dir_output, "/df_L_post.csv"), row.names = FALSE)
-  write.csv(post$df_D, file = paste0(dir_output, "/df_D_post.csv"), row.names = FALSE)
+  df_B <- df_B_post_long
+  df_G <- df_G_post_long
+  df_L <- df_L_post_long
+  df_D <- df_D_post_long
+
+  saveRDS(  df_B, file = paste0(dir_output, "/df_B_post.rds"))
+  saveRDS(  df_G, file = paste0(dir_output, "/df_G_post.rds"))
+  saveRDS(  df_L, file = paste0(dir_output, "/df_L_post.rds"))
+  saveRDS(  df_D, file = paste0(dir_output, "/df_D_post.rds"))
+  write.csv(df_B, file = paste0(dir_output, "/df_B_post.csv"), row.names = FALSE)
+  write.csv(df_G, file = paste0(dir_output, "/df_G_post.csv"), row.names = FALSE)
+  write.csv(df_L, file = paste0(dir_output, "/df_L_post.csv"), row.names = FALSE)
+  write.csv(df_D, file = paste0(dir_output, "/df_D_post.csv"), row.names = FALSE)
+
+  if (do_mcmc_diag_plots){
+    fname <- here(dir_output, paste0("mcmcB_", mcmc_diag_plot_year, ".qs"))
+    if (file.exists(fname)){
+      out <- qread(fname)     
+      # Combine the chains
+      out <- createMcmcSamplerList(out)
+      
+      pdf(file = paste0(dir_output, "/mcmc_diag_plots.pdf"))   
+        # MCMC chain trace plots, 3 per page
+        tracePlot(out, which = c(2:4), start = start)
+        tracePlot(out, which = c(5:7), start = start)
+        tracePlot(out, which = c(8:10), start = start)
+        tracePlot(out, which = c(11:13), start = start)
+        tracePlot(out, which = c(14:16), start = start)
+        tracePlot(out, which = c(17:19), start = start)
+        tracePlot(out, which = c(20:22), start = start)
+        tracePlot(out, which = c(23:25), start = start)
+        tracePlot(out, which = c(26:28), start = start)
+        tracePlot(out, which = c(29:31), start = start)
+        tracePlot(out, which = c(32:34), start = start)
+        tracePlot(out, which = c(35:36), start = start)
+
+        # MCMC parameter correlation plots
+        # w-c, c-w
+        correlationPlot(out, whichParameters = c(2,7), start = start)
+        # g-c, c-g
+        correlationPlot(out, whichParameters = c(9,14), start = start)
+        # r-c, c-r
+        correlationPlot(out, whichParameters = c(10,20), start = start)
+        # r-g, g-r
+        correlationPlot(out, whichParameters = c(16,21), start = start)
+        
+        # add Gelman-Ruben plots? other convergence checks?
+      dev.off()
+    } # file.exists
+  } # do_mcmc_diag_plots
 
   return(list(p_B = p_B, p_G = p_G, p_L = p_L, p_D = p_D,
     df_B = df_B_post_long,

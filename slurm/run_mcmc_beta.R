@@ -25,7 +25,7 @@ pred_ls <- tar_read(c_pred_ls)
 # e.g. for 2015-2019, n_t = 5, n_p = 4
 #v_times <- 1750:2019 # 1750:1779
 #v_times <- 1950:2019
-v_times <- 1990:2020
+v_times <- 1950:2020
 n_t <- length(v_times)
 
 i <- as.numeric(commandArgs(trailingOnly = TRUE))[1]

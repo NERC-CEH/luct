@@ -30,9 +30,9 @@ options(tidyverse.quiet = TRUE)
 options(bitmapType='cairo')
 tar_option_set(
   packages = c(
-    "dplyr", "purrr", "units", "data.table", "ggplot2", "stringr",
+    "dplyr", "purrr", "units", "data.table", "ggplot2", "stringr", "qs",
     "zoo", "mgcv", "reshape2", "readxl", "tidyr", "sp", "sf", "raster", #"rgeos", "ggforce", "plyr", 
-    "rgdal", "grid", "spCEH", "scico", "stars", "BayesianTools"),
+    "rgdal", "grid", "spCEH", "scico", "stars", "BayesianTools", "scales"),
   format = "qs",
   cue = tar_cue(
       mode = "thorough", #c("thorough", "always", "never"),
@@ -339,7 +339,7 @@ list(
       c_obs_all, 
       old_unit = "m^2", 
       new_unit = "km^2"),
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "always")
   ),
             
   # Exclude some data sources which we do not want to use
@@ -347,24 +347,36 @@ list(
     c_obs_exc,
     set_exclusions(
       c_obs_km2),
-    cue = tar_cue(mode = "thorough")
+      #data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC", "IACS")),
+    cue = tar_cue(mode = "always")
   ),
   
-  # Calculate the relative uncertainty for the data sources
+  # remove this target to meta notebook - one-off operation with all data sets
+  # we now want flexibility to exclude some data sources, based on the results from all
+  # # Calculate the relative uncertainty for the data sources
+  # tar_target(
+    # c_df_uncert,
+    # get_uncert_scaling(
+      # c_obs_exc, 
+        # v_names_sources = 
+        # c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
+        # v_interval_length_sources = 
+        # c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
+        # # this gives a way of removing effect of data sources: long int_lth means effects is reduced by sqrt(n)
+        # #c( 1,          1,       8,    1,    1e9,   1e9,      1e9,   1,    1e9),
+        # v_start_year_source = 
+        # c( 1750,       2001,    1950, 1900, 1990,  2000,     2015,  2004,   2016),
+        # cv_AgCensus = 0.1),
+    # cue = tar_cue(mode = "thorough")
+  # ),
+                
+  # replacing above, this target just holds a data file of previously-calculated uncertainties
+  # we now want flexibility to exclude some data sources, based on the results from all
+  # Read in the relative uncertainty for the data sources
   tar_target(
-    c_df_uncert,
-    get_uncert_scaling(
-      c_obs_exc, 
-        v_names_sources = 
-        c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
-        v_interval_length_sources = 
-        c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
-       # this gives a way of removing effect of data sources: long int_lth means effects is reduced by sqrt(n)
-       #c( 1,          1,       8,    1,    1e6,   1e6,      1e6,   1e6,    1e6),
-        v_start_year_source = 
-        c( 1750,       2001,    1950, 1900, 1990,  2000,     2015,  2004,   2016),
-        cv_AgCensus = 0.1),
-    cue = tar_cue(mode = "thorough")
+    c_fname_df_uncert,
+      fs::path_rel(here("data", "df_uncert.qs")),
+    format = "file"
   ),
                 
   # Interpolate NAs in BLAGs
@@ -374,7 +386,7 @@ list(
       c_obs_exc, 
       start_year = 1950, 
       end_year   = 2020),
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "always")
   ),
 
   # Add the relative uncertainties to the data sources
@@ -382,7 +394,8 @@ list(
     c_obs_unc,
     add_uncert(
       c_obs_filled, 
-      c_df_uncert)
+      c_fname_df_uncert), 
+    cue = tar_cue(mode = "always")
   ),
                 
   # Predict the Beta matrix by least-squares
@@ -408,8 +421,8 @@ list(
   # Run a SLURM job to estimate Beta by MCMC
   tar_target(
     c_mcmc_fname_Bmap,
-    run_mcmc_beta_job(c_mcmc_fname_job, c_obs_unc),
-    cue = tar_cue(mode = "thorough"),
+    run_mcmc_beta_job(c_mcmc_fname_job, v_times = 1950:2020, c_obs_unc),
+    cue = tar_cue(mode = "never"),
     format = "file"
   ),    
 
@@ -417,13 +430,14 @@ list(
   tar_target(
     c_post_B,
     get_post_plots(
+      start_time = 1950, # 2019 only just now?
       end_time = 2020, # 2019 only just now?
       v_mcmc_fname_Bmap = c_mcmc_fname_Bmap,
       obs_unc = c_obs_unc, 
       obs_exc = c_obs_exc, 
+      #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
       blag_lcm = c_blag_lcm), 
-    cue = tar_cue(mode = "thorough"),
-    format = "file"
+    cue = tar_cue(mode = "always")
   ),    
 
   

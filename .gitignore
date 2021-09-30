@@ -9,7 +9,9 @@
 
 # {targets} cache
 #_targets/
-
+# ignore big target file with posterior data
+_targets/objects/c_post_B
+ 
 ### ./data-raw and ./data
 
 # Keep data off GitHub here
