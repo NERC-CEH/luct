@@ -346,8 +346,8 @@ list(
   tar_target(
     c_obs_exc,
     set_exclusions(
-      c_obs_km2),
-      #data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+      c_obs_km2,
+      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
     cue = tar_cue(mode = "always")
   ),
   
@@ -414,14 +414,14 @@ list(
   # Path to MCMC_Beta SLURM job file
   tar_target(
     c_mcmc_fname_job,
-    fs::path_rel(here("slurm", "run_mcmc_beta_run13.job")),
+    fs::path_rel(here("slurm", "run_mcmc_beta_run14.job")),
     format = "file"
   ),
 
   # Run a SLURM job to estimate Beta by MCMC
   tar_target(
     c_mcmc_fname_Bmap,
-    run_mcmc_beta_job(c_mcmc_fname_job, dir_output = "output/output_run13",
+    run_mcmc_beta_job(c_mcmc_fname_job, dir_output = "output/output_run14",
       v_times = 1950:2020, c_obs_unc),
     cue = tar_cue(mode = "never"),
     format = "file"
@@ -433,7 +433,10 @@ list(
     get_post_plots(
       start_time = 1950, # 2019 only just now?
       end_time = 2020, # 2019 only just now?
+      dir_output = "output/output_run14",
       v_mcmc_fname_Bmap = c_mcmc_fname_Bmap,
+      fig_start_time = 1950,
+      fig_end_time   = 2020,
       obs_unc = c_obs_unc, 
       obs_exc = c_obs_exc, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
