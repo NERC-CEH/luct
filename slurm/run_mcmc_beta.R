@@ -14,6 +14,7 @@ library(BayesianTools)
 #source("_targets_packages.R")
 source("R/luc_track.R")
 source("R/luct.R")
+#set.seed(586)
 
 obs     <- tar_read(c_obs_unc)
 pred_ls <- tar_read(c_pred_ls)
@@ -28,8 +29,14 @@ pred_ls <- tar_read(c_pred_ls)
 v_times <- 1950:2020
 n_t <- length(v_times)
 
+# read arguments
+# which year in v_times to process
 i <- as.numeric(commandArgs(trailingOnly = TRUE))[1]
-#i = 2
+# directory for the output
+dir_output <- commandArgs(trailingOnly = TRUE)[2]
+
+#dir_output <- "output"
+#i = 69
 i_time <- v_times[i+1]
 i_time
 
@@ -40,7 +47,7 @@ obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
 
 ## ---- estimate_B_by_MCMC_parallel, eval=recalc, echo=FALSE--------------------
 # Parallelise over years, finding the posterior distribution of the $B$ matrix by MCMC.
-n_iter <- 600000
+n_iter <- 180000
 thin <- 10 # round(max(1, n_iter/20))
 # we want three processors to each run one chain, with the 3 internal chains 
 n_chains <- 1 # on the same core (DREAMz uses 3 internal chains by default)
@@ -50,15 +57,15 @@ n_cores  <- 3 # number of cores to use
 # x <- seq(0, 10000, by = 10)
 # y <- dnorm(x, mean = 0, sd = 3000)
 # plot(x, y, ylim = c(0, max(y)))
-# prior <- createTruncatedNormalPrior(
-   # mean = rep(0, n_u^2), 
-   # sd   = rep(3000, n_u^2), 
-   # lower = rep(0, n_u^2),
-   # upper = rep(10000, n_u^2))
+prior <- createTruncatedNormalPrior(
+   mean = rep(0, n_u^2), 
+   sd   = rep(3000, n_u^2), 
+   lower = rep(0, n_u^2),
+   upper = rep(10000, n_u^2))
 # # Prior: uniform
-prior <- createUniformPrior(
-  lower = rep(    0, n_u^2), 
-  upper = rep(6000, n_u^2))
+# prior <- createUniformPrior(
+  # lower = rep(    0, n_u^2), 
+  # upper = rep(6000, n_u^2))
   
 setUp <- createBayesianSetup(get_loglik, prior = prior, parallel = FALSE)
 
@@ -108,11 +115,14 @@ system.time(
 
 Bmap <- MAP(out[[1]])$parametersMAP
 #saveRDS(Bmap, file = here("output", paste0("mcmcB_map", i_time, ".rds")))
-qsave(Bmap, file = here("output", paste0("mcmcB_map", i_time, ".qs")))
+qsave(Bmap, file = here(dir_output, paste0("mcmcB_map", i_time, ".qs")))
 #saveRDS(out,  file = here("output", paste0("mcmcB_", i_time, ".rds")))
-qsave(out,  file = here("output", paste0("mcmcB_", i_time, ".qs")))
+qsave(out,  file = here(dir_output, paste0("mcmcB_", i_time, ".qs")))
 parallel::stopCluster(cl)
 
+# Combine the chains
+out <- createMcmcSamplerList(out)
+summary(out) # check for errors
 
 ## ----quit_gracefully, eval=recalc, echo=FALSE---------------------------------
 # it used to help if scripts exited R without saving when run on LSF job scheduler

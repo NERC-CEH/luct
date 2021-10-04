@@ -682,10 +682,10 @@ set_exclusions <- function(
 #' @return use_rmse = FALSE
 #' @export
 #' @examples
-#' obs <- tar_read(c_obs)
+#' obs <- tar_read(c_obs_unc)
+#' v_B <- runif(n_u^2, 0, 1000)
 #' rmse   <- get_loglik(v_B, use_rmse = TRUE)
-#' rmse   <- get_loglik(v_B, obs$dt_B, obs$dt_G, obs$dt_L, obs$dt_D, use_rmse = TRUE)
-#' loglik <- get_loglik(v_B, obs$dt_B, obs$dt_G, obs$dt_L, obs$dt_D)
+#' loglik <- get_loglik(v_B)
 get_loglik <- function(v_B, 
     #dt_B_obs, dt_G_obs, dt_L_obs, dt_D_obs, 
     n_u = sqrt(length(v_B)), use_rmse = FALSE){
@@ -716,19 +716,70 @@ get_loglik <- function(v_B,
     v_RMSE[is.nan(v_RMSE)] <- NA
     return(sum(v_RMSE, na.rm = TRUE))
   } else {
-    # use constant CV for sigma in obs; could use mult_sd <- c(0.05, 0.1, 0.1, 0.4, 0.3, 0.2)
-    v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = 0.1*abs(dt_B$area), log = T)
-    v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = 0.1*abs(dt_G$area), log = T)
-    v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = 0.1*abs(dt_L$area), log = T)
-    v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = 0.1*abs(dt_D$area), log = T)
+    # # use constant CV for sigma in obs; could use mult_sd <- c(0.05, 0.1, 0.1, 0.4, 0.3, 0.2)
+    # v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = 0.1*abs(dt_B$area), log = T)
+    # v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = 0.1*abs(dt_G$area), log = T)
+    # v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = 0.1*abs(dt_L$area), log = T)
+    # v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = 0.1*abs(dt_D$area), log = T)
+
+    # # run 6 pulsar - use constant CV for sigma in obs with minimum sd of 100 km2
+    # v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = max(100, 0.1*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = max(100, 0.1*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = max(100, 0.1*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = max(100, 0.1*abs(dt_D$area)), log = T)
+
+    # # run 8 pulsar - use variable CV for sigma in obs with minimum sd of 100 km2
+    # v_llik_B <- dnorm(dt_B$area, mean = dt_B$pred, sd = max(100, dt_B$sigma*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area, mean = dt_G$pred, sd = max(100, dt_G$sigma*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area, mean = dt_L$pred, sd = max(100, dt_L$sigma*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area, mean = dt_D$pred, sd = max(100, dt_D$sigma*abs(dt_D$area)), log = T)
+
+    # # run 9 pulsar - use constant CV for sigma in obs with minimum sd of 100 km2, and Fp/Fn rates
+    # v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = max(100, 0.1*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = max(100, 0.1*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = max(100, 0.1*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = max(100, 0.1*abs(dt_D$area)), log = T)
+
+    # # run 9X pulsar - use constant CV for sigma in obs with minimum sd of 100 km2, and Fp/Fn rates
+    # v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = pmax(100, 0.1*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = pmax(100, 0.1*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = pmax(100, 0.1*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = pmax(100, 0.1*abs(dt_D$area)), log = T)
+
+    # # run 10 pulsar - use variable CV for sigma in obs with minimum sd of 100 km2, and Fp/Fn rates
+    # v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = max(100, dt_B$sigma*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = max(100, dt_G$sigma*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = max(100, dt_L$sigma*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = max(100, dt_D$sigma*abs(dt_D$area)), log = T)
+
+    # run 13 = longer 10X pulsar - use variable CV for sigma in obs with minimum sd of 100 km2, and Fp/Fn rates
+    v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = pmax(100, dt_B$sigma*abs(dt_B$area)), log = T)
+    v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = pmax(100, dt_G$sigma*abs(dt_G$area)), log = T)
+    v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = pmax(100, dt_L$sigma*abs(dt_L$area)), log = T)
+    v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = pmax(100, dt_D$sigma*abs(dt_D$area)), log = T)
+
+    # # run 11 pulsar - use variable CV for sigma only in EO obs where correction needs applied, with minimum sd of 100 km2, and Fp/Fn rates
+    # # scale from 0 (no effect, all = cv_AgCensus) to 1 (full effect of NRMSE*r2 scaling)
+    # sigma_scaling_coeff <- 0
+    # cv_AgCensus <- 0.1
+    # dt_B$sigma <- cv_AgCensus + (dt_B$sigma - cv_AgCensus) * sigma_scaling_coeff
+    # dt_G$sigma <- cv_AgCensus + (dt_G$sigma - cv_AgCensus) * sigma_scaling_coeff
+    # dt_L$sigma <- cv_AgCensus + (dt_L$sigma - cv_AgCensus) * sigma_scaling_coeff
+    # dt_D$sigma <- cv_AgCensus + (dt_D$sigma - cv_AgCensus) * sigma_scaling_coeff
+
+    # v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = max(100*dt_B$apply_correction, dt_B$sigma*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = max(100*dt_G$apply_correction, dt_G$sigma*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = max(100*dt_L$apply_correction, dt_L$sigma*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = max(100*dt_D$apply_correction, dt_D$sigma*abs(dt_D$area)), log = T)
 
     # # crude treatment of Fn rate ~ 1/3 positive of Fp rate
     # v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = max(100, dt_B$sigma*abs(dt_B$area)), log = T)
     # v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = max(100, dt_G$sigma*abs(dt_G$area)), log = T)
     # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = max(100, dt_L$sigma*abs(dt_L$area)), log = T)
     # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = max(100, dt_D$sigma*abs(dt_D$area)), log = T)
-    
+   
     loglik <- sum(v_llik_D, v_llik_G, v_llik_L, v_llik_B, na.rm = TRUE)
+
     return(loglik)
   }
 }
@@ -1030,6 +1081,7 @@ get_post_mcmc_parallel <- function(
 #' x <- run_mcmc_beta_job(fname_job, v_times = 2011:2020, obs)
 run_mcmc_beta_job <- function(
     fname_job = "./slurm/run_mcmc_beta.job", 
+    dir_output = "output",
     v_times = 1950:2020, # needs to match run_mcmc_beta.R, line 28
     obs
   ){
@@ -1038,7 +1090,7 @@ run_mcmc_beta_job <- function(
   err <- system(cmd)
   # and return the years and paths of the output files
   # these should match slurm/run_mcmc_beta.R, but not essential - only ones that are tracked
-  v_fnames <- fs::path_rel(here("output", paste0("mcmcB_map", v_times, ".qs")))
+  v_fnames <- fs::path_rel(here(dir_output, paste0("mcmcB_map", v_times, ".qs")))
   return(v_fnames)
 }
 
@@ -1114,6 +1166,8 @@ get_r2 <- function(df = df, v, v_ref = "Ref"){
 get_uncert_scaling <- function(obs, 
   v_names_sources = 
   c("AgCensus", "MODIS", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME"),
+  v_apply_correction = 
+  c( 0,          0,       0,    0,    1,     1,        1,     1,      1),
   v_interval_length_sources = 
   c( 1,          1,       8,    1,    3,     6,        1,     1,      1),
   v_start_year_source = 
@@ -1134,6 +1188,7 @@ get_uncert_scaling <- function(obs,
 
   df <- data.frame(intvl_lth = v_interval_length_sources, 
     start_year_source = v_start_year_source, 
+    apply_correction = v_apply_correction,
     NRMSE = v_nrmse, r2 = v_r2, 
     # reduce NRMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
     sigma = v_nrmse * abs(1 - v_r2))
@@ -1144,6 +1199,9 @@ get_uncert_scaling <- function(obs,
   # very arbitrary assumption, to be improved upon
   df["AgCensus",]$sigma <- df[3,]$sigma * 0.5
   df["FC",]$sigma       <- df[3,]$sigma * 0.5
+  # CS data harder to quantify - uncert is in upscaling 
+  # for now, guess same as above and temprly do not apply intvl_lth effect - hence / sqrt(8)
+  df["CS",]$sigma       <- df[3,]$sigma * 0.5 / sqrt(8)
 
   # all values are relative to AGCensus, assuming it has 10 % uncertainty
   df$sigma <- df$sigma / df["AgCensus",]$sigma * cv_AgCensus
@@ -1202,7 +1260,7 @@ add_uncert <- function(obs, fname_df_uncert){
   
   #df_uncert$data_source <- rownames(df_uncert)
   df_uncert <- qread(fname_df_uncert)
-  df_uncert <- df_uncert[, c("data_source", "sigma", "sigma_D", "start_year_source", "Fp", "Fn")]
+  df_uncert <- df_uncert[, c("data_source", "apply_correction", "sigma", "sigma_D", "start_year_source", "Fp", "Fn")]
   obs$dt_B <- merge(obs$dt_B, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_G <- merge(obs$dt_G, df_uncert, all.x = TRUE, by = "data_source") 
   obs$dt_L <- merge(obs$dt_L, df_uncert, all.x = TRUE, by = "data_source") 
@@ -1413,10 +1471,11 @@ get_post_plots <- function(
   ){
   
   # subset observations to those of interest
-  obs_unc$dt_B <- obs_unc$dt_B[data_source %in% v_data_source]
-  obs_unc$dt_G <- obs_unc$dt_G[data_source %in% v_data_source]
-  obs_unc$dt_L <- obs_unc$dt_L[data_source %in% v_data_source]
-  obs_unc$dt_D <- obs_unc$dt_D[data_source %in% v_data_source]  
+  # subset only raw data and keep corrected & interpolated data for ribbon
+  # obs_unc$dt_B <- obs_unc$dt_B[data_source %in% v_data_source]
+  # obs_unc$dt_G <- obs_unc$dt_G[data_source %in% v_data_source]
+  # obs_unc$dt_L <- obs_unc$dt_L[data_source %in% v_data_source]
+  # obs_unc$dt_D <- obs_unc$dt_D[data_source %in% v_data_source]  
   
   obs_exc$dt_B <- obs_exc$dt_B[data_source %in% v_data_source]
   obs_exc$dt_G <- obs_exc$dt_G[data_source %in% v_data_source]
@@ -1580,7 +1639,8 @@ get_post_plots <- function(
   # the predictions
   p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975,  fill = "95% CI"), 
     alpha = 0.4)
-  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"), linetype = 2)
+  p <- p + geom_line(aes(time, area_q50, colour = "Maximum a posterior"))
   p <- p + ylab(expression(paste(Area~km^2)))
   p <- p + ggtitle("Net Change")
   p <- p + facet_wrap(~ u, scales = "free_y")
@@ -1631,7 +1691,8 @@ get_post_plots <- function(
   # the predictions
   p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975,  fill = "95% CI"), 
     alpha = 0.4)
-  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"), linetype = 2)
+  p <- p + geom_line(aes(time, area_q50, colour = "Maximum a posterior"))
   p <- p + ylab(expression(paste(Area~km^2)))
   p <- p + ggtitle("Gross Gain")
   p <- p + facet_wrap(~ u, scales = "free_y")
@@ -1680,7 +1741,8 @@ get_post_plots <- function(
   # the predictions
   p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975,  fill = "95% CI"), 
     alpha = 0.4)
-  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"), linetype = 2)
+  p <- p + geom_line(aes(time, area_q50, colour = "Maximum a posterior"))
   p <- p + ylab(expression(paste(Area~km^2)))
   p <- p + ggtitle("Gross Loss")
   p <- p + facet_wrap(~ u, scales = "free_y")
@@ -1766,7 +1828,8 @@ get_post_plots <- function(
   # the predictions
   p <- p + geom_ribbon(aes(ymin = area_q025, ymax = area_q975,  fill = "95% CI"), 
     alpha = 0.4)
-  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"))
+  p <- p + geom_line(aes(time, area_MAP, colour = "Maximum a posterior"), linetype = 2)
+  p <- p + geom_line(aes(time, area_q50, colour = "Maximum a posterior"))
   p <- p + ylab(expression(paste(Area~km^2)))
   p <- p + ggtitle("Beta matrix")
   p <- p + facet_grid(u_from ~ u_to, scales = "free_y")
@@ -1835,6 +1898,7 @@ get_post_plots <- function(
     df_B = df_B_post_long,
     df_G = df_G_post_long,
     df_L = df_L_post_long,
-    df_D = df_D_post_long
+    df_D = df_D_post_long,
+    a_B_post = a_B_post
     ))
 }

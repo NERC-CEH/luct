@@ -347,7 +347,7 @@ list(
     c_obs_exc,
     set_exclusions(
       c_obs_km2),
-      #data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC", "IACS")),
+      #data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
     cue = tar_cue(mode = "always")
   ),
   
@@ -414,14 +414,15 @@ list(
   # Path to MCMC_Beta SLURM job file
   tar_target(
     c_mcmc_fname_job,
-    fs::path_rel(here("slurm", "run_mcmc_beta.job")),
+    fs::path_rel(here("slurm", "run_mcmc_beta_run13.job")),
     format = "file"
   ),
 
   # Run a SLURM job to estimate Beta by MCMC
   tar_target(
     c_mcmc_fname_Bmap,
-    run_mcmc_beta_job(c_mcmc_fname_job, v_times = 1950:2020, c_obs_unc),
+    run_mcmc_beta_job(c_mcmc_fname_job, dir_output = "output/output_run13",
+      v_times = 1950:2020, c_obs_unc),
     cue = tar_cue(mode = "never"),
     format = "file"
   ),    
@@ -436,7 +437,9 @@ list(
       obs_unc = c_obs_unc, 
       obs_exc = c_obs_exc, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
-      blag_lcm = c_blag_lcm), 
+      blag_lcm = c_blag_lcm,
+      start  = 1000,
+      mcmc_diag_plot_year = 2019), 
     cue = tar_cue(mode = "always")
   ),    
 
@@ -506,7 +509,7 @@ list(
     },
     # Track the files returned by the command
     format = "file",
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   ),   # end m_AgCensus_plot
   
   ## m_02 Plot the CS data ----
@@ -529,7 +532,7 @@ list(
     },
     # Track the files returned by the command
     format = "file",
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   )   # end m_CS_plot
   
   ## m_03 Plot the data comparison ----
