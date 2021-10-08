@@ -16,7 +16,7 @@ source("R/luc_track.R")
 source("R/luct.R")
 #set.seed(586)
 
-obs     <- tar_read(c_obs_unc)
+obs     <- tar_read(c_obs)
 pred_ls <- tar_read(c_pred_ls)
 
 ## ---- initialise_predictions, eval=recalc, echo=FALSE-------------------------

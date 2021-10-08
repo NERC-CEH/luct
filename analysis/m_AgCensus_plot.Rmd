@@ -22,6 +22,8 @@ library(targets) # access data from the targets cache
 library(tictoc) # capture execution time
 library(here) # construct file paths relative to project root
 library(ggplot2) # data wrangling
+library(units) # data wrangling
+library(ggforce) # data wrangling
 
 knitr::opts_chunk$set(dev = "png",
                       dev.args = list(png = list(type = "cairo-png")),
@@ -29,16 +31,6 @@ knitr::opts_chunk$set(dev = "png",
                       
 # start the execution time clock
 tictoc::tic("Computation time (excl. render)")
-
-# Get the path to the raw entity data file
-# This is a target managed by {targets}
-l_df_AgCensus_Eng  <- tar_read(c_agc_en)
-l_df_AgCensus_Sco  <- tar_read(c_agc_sc)
-l_df_AgCensus_Wal  <- tar_read(c_agc_wa)
-l_df_AgCensus_NIr  <- tar_read(c_agc_ni)
-
-dt_A_UK  <- tar_read(c_blag_AgCensus)$dt_A
-dt_D_UK <- tar_read(c_blag_AgCensus)$dt_D
 ```
 
 ```{r, include = FALSE, cache = FALSE}
@@ -51,16 +43,42 @@ dt_D_UK <- tar_read(c_blag_AgCensus)$dt_D
 # fails if a call to here::here() is embedded in 
 # a call to knitr::read_chunk()
 knitr::read_chunk("R/luct.R")
+source("R/luct_AgCensus.R")
 ```
+
+```{r, include = FALSE, cache = FALSE}
+# Get the path to the raw entity data file
+# This is a target managed by {targets}
+agc_en  <- tar_read(c_agc_en)
+agc_sc  <- tar_read(c_agc_sc)
+agc_wa  <- tar_read(c_agc_wa)
+agc_ni  <- tar_read(c_agc_ni)
+agc     <- tar_read(c_blag_AgCensus)
+
+agc_en$df_long$area <- set_units(agc_en$df_long$area, km^2)
+agc_sc$df_long$area <- set_units(agc_sc$df_long$area, km^2)
+agc_wa$df_long$area <- set_units(agc_wa$df_long$area, km^2)
+agc_ni$df_long$area <- set_units(agc_ni$df_long$area, km^2)
+
+agc$dt_A$area <- set_units(agc$dt_A$area, m^2)
+agc$dt_A$area <- set_units(agc$dt_A$area, km^2)
+agc$dt_D$area <- set_units(agc$dt_D$area, m^2)
+agc$dt_D$area <- set_units(agc$dt_D$area, km^2)
+
+agc$dt_A$region <- factor(agc$dt_A$region, levels = v_region)
+agc$dt_D$region <- factor(agc$dt_D$region, levels = v_region)
+```
+
 
 # Introduction
 
 <!--- { ACplotEngland -->
 ```{r ACplotEngland, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land use from the June Agricultural Census in England, 1980-2019. Points show uncorrected data; lines show corrected data; Green vertical lines show known step changes; Red vertical lines show suspected step changes which have been adjusted for."}
-p <- ggplot(l_df_AgCensus_Eng$df_long, aes(time, area))
+p <- ggplot(agc_en$df_long, aes(time, area))
 # p <- p + geom_vline (xintercept =   knownChangePoint, colour = "green")
 # p <- p + geom_vline (xintercept = unknownChangePoint, colour = "red")
 p <- p + geom_line()
+p <- p + geom_point(data = agc$dt_A[region == "en"], colour = "blue")
 p <- p + ggtitle(label = "Land use in England from Agricultural Census",
  subtitle = "Black lines show uncorrected data; Coloured lines show corrected data
 Green lines show known step changes; Red lines show unknown step changes")
@@ -73,10 +91,11 @@ p + facet_wrap(~ u, scales = "free_y")
 
 <!--- { ACplotScotland -->
 ```{r ACplotScotland, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land use from the June Agricultural Census in Scotland, 1980-2019. Points show uncorrected data; lines show corrected data; Green vertical lines show known step changes; Red vertical lines show suspected step changes which have been adjusted for."}
-p <- ggplot(l_df_AgCensus_Sco$df_long, aes(time, area))
+p <- ggplot(agc_sc$df_long, aes(time, area))
 # p <- p + geom_vline (xintercept =   knownChangePoint, colour = "green")
 # p <- p + geom_vline (xintercept = unknownChangePoint, colour = "red")
 p <- p + geom_line()
+p <- p + geom_point(data = agc$dt_A[region == "sc"], colour = "blue")
 p <- p + ggtitle(label = "Land use in Scotland from Agricultural Census",
  subtitle = "Black lines show uncorrected data; Coloured lines show corrected data
  Green lines show known step changes; Red lines show unknown step changes")
@@ -89,9 +108,9 @@ p + facet_wrap(~ u, scales = "free_y")
 
 <!--- { ACplotWales -->
 ```{r ACplotWales, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land use from the June Agricultural Census in Wales, 1980-2019."}
-p <- ggplot(l_df_AgCensus_Wal$df_long, aes(time, area))
+p <- ggplot(agc_wa$df_long, aes(time, area))
 p <- p + geom_line()
-p <- p + geom_point()
+p <- p + geom_point(data = agc$dt_A[region == "wa"], colour = "blue")
 p <- p + ggtitle(label = "Land use in Wales from Agricultural Census")
 p <- p + xlim(1981, 2020)
 p + facet_wrap(~ u, scales = "free_y")
@@ -102,27 +121,34 @@ p + facet_wrap(~ u, scales = "free_y")
 
 <!--- { plotNIreland -->
 ```{r plotNIreland, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land use from the June Agricultural Census in Northern Ireland, 1980-2019."}
-p <- ggplot(l_df_AgCensus_NIr$df_long, aes(time, area))
+p <- ggplot(agc_ni$df_long, aes(time, area))
 p <- p + geom_line()
-p <- p + geom_point()
+p <- p + geom_point(data = agc$dt_A[region == "ni"], colour = "blue")
+p <- p + ggtitle(label = "Land use in Northern Ireland from Agricultural Census")
 p <- p + xlim(1981, 2020)
 p + facet_wrap(~ u, scales = "free_y")
 ```
 
 <!--- } -->
 
-
-<!--- { plotDUK -->
-```{r plotUK, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019."}
-p <- ggplot(dt_A_UK, aes(time, area))
+<!--- { plot_A_all -->
+```{r plot_A_all, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019."}
+p <- ggplot(agc$dt_A, aes(time, area, colour = u))
 p <- p + geom_line()
-#p <- p + geom_point()
+p <- p + xlim(1981, 2020)
+p + facet_wrap(~ region, scales = "free_y")
+```
+
+<!--- { plot_A_uk -->
+```{r plot_A_uk, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019."}
+p <- ggplot(agc$dt_A[region == "uk"], aes(time, area))
+p <- p + geom_line()
 p <- p + xlim(1981, 2020)
 p + facet_wrap(~ u, scales = "fixed")
 ```
 
 ```{r plot_D_UK, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019."}
-p <- ggplot(dt_D_UK, aes(time, area))
+p <- ggplot(agc$dt_D[region == "uk"], aes(time, area))
 p <- p + geom_line()
 #p <- p + geom_point(aes(colour = u))
 p <- p + xlim(1982, 2020)
@@ -130,6 +156,13 @@ p <- p + xlim(1982, 2020)
 p + facet_wrap(~ u, scales = "free_y")
 ```
 
+<!--- { plot_D_all -->
+```{r plot_D_all, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019."}
+p <- ggplot(agc$dt_D, aes(time, area, colour = u))
+p <- p + geom_line()
+p <- p + xlim(1981, 2020)
+p + facet_wrap(~ region, scales = "free_y")
+```
 <!--- } -->
 
 # Timing {.unnumbered}

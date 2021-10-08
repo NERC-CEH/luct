@@ -46,6 +46,7 @@ obs <- tar_read(c_obs)
 # fails if a call to here::here() is embedded in 
 # a call to knitr::read_chunk()
 knitr::read_chunk("R/luct.R")
+source(here::here("R", "luct_AgCensus.R"))
 ```
 
 # Introduction
@@ -54,16 +55,17 @@ Having assembled all the available data sources, we can now plot them on a commo
 
 <!--- { DCplotA -->
 ```{r DCplotA, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of land-use areas $\\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only."}
-
 # A time series
-p <- ggplot(obs$dt_A, aes(time, area, colour = data_source))
-p <- p + geom_line()
-p <- p + geom_point()
-p <- p + ggtitle("Total Area in UK")
-p <- p + xlim(1990, 2020)
-p <- p + facet_wrap(~ u, scales = "free_y")
-p
-#ggsave(p, file = "A_vsTime_100m.png")
+for (i_region in v_region){
+  p <- ggplot(obs$dt_A[region == i_region], aes(time, area, colour = data_source))
+  p <- p + geom_line()
+  p <- p + geom_point()
+  p <- p + ggtitle(paste("Total Area in", i_region))
+  p <- p + xlim(1990, 2020)
+  p <- p + facet_wrap(~ u, scales = "free_y")
+  print(p)
+  #ggsave(p, file = "A_vsTime_100m.png")
+}
 ```
 
 Figure \@ref(fig:DCplotA) shows the total areas of each land-use class estimated by the available data sources. For the total area of woodland, Agricultural Census and IACS only record the woodland area occurring on agricultural land, so these should not be expected to match the actual totals; they are only included to compare the rate of increase. However, between the remaining sources, there is a wide range in estimates, varying by 16000 km^2^, with FC > LCM > CORINE. CORINE shows an apparent decline in woodland area, which has to be considered suspect. LCM and FC show similar trends, but LCM estimates the woodland area to be ~ 6000 km^2^ lower. Because the FC data is largely based on ground-based survey and aerial photography rather than satellite, we assume this to be more reliable.
@@ -76,16 +78,16 @@ For grassland, the outlying line of IACS data can be discounted as it covers onl
 <!--- { DCplotB -->
 ```{r DCplotB, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of area changing from each land use to every other land use (the matrix $\\mathbf{B}$) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates."}
 # B matrix
-#p <- ggplot(df[data_source == "CS" & time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
-p <- ggplot(obs$dt_B[time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
-p <- p + geom_line()
-# 1/5 of temp grass will change to crop & vv each year, from Ag Census
-#p <- p + geom_hline(yintercept = 2000, colour = "yellow")
-p <- p + geom_point()
-p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
-p <- p + facet_grid(rows = vars(u_from), cols = vars(u_to), scales = "free_y")
-p
-#ggsave(p, file = "B_vsTime_100m.png")
+for (i_region in v_region){
+  p <- ggplot(obs$dt_B[region == i_region & time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
+  p <- p + geom_line()
+  p <- p + geom_point()
+  p <- p + ggtitle(i_region)
+  p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+  p <- p + facet_grid(rows = vars(u_from), cols = vars(u_to), scales = "free_y")
+  print(p)
+  #ggsave(p, file = "B_vsTime_100m.png")
+}
 ```
 
 Figure \@ref(fig:DCplotB) shows the $\mathbf{B}$ matrix over time.
@@ -94,13 +96,17 @@ The y axis scales are somewhat skewed by a number of outlying high values. The p
 
 <!--- { DCplotBtext -->
 ```{r DCplotBtext, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Area changing from each land use to every other land use (the matrix $\\mathbf{B}$) observed by different data sources between 2017 and 2018."}
-p <- ggplot(data = obs$dt_B[time == 2018], aes(u_to, u_from)) 
-p <- p + geom_raster(aes(fill = area))
-p <- p + geom_text(aes(label = round(area, 0)), colour = "blue")
-p <- p + facet_wrap(~ data_source)
-p <- p + scico::scale_fill_scico(palette = "lajolla")
-p
-#ggsave(p, file = "B_text_100m.png")
+
+for (i_region in v_region){
+  p <- ggplot(data = obs$dt_B[region == i_region & time == 2018], aes(u_to, u_from)) 
+  p <- p + geom_raster(aes(fill = area))
+  p <- p + geom_text(aes(label = round(area, 0)), colour = "blue")
+  p <- p + facet_wrap(~ data_source)
+  p <- p + ggtitle(i_region)
+  p <- p + scico::scale_fill_scico(palette = "lajolla")
+  print(p)
+  #ggsave(p, file = "B_text_100m.png")
+}
 ```
 
 Figure \@ref(fig:DCplotBtext) indicates that LCC and LCM give $B$ values that are approximately an order of magnitude higher than CS and CORINE in 2017-2018. The former give crop-grass transitions close to 4000 km^2^; CS averages 583 km^2^. For grass-rough transitions, LCM gives values close to 2000 km^2^; CS estimates 570 km^2^. To examine the general patterns over time more clearly, we can plot the gross changes of each land-use class i.e. the sums of the rows and columns in Figures \@ref(fig:DCplotG) and \@ref(fig:DCplotL).
@@ -110,14 +116,17 @@ Figure \@ref(fig:DCplotBtext) indicates that LCC and LCM give $B$ values that ar
 ```{r DCplotG, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of gross gain of area  $\\mathbf{G}$ to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates."}
 # G time series
 # remove first records (zero) and outlier IACS point at 2014/5
-p <- ggplot(obs$dt_G[time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
-p <- p + geom_line()
-p <- p + geom_point()
-p <- p + ggtitle("Gross Gains")
-p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
-p <- p + facet_wrap(~ u, scales = "free_y")
-p
-#ggsave(p, file = "G_vsTime_100m.png")
+
+for (i_region in v_region){
+  p <- ggplot(obs$dt_G[region == i_region & time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
+  p <- p + geom_line()
+  p <- p + geom_point()
+  p <- p + ggtitle(paste("Gross Gains in", i_region))
+  p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+  p <- p + facet_wrap(~ u, scales = "free_y")
+  print(p)
+  #ggsave(p, file = "G_vsTime_100m.png")
+}
 ```
 
 Figure \@ref(fig:DCplotG) shows the gross gain in area of each land use.
@@ -130,14 +139,17 @@ A similar lack of agreement is generally apparent in the data for the other five
 ```{r DCplotL, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of gross loss of area $\\mathbf{L}$ from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates."}
 # L time series
 # remove first records (zero) and outlier IACS point at 2014/5
-p <- ggplot(obs$dt_L[time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
-p <- p + geom_line()
-p <- p + geom_point()
-p <- p + ggtitle("Gross Losses")
-p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
-p <- p + facet_wrap(~ u, scales = "free_y")
-p
-#ggsave(p, file = "L_vsTime_100m.png")
+
+for (i_region in v_region){
+  p <- ggplot(obs$dt_L[region == i_region & time > 1990 & time < 2020 & area > 0], aes(time, area, colour = data_source))
+  p <- p + geom_line()
+  p <- p + geom_point()
+  p <- p + ggtitle(paste("Gross Losses in", i_region))
+  p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+  p <- p + facet_wrap(~ u, scales = "free_y")
+  print(p)
+  #ggsave(p, file = "L_vsTime_100m.png")
+}
 ```
 
 Examining the gross losses shows a similar picture(Figure \@ref(fig:DCplotL)). According to FC data (green symbols), deforestation rates have remained very low, less than 50 km^2^. The 1990-2015 LCM data gives a close but slightly higher mean compared to this.  The post-2015 LCM data show much higher rates, over 2000 km^2^, which again seem implausible.  CORINE also shows high deforestation in 2006, which then decreses. Over all land uses, there is essentially the same overall pattern as in the gross gains. with the 1990-2015 LCM and CS data showing small losses, whilst the post-2015 LCM, LCC and IACS data show much larger losses.
@@ -146,16 +158,19 @@ Examining the gross losses shows a similar picture(Figure \@ref(fig:DCplotL)). A
 <!--- { DCplotD -->
 ```{r DCplotD, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of net change in area of each land use $\\Delta \\mathbf{A}$ observed by different data sources."}
 # D time series
-p <- ggplot(obs$dt_D[time >= 1950 & time <= 2020 & area != 0], 
-  aes(time, area, colour = data_source))
-p <- p + geom_line()
-p <- p + geom_point()
-p <- p + ggtitle("Net Change in Area in UK")
-p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
-p <- p + geom_hline(yintercept = 0)
-p <- p + facet_wrap(~ u, scales = "free_y")
-p
-#ggsave(p, file = "D_vsTime_100m.png")
+
+for (i_region in v_region){
+  p <- ggplot(obs$dt_D[region == i_region & time >= 1950 & time <= 2020 & area != 0], 
+    aes(time, area, colour = data_source))
+  p <- p + geom_line()
+  p <- p + geom_point()
+  p <- p + ggtitle(paste("Net Change in Area in", i_region))  
+  p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+  p <- p + geom_hline(yintercept = 0)
+  p <- p + facet_wrap(~ u, scales = "free_y")
+  print(p)
+  #ggsave(p, file = "D_vsTime_100m.png")
+}
 ```
 
 The net effect of these gains and losses is shown in Figure \@ref(fig:DCplotD). The same broad pattern is apparent The 1990-2015 LCM and CS data give lower estimates, with little temporal resolution because of the frequency of the surveys.  The Agricultural Census shows annual variability, oscillating from positive to negative, but at a lower level. LCC, post-2015 LCM data, and IACS data show higher net rates of change, with rates of net change 3-4 times higher and a more noisy pattern.

@@ -62,7 +62,7 @@ list(
     c(fs::path_rel(here("data-raw/AgCensus/England", 
         "AgCensus_England_ha_1900-2010.csv")),
       fs::path_rel(here("data-raw/AgCensus/England", 
-        "AgCensus_England_ha_1983-2019.csv"))),
+        "AgCensus_England_ha_1983-2020.csv"))),
     format = "file"
   ),
 
@@ -72,7 +72,7 @@ list(
     c(fs::path_rel(here("data-raw/AgCensus/Scotland", 
         "AgCensus_Scotland_ha_1883-2014.csv")),
       fs::path_rel(here("data-raw/AgCensus/Scotland", 
-        "AgCensus_Scotland_ha_2009-2019.csv"))),
+        "AgCensus_Scotland_ha_2009-2020.csv"))),
     format = "file"
   ),
 
@@ -82,7 +82,7 @@ list(
     c(fs::path_rel(here("data-raw/AgCensus/Wales", 
         "AgCensus_Wales_ha_1867-2012.csv")),
       fs::path_rel(here("data-raw/AgCensus/Wales", 
-        "AgCensus_Wales_ha_1998-2019.csv"))),
+        "AgCensus_Wales_ha_1998-2020.csv"))),
     format = "file"
   ),
 
@@ -90,7 +90,7 @@ list(
   tar_target(
     c_file_AgCensus_NIr,
     fs::path_rel(here("data-raw/AgCensus/NIreland", 
-        "AgCensus_NIreland_ha_1981-2019.csv")),
+        "AgCensus_NIreland_ha_1981-2020.csv")),
     format = "file"
   ),
 
@@ -131,7 +131,7 @@ list(
                                  c_agc_sc$df_long, 
                                  c_agc_wa$df_long, 
                                  c_agc_ni$df_long),
-                                 l_country = "UK")
+                                 v_region = v_region)
   ),
 
   # Path to MODIS data file
@@ -164,7 +164,7 @@ list(
   tar_target(
     c_file_fc,
     c(fs::path_rel(here("data-raw/FC/timeSeries", 
-        "forest_planting_byYear_UK.csv")),
+        "forest_planting_byYear_ha.csv")),
       fs::path_rel(here("data-raw/FC/timeSeries", 
         "Deforestation_Areas_for_CEH_1990-2019.xlsx"))),
     format = "file"
@@ -339,18 +339,9 @@ list(
       c_obs_all, 
       old_unit = "m^2", 
       new_unit = "km^2"),
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "thorough")
   ),
-            
-  # Exclude some data sources which we do not want to use
-  tar_target(
-    c_obs_exc,
-    set_exclusions(
-      c_obs_km2,
-      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
-    cue = tar_cue(mode = "always")
-  ),
-  
+
   # remove this target to meta notebook - one-off operation with all data sets
   # we now want flexibility to exclude some data sources, based on the results from all
   # # Calculate the relative uncertainty for the data sources
@@ -383,10 +374,10 @@ list(
   tar_target(
     c_obs_filled,
     interpolate_blag(
-      c_obs_exc, 
+      c_obs_km2, 
       start_year = 1950, 
       end_year   = 2020),
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "thorough")
   ),
 
   # Add the relative uncertainties to the data sources
@@ -395,13 +386,23 @@ list(
     add_uncert(
       c_obs_filled, 
       c_fname_df_uncert), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "thorough")
   ),
-                
+            
+  # Exclude some data sources which we do not want to use
+  tar_target(
+    c_obs,
+    set_exclusions(
+      c_obs_unc,
+      regions_toInclude = v_region,
+      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+    cue = tar_cue(mode = "thorough")
+  ),
+  
   # Predict the Beta matrix by least-squares
   tar_target(
     c_pred_ls,
-    get_pred_ls(c_obs_unc, start_year = 1990, end_year = 2020),
+    get_pred_ls(c_obs, start_year = 1990, end_year = 2020),
     cue = tar_cue(mode = "never")
   ),
                     
@@ -422,7 +423,7 @@ list(
   tar_target(
     c_mcmc_fname_Bmap,
     run_mcmc_beta_job(c_mcmc_fname_job, dir_output = "output/output_run14",
-      v_times = 1950:2020, c_obs_unc),
+      v_times = 1950:2020, c_obs),
     cue = tar_cue(mode = "never"),
     format = "file"
   ),    
@@ -438,12 +439,12 @@ list(
       fig_start_time = 1950,
       fig_end_time   = 2020,
       obs_unc = c_obs_unc, 
-      obs_exc = c_obs_exc, 
+      obs_exc = c_obs_unc, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
       blag_lcm = c_blag_lcm,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "thorough")
   ),    
 
   
@@ -512,7 +513,7 @@ list(
     },
     # Track the files returned by the command
     format = "file",
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "thorough")
   ),   # end m_AgCensus_plot
   
   ## m_02 Plot the CS data ----
@@ -535,31 +536,31 @@ list(
     },
     # Track the files returned by the command
     format = "file",
-    cue = tar_cue(mode = "never")
-  )   # end m_CS_plot
+    cue = tar_cue(mode = "thorough")
+  ),   # end m_CS_plot
   
   ## m_03 Plot the data comparison ----
 
-  # # Report investigating how to read the raw CS data
-  # tar_target(
-    # m_data_comparison,
-    # command = {
-      # # Scan for targets of tar_read() and tar_load()
-      # !!tar_knitr_deps_expr(here("analysis", "m_data_comparison.Rmd"))
+  # Report investigating how to read the raw CS data
+  tar_target(
+    m_data_comparison,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("analysis", "m_data_comparison.Rmd"))
 
-      # # Build the report
-      # workflowr::wflow_build(
-        # here("analysis", "m_data_comparison.Rmd")
-      # )
+      # Build the report
+      workflowr::wflow_build(
+        here("analysis", "m_data_comparison.Rmd")
+      )
 
-      # # Track the input Rmd file (and not the rendered HTML file).
-      # # Make the path relative to keep the project portable.
-      # fs::path_rel(here("analysis", "m_data_comparison.Rmd"))
-    # },
-    # # Track the files returned by the command
-    # format = "file",
-    # cue = tar_cue(mode = "never")
-  # ),   # end m_data_comparison
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("analysis", "m_data_comparison.Rmd"))
+    },
+    # Track the files returned by the command
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  )  # end m_data_comparison
   
   ## m_04 Quantify relative uncertainties ----
 

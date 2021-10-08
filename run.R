@@ -42,6 +42,7 @@ tar_visnetwork(allow = starts_with("m_"))
 # all detail
 tar_visnetwork()
 tar_visnetwork(targets_only = TRUE)
+tar_visnetwork(allow = starts_with("c_"), targets_only = TRUE)
 
 tar_meta(fields = warnings)
 View(tar_meta(fields = path))
@@ -55,7 +56,7 @@ tar_destroy()
 # some debugging
 tar_read(c_file_FC)
 
-obs <-tar_read(c_obs)
+obs <- tar_read(c_obs_unc)
 df_uncert <-tar_read(c_df_uncert)
 tar_load(c_df_A_AgCensus_Sco)
 tar_load(c_df_A_AgCensus_Wal)

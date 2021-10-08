@@ -78,6 +78,69 @@ getAreaNetChange_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
   return(D_u)  
 }
 
+
+## ---- get_blag_cs
+
+#' Function to calculate blag data tables
+#'   from Countryside Survey data 
+#'
+#' @param a_B An array of Beta matrices
+#' @param v_times A vector of times corresponding to third dimension of a_B
+#' @param region A character string for the region covered by a_B
+#' @return A BLAG object
+#' @export
+#' @examples
+#' blag_en <- get_blag_cs(l_a_B[[1]], region = "en")
+get_blag_cs <- function(a_B, v_times, region){
+  a_B <- remove_units(a_B) # not sure if needed
+
+  dt_B <- as.data.table(a_B[,,]) # remove first time - no difference to calculate, so all zeroes
+  names(dt_B) <- c("u_from", "u_to", "time", "area")
+  # summary(dt_B)
+  #dt_B$area <- remove_units(dt_B$area)
+  dt_B$year <- v_times[dt_B$time]
+  dt_B$u_from <- as.factor(dt_B$u_from)
+  dt_B$u_to   <- as.factor(dt_B$u_to)
+  levels(dt_B$u_from) <- names_u
+  levels(dt_B$u_to)   <- names_u
+  #dt_B <- subset(dt_B, year > 1970 & year < 2020)
+  # dt_B <- subset(dt_B, year == 1970 | 
+    # year == 1980 | year == 1990 | year == 2000)
+
+  ## ----CSplotG, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied area gains $\\mathbf{G}$ to each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
+  # calc gross gain from B; MARGIN = 3 because that is the time dimension
+  dt_G <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaGrossGain_fromBeta, n_u = 6)))
+  names(dt_G) <- names_u
+  dt_G <- data.table(time = as.numeric(rownames(dt_G)), dt_G)
+  dt_G <- melt(dt_G, id=c("time"), variable.name = "u", value.name = "area")
+  dt_G$year <- v_times[dt_G$time]
+
+  ## ----CSplotL, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied losses of area $\\mathbf{L}$ from each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
+  # calc gross loss from B; MARGIN = 3 because that is the time dimension
+  dt_L <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaGrossLoss_fromBeta, n_u = 6)))
+  names(dt_L) <- names_u
+  dt_L <- data.table(time = as.numeric(rownames(dt_L)), dt_L)
+  dt_L <- melt(dt_L, id=c("time"), variable.name = "u", value.name = "area")
+  dt_L$year <- v_times[dt_L$time]
+
+  ## ----CSplotD, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied net change in area $\\Delta \\mathbf{A}$ of each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
+  # dt_D_cs, ## this is D not A**
+  # calc net change from B; MARGIN = 3 because that is the time dimension
+  dt_D <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaNetChange_fromBeta, n_u = 6)))
+  names(dt_D) <- names_u
+  dt_D <- data.table(time = as.numeric(rownames(dt_D)), dt_D)
+  dt_D <- melt(dt_D, id=c("time"), variable.name = "u", value.name = "area")
+  dt_D$year <- v_times[dt_D$time]
+  
+  dt_B$region <- region 
+  dt_G$region <- region 
+  dt_L$region <- region 
+  dt_D$region <- region
+  
+  return(list(dt_B = dt_B, dt_G = dt_G, dt_L = dt_L, dt_D = dt_D))
+}
+
+
 ## ---- wrangle_CS
 
 #' Function to wrangle Countryside Survey data 
@@ -87,8 +150,8 @@ getAreaNetChange_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
 #' @return A BLAG object
 #' @export
 #' @examples
-#' blag <- wrangle_CS(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv")
-wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
+#' blag <- wrangle_CS(fpath = "./data-raw/CS/UK_LUC_matrices_2018i.csv")
+wrangle_CS <- function(fpath = "./data-raw/CS/UK_LUC_matrices_2018i.csv"){
   df_B <- read.csv(fpath)
   # names(df_B)
   # summary(df_B)
@@ -100,7 +163,6 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   m_B <- df_B[,6:35]
   # dim(m_B)
   # names(m_B)
-
 
   ## ----restructure, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE-----------------
   df_B$year <- df_B$Year
@@ -142,60 +204,43 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   # sum to give the matrices of UK totals
   a_B_uk <- Reduce("+", l_a_B)
   # str(a_B_uk)
-  # l_a_B[[1]][,, 71] +
-  # l_a_B[[2]][,, 71] +
-  # l_a_B[[3]][,, 71] +
-  # l_a_B[[4]][,, 71]
-  # a_B_uk[,, 71]
-
+  # str(l_a_B[[1]])
 
   ## ----CSplotBtext, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Example $\\mathbf{B}$ matrix showing the areas changing land use between 1990 and 1991 in km^2^."----
-  # B matrix
-  a_B <- a_B_uk
-  #st_B <- st_as_stars(a_B)
-  #plot(st_B)
-  a_B <- remove_units(a_B)
-  #par(mfrow=c(2,2))
-  #apply(a_B[,,2:5], MARGIN=3, function(x) {corrplot(x, is.corr = FALSE, insig = "p-value")})
-  #plot(st_B, text_values = TRUE)
+  # alphabetical  # E, NI, S, W
+  blag_en <- get_blag_cs(l_a_B[[1]], v_times = 1950:2050, region = "en")
+  blag_ni <- get_blag_cs(l_a_B[[2]], v_times = 1950:2050, region = "ni")
+  blag_sc <- get_blag_cs(l_a_B[[3]], v_times = 1950:2050, region = "sc")
+  blag_wa <- get_blag_cs(l_a_B[[4]], v_times = 1950:2050, region = "wa")
+  blag_uk <- get_blag_cs(a_B_uk,     v_times = 1950:2050, region = "uk")
 
-  dt_B <- as.data.table(a_B[,,]) # remove first time - no difference to calculate, so all zeroes
-  names(dt_B) <- c("u_from", "u_to", "time", "area")
-  # summary(dt_B)
-  #dt_B$area <- remove_units(dt_B$area)
-  dt_B$year <- v_times[dt_B$time]
-  dt_B$u_from <- as.factor(dt_B$u_from)
-  dt_B$u_to   <- as.factor(dt_B$u_to)
-  levels(dt_B$u_from) <- names_u
-  levels(dt_B$u_to)   <- names_u
-  #dt_B <- subset(dt_B, year > 1970 & year < 2020)
-  # dt_B <- subset(dt_B, year == 1970 | 
-    # year == 1980 | year == 1990 | year == 2000)
-
-  ## ----CSplotG, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied area gains $\\mathbf{G}$ to each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
-  # calc gross gain from B; MARGIN = 3 because that is the time dimension
-  dt_G <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaGrossGain_fromBeta, n_u = 6)))
-  names(dt_G) <- names_u
-  dt_G <- data.table(time = as.numeric(rownames(dt_G)), dt_G)
-  dt_G <- melt(dt_G, id=c("time"), variable.name = "u", value.name = "area")
-  dt_G$year <- v_times[dt_G$time]
-
-  ## ----CSplotL, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied losses of area $\\mathbf{L}$ from each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
-  # calc gross loss from B; MARGIN = 3 because that is the time dimension
-  dt_L <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaGrossLoss_fromBeta, n_u = 6)))
-  names(dt_L) <- names_u
-  dt_L <- data.table(time = as.numeric(rownames(dt_L)), dt_L)
-  dt_L <- melt(dt_L, id=c("time"), variable.name = "u", value.name = "area")
-  dt_L$year <- v_times[dt_L$time]
-
-  ## ----CSplotD, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = "Time series of implied net change in area $\\Delta \\mathbf{A}$ of each land use, from CS data. We assumed that the rates of change were constant during the period between surveys."----
-  # dt_D_cs, ## this is D not A**
-  # calc net change from B; MARGIN = 3 because that is the time dimension
-  dt_D <- as.data.table(t(apply(a_B[,,], MARGIN = 3, FUN = getAreaNetChange_fromBeta, n_u = 6)))
-  names(dt_D) <- names_u
-  dt_D <- data.table(time = as.numeric(rownames(dt_D)), dt_D)
-  dt_D <- melt(dt_D, id=c("time"), variable.name = "u", value.name = "area")
-  dt_D$year <- v_times[dt_D$time]
+  dt_B <- rbindlist(list(
+    blag_en$dt_B,
+    blag_ni$dt_B,
+    blag_sc$dt_B,
+    blag_wa$dt_B,
+    blag_uk$dt_B))
+    
+  dt_G <- rbindlist(list(
+    blag_en$dt_G,
+    blag_ni$dt_G,
+    blag_sc$dt_G,
+    blag_wa$dt_G,
+    blag_uk$dt_G))
+      
+  dt_L <- rbindlist(list(
+    blag_en$dt_L,
+    blag_ni$dt_L,
+    blag_sc$dt_L,
+    blag_wa$dt_L,
+    blag_uk$dt_L))
+    
+  dt_D <- rbindlist(list(
+    blag_en$dt_D,
+    blag_ni$dt_D,
+    blag_sc$dt_D,
+    blag_wa$dt_D,
+    blag_uk$dt_D))
 
   ## ----saving, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE----------------------
   dt_D$data_source <- "CS"
@@ -223,11 +268,7 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
   dt_G$area <- drop_units(dt_G$area)
   dt_L$area <- drop_units(dt_L$area) 
 
-  dt_D_cs <- dt_D
-  dt_B_cs <- dt_B
-  dt_G_cs <- dt_G
-  dt_L_cs <- dt_L 
-  return(list(dt_D = dt_D, dt_B = dt_B, dt_G = dt_G, dt_L = dt_L))
+  return(list(dt_B = dt_B, dt_G = dt_G, dt_L = dt_L, dt_D = dt_D))
 }
 
 
@@ -240,18 +281,21 @@ wrangle_CS <- function(fpath = "../data-raw/CS/UK_LUC_matrices_2018i.csv"){
 #' @return A list of data frames for affn and defn i.e. gross gains and losses
 #' @export
 #' @examples
-#' fpath1 = "./data-raw/FC/timeSeries/forest_planting_byYear_UK.csv"
+#' fpath1 = "./data-raw/FC/timeSeries/forest_planting_byYear_ha.csv"
 #' fpath2 = "./data-raw/FC/timeSeries/Deforestation_Areas_for_CEH_1990-2019.xlsx"
 #' x <- wrangle_FC(c(fpath1, fpath2))
 wrangle_FC <- function(v_fpath = 
-  c("./data-raw/FC/timeSeries/forest_planting_byYear_UK.csv",
+  c("./data-raw/FC/timeSeries/forest_planting_byYear_ha.csv",
     "./data-raw/FC/timeSeries/Deforestation_Areas_for_CEH_1990-2019.xlsx")){
 
   # read data on afforestation
   df_affn <- read.csv(v_fpath[1])
   names(df_affn)
-  names(df_affn) <- c("time", "area")
-  df_affn$area <- set_units(df_affn$area, km^2)
+  df_affn <- tidyr::pivot_longer(df_affn, cols = starts_with("area_"),
+    names_to = "region", values_to = "area")
+ 
+  df_affn$region <- substr(df_affn$region, 6, 7)
+  df_affn$area <- set_units(df_affn$area, ha)
   df_affn$area <- set_units(df_affn$area, m^2)
   summary(df_affn)
   # plot(df_affn$time, cumsum(df_affn$area))
@@ -263,7 +307,16 @@ wrangle_FC <- function(v_fpath =
   # read data on deforestation
   df_defn <- read_excel(v_fpath[2],
     sheet  = "Def Time series 1990-2019i", skip = 3)
-  df_defn <- with(df_defn[1:30,], data.frame(time = as.numeric(Year), area = Total))
+  df_defn <- with(df_defn[1:30,], data.frame(time = as.numeric(Year), 
+    area_uk = area_uk, 
+    area_en = area_en,
+    area_sc = area_sc,
+    area_wa = area_wa,
+    area_ni = area_ni))
+  df_defn <- tidyr::pivot_longer(df_defn, cols = starts_with("area_"),
+    names_to = "region", values_to = "area")
+  df_defn$region <- substr(df_defn$region, 6, 7)
+
   df_defn$area <- set_units(df_defn$area, ha)
   df_defn$area <- set_units(df_defn$area, m^2)
   df_defn$u <- "woods"
@@ -273,7 +326,7 @@ wrangle_FC <- function(v_fpath =
 
   # initialise a copy for net change
   dt_D <- dt_L
-  dt <- merge(dt_L, dt_G, all.x = TRUE, by = "time")
+  dt <- merge(dt_L, dt_G, all.x = TRUE, by = c("region", "time"))
   dt_D$area <- dt$area.y - dt$area.x
   dt_D$area <- set_units(dt_D$area, m^2)
   dt_D$area <- drop_units(dt_D$area)
@@ -281,8 +334,11 @@ wrangle_FC <- function(v_fpath =
   # initialise a copy for absolute area
   dt_A  <- dt_D
   # assume initial area of forest in 1990 worked out previously - check this
-  initArea <- (36312.07 * 1e6) - sum(dt_D$area)
-  dt_A$area <- initArea + cumsum(dt_D$area)
+  initArea_uk <- (36312.07 * 1e6) - sum(dt_D$area)
+  # add same for other countries when available
+  #initArea_en <- (xxx * 1e6) - sum(dt_D$area)
+  dt_A <- dt_A[region == "uk", area := initArea_uk + cumsum(area)]
+  #dt_A <- dt_A[region != "uk", area := NA] # only do for UK just now
   
   return(list(dt_A = dt_A, dt_D = dt_D, dt_G = dt_G, dt_L = dt_L))
 }
@@ -491,7 +547,7 @@ combine_blags <- function(l_blags = list(blag_cor, blag_iacs, blag_lcc, blag_lcm
   
   # re-ordering by (u_to, u_from) (not u_from, u_to) allows 
   # the default vector to matrix conversion to work (where byrow = FALSE)
-  dt_B <- arrange(dt_B, time, data_source, u_to, u_from)
+  dt_B <- arrange(dt_B, time, data_source, region, u_to, u_from)
 
   # G time series
   dt_G <- rbindlist(lapply(l_blags, '[[', "dt_G"), use.names=TRUE, fill=TRUE)
@@ -530,7 +586,7 @@ convert_units <- function(blag, old_unit = "m^2", new_unit = "km^2"){
   
   # re-ordering by (u_to, u_from) (not u_from, u_to) allows 
   # the default vector to matrix conversion to work (where byrow = FALSE)
-  blag$dt_B <- arrange(blag$dt_B, time, data_source, u_to, u_from)
+  blag$dt_B <- arrange(blag$dt_B, time, data_source, region, u_to, u_from)
 
   # G time series
   blag$dt_G$area <-  set_units(blag$dt_G$area, old_unit)
@@ -580,14 +636,15 @@ convert_units <- function(blag, old_unit = "m^2", new_unit = "km^2"){
 ##* WIP obs should be replaced with blag
 set_exclusions <- function(
   obs,
+  regions_toInclude = c("uk"),
   data_sources_toInclude = c("AgCensus", "CORINE", "CROME", "CS", "FC",
                            "IACS",     "LCC",    "LCM",   "MODIS")
   ){
   # subset to only the data sets we want to include
-  obs$dt_B <- obs$dt_B[data_source %in% data_sources_toInclude]
-  obs$dt_G <- obs$dt_G[data_source %in% data_sources_toInclude]
-  obs$dt_L <- obs$dt_L[data_source %in% data_sources_toInclude]
-  obs$dt_D <- obs$dt_D[data_source %in% data_sources_toInclude]
+  obs$dt_B <- obs$dt_B[data_source %in% data_sources_toInclude & region %in% regions_toInclude]
+  obs$dt_G <- obs$dt_G[data_source %in% data_sources_toInclude & region %in% regions_toInclude]
+  obs$dt_L <- obs$dt_L[data_source %in% data_sources_toInclude & region %in% regions_toInclude]
+  obs$dt_D <- obs$dt_D[data_source %in% data_sources_toInclude & region %in% regions_toInclude]
 
   # zeroes are actually missing values
   # should remove earlier
@@ -616,6 +673,8 @@ set_exclusions <- function(
   data_sources_toExclude <- c("AgCensus", "IACS", "LCC", "CROME")
   obs$dt_B$useData[(obs$dt_B$u_from == u_to_exclude | obs$dt_B$u_to == u_to_exclude) 
                                           & obs$dt_B$data_source %in% data_sources_toExclude] <- FALSE
+  # use CS only for Beta data
+  data_sources_toExclude <- c("CS", "AgCensus", "IACS", "LCC", "CROME")
   obs$dt_G$useData[obs$dt_G$u == u_to_exclude & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == u_to_exclude & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_D$useData[obs$dt_D$u == u_to_exclude & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
@@ -644,6 +703,8 @@ set_exclusions <- function(
   data_sources_toExclude <- c("IACS", "LCC")
   obs$dt_B$useData[(obs$dt_B$u_from == u_to_exclude | obs$dt_B$u_to == u_to_exclude) 
                                           & obs$dt_B$data_source %in% data_sources_toExclude] <- FALSE
+  # use CS only for Beta data
+  data_sources_toExclude <- c("CS", "IACS", "LCC")
   obs$dt_G$useData[obs$dt_G$u == u_to_exclude & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == u_to_exclude & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_D$useData[obs$dt_D$u == u_to_exclude & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
@@ -653,6 +714,8 @@ set_exclusions <- function(
   data_sources_toExclude <- c("IACS", "LCC")
   obs$dt_B$useData[(obs$dt_B$u_from == u_to_exclude | obs$dt_B$u_to == u_to_exclude) 
                                           & obs$dt_B$data_source %in% data_sources_toExclude] <- FALSE
+  # use CS only for Beta data
+  data_sources_toExclude <- c("CS", "IACS", "LCC")
   obs$dt_G$useData[obs$dt_G$u == u_to_exclude & obs$dt_G$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_L$useData[obs$dt_L$u == u_to_exclude & obs$dt_L$data_source %in% data_sources_toExclude] <- FALSE
   obs$dt_D$useData[obs$dt_D$u == u_to_exclude & obs$dt_D$data_source %in% data_sources_toExclude] <- FALSE
@@ -807,7 +870,7 @@ get_pred_ls <- function(
   # this duplicates reordering in combine_blags
   # but the additional check is probably a good idea
   # as the order determines vector to matrix conversion ordering
-  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
+  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, region, u_to, u_from)
 
   # initialise array for predicted B parameters
   # use LCM as initial values
@@ -922,7 +985,7 @@ get_post_mcmc_serial <- function(
   # this duplicates reordering in combine_blags
   # but the additional check is probably a good idea
   # as the order determines vector to matrix conversion ordering
-  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
+  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, region, u_to, u_from)
 
   ## start BayesianTools MCMC code
 
@@ -1012,7 +1075,7 @@ get_post_mcmc_parallel <- function(
   # this duplicates reordering in combine_blags
   # but the additional check is probably a good idea
   # as the order determines vector to matrix conversion ordering
-  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, u_to, u_from)
+  obs$dt_B <- dplyr::arrange(obs$dt_B, time, data_source, region, u_to, u_from)
 
   ## start BayesianTools MCMC code
 
@@ -1397,14 +1460,14 @@ interpolate_blag <- function(blag, start_year = 1950, end_year = 2020){
     # convert time to a factor with all levels 
     dt <- dt[, time := factor(time, levels = start_year:end_year)]
     # add all the missing factor combinations
-    dt <- as.data.table(complete(dt, data_source, u_from, u_to, time))
+    dt <- as.data.table(complete(dt, data_source, region, u_from, u_to, time))
     dt <- dt[, time := as.integer(as.character(time))]
     # interpolate missing values
-    dt <- dt[, area:= na.approx(area, na.rm = FALSE), by = .(data_source, u_from, u_to)]
+    dt <- dt[, area:= na.approx(area, na.rm = FALSE),                 by = .(data_source, region, u_from, u_to)]
     # fill in trailing missing values
-    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = TRUE), by = .(data_source, u_from, u_to)]
+    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = TRUE),  by = .(data_source, region, u_from, u_to)]
     # fill in leading missing values
-    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = FALSE), by = .(data_source, u_from, u_to)]
+    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = FALSE), by = .(data_source, region, u_from, u_to)]
     return(dt)
   }
 
@@ -1417,14 +1480,16 @@ interpolate_blag <- function(blag, start_year = 1950, end_year = 2020){
     # convert time to a factor with all levels 
     dt <- dt[, time := factor(time, levels = start_year:end_year)]
     # add all the missing factor combinations
-    dt <- as.data.table(complete(dt, data_source, u, time))
+    dt <- as.data.table(complete(dt, data_source, region, u, time))
     dt <- dt[, time := as.integer(as.character(time))]
+    # record rows containing original raw data, not interpolated data, for later plotting
+    dt <- dt[, raw_data := !is.na(area)]
     # interpolate missing values
-    dt <- dt[, area:= na.approx(area, na.rm = FALSE), by = .(data_source, u)]
+    dt <- dt[, area := na.approx(area, na.rm = FALSE),                 by = .(data_source, region, u)]
     # fill in trailing missing values
-    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = TRUE), by = .(data_source, u)]
+    dt <- dt[, area := na.locf(area, na.rm = FALSE, fromLast = TRUE),  by = .(data_source, region, u)]
     # fill in leading missing values
-    dt <- dt[, area:= na.locf(area, na.rm = FALSE, fromLast = FALSE), by = .(data_source, u)]
+    dt <- dt[, area := na.locf(area, na.rm = FALSE, fromLast = FALSE), by = .(data_source, region, u)]
     return(dt)
   }
 

@@ -1,4 +1,4 @@
-v_name_region  <- c("En", "Sc", "Wa", "NI", "UK")
+v_region <- c("en", "sc", "wa", "ni", "uk")
 
   joinup <- function(df1, df2){
     # names of the columns to adjust
@@ -31,19 +31,19 @@ wrangle_AgCensus_historical <- function(
   df <- read.csv(fname)
 
   # for consistency, just use first two characters, incl capitalisation
-  df$country <- substr(df$country, 1, 2)
-
+  df$region <- tolower(substr(df$country, 1, 2))
+  df$country <- NULL
   
   # sum to UK in a separate data frame
-  # remove "country" before summing all - otherwise causes an error
-  df_uk <- subset(df, select = -country) # WILL
+  # remove "region" before summing all - otherwise causes an error
+  df_uk <- subset(df, select = -region) # WILL
   df_uk <- df_uk %>% group_by(year) %>%
       summarise_all(list(~ sum(., na.rm=TRUE)))
-  df_uk$country <- "UK"
+  df_uk$region <- "uk"
 
   # add this back in to the original
   df <- rbind(df_uk, df)
-  df$country <- factor(df$country, levels = v_name_region)
+  df$region <- factor(df$region, levels = v_region)
 
   # and declare units as km2  
   df$crops <- set_units(df$crops, km^2)  
@@ -54,11 +54,11 @@ wrangle_AgCensus_historical <- function(
   # make names and their order consistent
   names(df)[names(df) == "year"] <- "time"
   names(df)[names(df) == "land_use"] <- "u"
-  df <- df[, c("country", "time", "woods", "crops", "grass", "rough" )]
+  df <- df[, c("region", "time", "woods", "crops", "grass", "rough" )]
 
   # and make a long-format version
   df_wide <- df
-  df_long      <- melt(df_wide, id=c("time", "country"), variable.name = "u", value.name = "area")
+  df_long      <- melt(df_wide, id=c("time", "region"), variable.name = "u", value.name = "area")
   
   return(list(df_long = df_long, df_wide = df_wide))
 }
@@ -192,7 +192,7 @@ wrangle_AgCensus_Sco_1 <- function(fpath =
 #' @return A BLAG object
 #' @export
 #' @examples
-#' fpath = "./data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_2009-2019.csv"
+#' fpath = "./data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_2009-2020.csv"
 #' df2 <- wrangle_AgCensus_Sco_2(fpath)
 wrangle_AgCensus_Sco_2 <- function(fpath = 
     "./data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_2009-2019.csv"){
@@ -440,7 +440,7 @@ process_AgCensus_Eng <- function(v_fpath = c(
   agc_hist
   ){
 
-  df0 <- subset(agc_hist$df_wide, country == "En")
+  df0 <- subset(agc_hist$df_wide, region == "en")
   df1 <- wrangle_AgCensus_Eng_1(v_fpath[1])
   df2 <- wrangle_AgCensus_Eng_2(v_fpath[2])
 
@@ -472,8 +472,8 @@ process_AgCensus_Eng <- function(v_fpath = c(
   df_long      <- melt(df, id=c("time"), variable.name = "u", value.name = "area")
   notDuplictates <- (df_long$time - as.integer(df_long$time)) == 0
   df_long <- df_long[notDuplictates, ]
-  df_long$country <- "En"
-  df$country      <- "En"
+  df_long$region <- "en"
+  df$region      <- "en"
 
   return(list(df_long = df_long, df_wide = df))
 }
@@ -484,7 +484,7 @@ process_AgCensus_Sco <- function(v_fpath = c(
   agc_hist
   ){
 
-  df0 <- subset(agc_hist$df_wide, country == "Sc")
+  df0 <- subset(agc_hist$df_wide, region == "sc")
   df0 <- df0[, c("time", "woods", "crops", "grass", "rough" )]
   df1 <- wrangle_AgCensus_Sco_1(v_fpath[1])
   df2 <- wrangle_AgCensus_Sco_2(v_fpath[2])
@@ -505,8 +505,8 @@ process_AgCensus_Sco <- function(v_fpath = c(
   df_long      <- melt(df, id=c("time"), variable.name = "u", value.name = "area")
   notDuplictates <- (df_long$time - as.integer(df_long$time)) == 0
   df_long <- df_long[notDuplictates, ]
-  df_long$country <- "Sc"
-  df$country      <- "Sc"
+  df_long$region <- "sc"
+  df$region      <- "sc"
 
   return(list(df_long = df_long, df_wide = df))
 }
@@ -517,7 +517,7 @@ process_AgCensus_Wal <- function(v_fpath = c(
   agc_hist
   ){
 
-  df0 <- subset(agc_hist$df_wide, country == "Wa")
+  df0 <- subset(agc_hist$df_wide, region == "wa")
   df0 <- df0[, c("time", "woods", "crops", "grass", "rough" )]
   df1 <- wrangle_AgCensus_Wal_1(v_fpath[1])
   df2 <- wrangle_AgCensus_Wal_2(v_fpath[2])
@@ -534,8 +534,8 @@ process_AgCensus_Wal <- function(v_fpath = c(
   df_long      <- melt(df, id=c("time"), variable.name = "u", value.name = "area")
   notDuplictates <- (df_long$time - as.integer(df_long$time)) == 0
   df_long <- df_long[notDuplictates, ]
-  df_long$country <- "Wa"
-  df$country      <- "Wa"
+  df_long$region <- "wa"
+  df$region      <- "wa"
 
   return(list(df_long = df_long, df_wide = df))
 }
@@ -545,14 +545,14 @@ process_AgCensus_NIr <- function(fpath =
   agc_hist
   ){
 
-  df0 <- subset(agc_hist$df_wide, country == "NI")
+  df0 <- subset(agc_hist$df_wide, region == "ni")
   df0 <- df0[, c("time", "woods", "crops", "grass", "rough" )]
   df1 <- wrangle_AgCensus_NIr(fpath)
 
   df <- join_AgCensus(df0, df1, df1)
  
   # interpolate between the gap from 1969 to 1983
-  df_allyears <- data.frame(time = 1750:2019)
+  df_allyears <- data.frame(time = 1750:2020)
   df <- merge(df_allyears, df, all.x = TRUE)
   df[,-1] <- na.approx(df[,-1])
   
@@ -560,8 +560,8 @@ process_AgCensus_NIr <- function(fpath =
   df_long      <- melt(df, id=c("time"), variable.name = "u", value.name = "area")
   notDuplictates <- (df_long$time - as.integer(df_long$time)) == 0
   df_long <- df_long[notDuplictates, ]
-  df_long$country <- "NI"
-  df$country      <- "NI"
+  df_long$region <- "ni"
+  df$region      <- "ni"
 
   return(list(df_long = df_long, df_wide = df))
 }
@@ -570,16 +570,16 @@ process_AgCensus_NIr <- function(fpath =
 #' x <- combine_AgCensus(l_df, agc_hist$df_long)
 combine_AgCensus <- function(
   l_df = list(df_A_Eng, df_A_Sco, df_A_Wal, df_A_NIr),
-  l_country = "UK"){
+  v_region = "uk"){
   
   #df <- bind_rows(l_df)
   df <- plyr::rbind.fill(l_df)
   dt <- as.data.table(df)
-  dt_A <- dt[, .(area = mean(area, na.rm = TRUE)), by = .(country, time, u)]
+  dt_A <- dt[, .(area = mean(area, na.rm = TRUE)), by = .(region, time, u)]
 
-  with(dt_A, table(country, time, u))
-  dt_A_uk <- dt_A[country != "UK", .(area =  sum(area, na.rm = TRUE)), by = .(time, u)]
-  dt_A_uk$country <- "UK"
+  with(dt_A, table(region, time, u))
+  dt_A_uk <- dt_A[region != "uk", .(area =  sum(area, na.rm = TRUE)), by = .(time, u)]
+  dt_A_uk$region <- "uk"
   dt_A <- bind_rows(dt_A, dt_A_uk)
   dt_A$data_source <- "AgCensus"
   # we need to have all in m2 for consistency
@@ -587,12 +587,12 @@ combine_AgCensus <- function(
   dt_A$area <- set_units(dt_A$area, m^2)
   dt_A$area <- drop_units(dt_A$area)
 
-  dt_D <- dt_A[, .(time, area = c(0, diff(area)), data_source), by = .(country, u)]
+  dt_D <- dt_A[, .(time, area = c(0, diff(area)), data_source), by = .(region, u)]
   dt_D <- dt_D[time >= 1900]
   
   # subset to return only the selected countries
-  dt_A <- dt_A[country %in% l_country]
-  dt_D <- dt_D[country %in% l_country]
+  dt_A <- dt_A[region %in% v_region]
+  dt_D <- dt_D[region %in% v_region]
  
   return(list(dt_A = dt_A, dt_D = dt_D)) #, 
               # df_A_Eng = l_df$df_A_Eng, df_A_Sco = l_df$df_A_Sco, 
@@ -602,12 +602,58 @@ combine_AgCensus <- function(
 
 wrangle_MODIS_urban <- function(fpath = 
   "./data-raw/MODIS/FAOStat_Artificial_land_surface_MODIS.csv"){
+
+  # get the urban split by DA region in 2018  
+  fname <- here("data-raw/mask", "dt_land_100m.qs")
+  dt_mask <- qread(fname)
+  # str(dt_mask)
+  # table(dt_mask$country)
+
+  fname <- here("data/LCM/Level1", "r_U_lcm_100m_2019.tif")
+  r <- raster(fname)
+  # plot(r)
+  dt <- as.data.table(as.data.frame(r))
+  dt <- data.table(dt_mask, u = dt$r_U_lcm_100m_2019)
+  dt_urban <- dt[u == 5, .N, by = country]
+  dt_urban <- dt_urban[!is.na(country)]
+  dt_urban[, frac_urban := N / sum(N)]
+  dt_urban[, region := v_region[country]]
+    
+  # read in the MODIS data
   dt <- fread(fpath)
-  dt_A <- with(dt, data.table(country = "UK", time = Year, area = Value, u = "urban", data_source = "MODIS"))
+  dt_A <- with(dt, data.table(region = "uk", time = Year, area = Value, u = "urban", data_source = "MODIS"))
   dt_A$area <- set_units(dt_A$area*1000, ha)
   dt_A$area <- set_units(dt_A$area, m^2)
   dt_A$area <- drop_units(dt_A$area)
-  dt_D <- dt_A[, .(time, area = c(NA, diff(area)), data_source), by = .(country, u)]
+  
+  dt_A_uk <- dt_A 
+  dt_A_en <- dt_A_uk
+  dt_A_sc <- dt_A_uk
+  dt_A_wa <- dt_A_uk
+  dt_A_ni <- dt_A_uk
+
+  dt_A_en$region <- "en"
+  dt_A_sc$region <- "sc"
+  dt_A_wa$region <- "wa"
+  dt_A_ni$region <- "ni"
+
+  dt_A_en[, area := area * dt_urban[region == "en", frac_urban]]
+  dt_A_sc[, area := area * dt_urban[region == "sc", frac_urban]]
+  dt_A_wa[, area := area * dt_urban[region == "wa", frac_urban]]
+  dt_A_ni[, area := area * dt_urban[region == "ni", frac_urban]]
+
+  dt_A <- rbindlist(list(
+    dt_A_uk,
+    dt_A_en,
+    dt_A_sc,
+    dt_A_wa,
+    dt_A_ni
+  ))
+
+  # calculate net change  by difference
+  dt_D <- dt_A[, .(time, area = c(NA, diff(area)), data_source), by = .(region, u)]
+  # infer that change is all gain, no losses
+  dt_G <- dt_A
   dim(dt_A)
-  return(list(dt_A = dt_A, dt_D = dt_D)) 
+  return(list(dt_A = dt_A, dt_D = dt_D, dt_G = dt_G)) 
 }

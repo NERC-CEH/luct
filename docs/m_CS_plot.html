@@ -364,171 +364,261 @@ div.tocify {
 
 
 <p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report"
-  data-toggle="collapse" data-target="#workflowr-report">
-  
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
-
 <div id="workflowr-report" class="collapse">
 <ul class="nav nav-tabs">
-  <li class="active">
+<li class="active">
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
-  <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<li>
+<a data-toggle="tab" href="#checks">
+Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
-  <li>
+<li>
 <a data-toggle="tab" href="#versions">Past versions</a>
 </li>
 </ul>
-
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
-  <p>
-<strong>Last updated:</strong> 2021-09-20
+<p>
+<strong>Last updated:</strong> 2021-10-08
 </p>
-  <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<p>
+<strong>Checks:</strong>
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+7
+<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+0
 </p>
-  <p>
-<strong>Knit directory:</strong> <code>luct/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<p>
+<strong>Knit directory:</strong>
+<code>luct/</code>
+<span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
-  <p>
-  
-This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
+1.6.2). The <em>Checks</em> tab describes the
+reproducibility checks that were applied when the results were created.
+The <em>Past versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
 <div id="checks" class="tab-pane fade">
-  <div class="panel-group" id="workflowr-checks">
-  <div class="panel panel-default">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-  
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you'll want to first commit it to the Git repo. If you're still working on the analysis, you can ignore this warning. When you're finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you
+know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Environment:</strong> empty
+</a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-  
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it's best to always run the code in an empty environment.</p>
+<p>Great job! The global environment was empty. Objects defined in the global
+environment can affect the analysis in your R Markdown file in unknown ways.
+For reproduciblity it’s best to always run the code in an empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201104code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20201104)</code> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201104code">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Seed:</strong> <code>set.seed(20201104)</code>
+</a>
 </p>
 </div>
 <div id="strongSeedstrongcodesetseed20201104code" class="panel-collapse collapse">
 <div class="panel-body">
-  
-<p>The command <code>set.seed(20201104)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20201104)</code> was run prior to running the code in the R Markdown file.
+Setting a seed ensures that any results that rely on randomness, e.g.
+subsampling or permutations, are reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Session information:</strong> recorded
+</a>
 </p>
 </div>
 <div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
 <div class="panel-body">
-  
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+<p>Great job! Recording the operating system, R version, and package versions is
+critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Cache:</strong> none
+</a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-  
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be confident
+that you successfully produced the results during this run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>File paths:</strong> relative
+</a>
 </p>
 </div>
 <div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-  
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+<p>Great job! Using relative paths to the files within your workflowr project
+makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttree48468d6e67694629d843500687d85af91fdb2168targetblank48468d6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="ssh://git@github.com/NERC-CEH/luct/tree/48468d6e67694629d843500687d85af91fdb2168" target="_blank">48468d6</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree48b190b0c9c7fe5ed7c84ead6d1ebe6c87606c04targetblank48b190ba">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/48b190b0c9c7fe5ed7c84ead6d1ebe6c87606c04" target="_blank">48b190b</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefsshgitgithubcomNERCCEHlucttree48468d6e67694629d843500687d85af91fdb2168targetblank48468d6a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree48b190b0c9c7fe5ed7c84ead6d1ebe6c87606c04targetblank48b190ba" class="panel-collapse collapse">
 <div class="panel-body">
-  
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development and
+connecting the code version to the results is critical for reproducibility.
 </p>
-
 <p>
-The results in this page were generated with repository version <a href="ssh://git@github.com/NERC-CEH/luct/tree/48468d6e67694629d843500687d85af91fdb2168" target="_blank">48468d6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/48b190b0c9c7fe5ed7c84ead6d1ebe6c87606c04" target="_blank">48b190b</a>.
+See the <em>Past versions</em> tab to see a history of the changes made to the
+R Markdown and HTML files.
 </p>
-
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for the
+analysis have been committed to Git prior to generating the results (you can
+use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only
+checks the R Markdown file, but you know if there are other scripts or data
+files that it depends on. Below is the status of the Git repository when the
+results were generated:
 </p>
-
 <pre><code>
 Ignored files:
-    Ignored:    _targets/
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    _targets/meta/process
+    Ignored:    _targets/meta/progress
+    Ignored:    analysis/life_tables.xlsx
+    Ignored:    analysis/m_lifetables.pdf
+    Ignored:    analysis/m_time_interval_analysis.pdf
+    Ignored:    analysis/m_uqdata.pdf
+    Ignored:    analysis/m_uqdata_24_09.pdf
+    Ignored:    analysis/m_uqdata_BR.html
+    Ignored:    analysis/time_interval_uncert_est.html
+    Ignored:    analysis/time_interval_uncert_est.pdf
     Ignored:    data-raw
     Ignored:    data/
-    Ignored:    log/
     Ignored:    output/
-    Ignored:    output_priorHnl_iter600k/
-    Ignored:    output_priorUni_iter360k/
+    Ignored:    output_archive/
     Ignored:    renv/library/
+    Ignored:    renv/local/
     Ignored:    renv/staging/
+    Ignored:    targets_archive/
+
+Untracked files:
+    Untracked:  R/luct_AgCensus_0.R
+    Untracked:  R/luct_Fp_Fn.R
+    Untracked:  R/luct_plot_Bpost.R
+    Untracked:  R/luct_plot_Bpost_0.R
+    Untracked:  R/scratch.R
+    Untracked:  _targets/objects/c_obs
+    Untracked:  a_B.rda
+    Untracked:  analysis/Fp_B_variation_effects.xlsx
+    Untracked:  analysis/life_tables_example.xlsx
+    Untracked:  analysis/m_time_interval_analysis.Rmd
+    Untracked:  analysis/m_uqdata_24_09.Rmd
+    Untracked:  analysis/m_uqdata_BR.Rmd
+    Untracked:  analysis/m_uqdata_BR.docx
+    Untracked:  analysis/m_urban_split_by_region.Rmd
+    Untracked:  analysis/mcmc_Beta_permutations.xlsx
+    Untracked:  luct_rsync.sh
+    Untracked:  run_1.R
+    Untracked:  run_agc.R
+    Untracked:  slurm/DA2_Beta.Rmd
+    Untracked:  slurm/process_LCM_WPA.R
+    Untracked:  slurm/process_LCM_WPA.job
+    Untracked:  slurm/runLikU.job
+    Untracked:  slurm/runSampleU.job
+    Untracked:  slurm/runVectors.job
 
 Unstaged changes:
+    Modified:   R/luct.R
+    Modified:   R/luct_AgCensus.R
     Modified:   _targets.R
+    Modified:   _targets/meta/.gitignore
+    Modified:   _targets/meta/meta
+    Modified:   _targets/objects/c_agc_en
+    Modified:   _targets/objects/c_agc_hist
+    Modified:   _targets/objects/c_agc_ni
+    Modified:   _targets/objects/c_agc_sc
+    Modified:   _targets/objects/c_agc_wa
+    Modified:   _targets/objects/c_blag_AgCensus
+    Modified:   _targets/objects/c_blag_CS
+    Modified:   _targets/objects/c_blag_MODIS
+    Modified:   _targets/objects/c_blag_fc
+    Modified:   _targets/objects/c_obs_all
+    Modified:   _targets/objects/c_obs_exc
+    Modified:   _targets/objects/c_obs_filled
+    Modified:   _targets/objects/c_obs_km2
+    Modified:   _targets/objects/c_obs_unc
     Modified:   analysis/m_AgCensus_plot.Rmd
-    Modified:   analysis/m_CS_plot.Rmd
-    Modified:   analysis/m_data_comparison.Rmd
-    Modified:   analysis/m_lifetables.Rmd
-    Modified:   analysis/m_uqdata.Rmd
+    Modified:   run.R
+    Modified:   slurm/run_mcmc_beta.R
 
 </code></pre>
-
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in
+this status report because it is ok for generated content to have uncommitted
+changes.
 </p>
-
 </div>
 </div>
 </div>
@@ -536,9 +626,13 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in th
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-  
+
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/m_CS_plot.Rmd</code>) and HTML (<code>docs/m_CS_plot.html</code>) files. If you've configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made
+to the R Markdown (<code>analysis/m_CS_plot.Rmd</code>) and HTML (<code>docs/m_CS_plot.html</code>)
+files. If you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table below to
+view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -564,10 +658,44 @@ Message
 <tbody>
 <tr>
 <td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/analysis/m_CS_plot.Rmd" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+<td>
+Graphics option set to PNG; SVG file deleted
+</td>
+</tr>
+<tr>
+<td>
 html
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/72d1da4e2686001b50ced295e23877c0fa1e83fa/docs/m_CS_plot.html" target="_blank">72d1da4</a>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/cf74775859144f9aa5ded62924700331d8dd55af/docs/m_CS_plot.html" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+<td>
+Graphics option set to PNG; SVG file deleted
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/72d1da4e2686001b50ced295e23877c0fa1e83fa/docs/m_CS_plot.html" target="_blank">72d1da4</a>
 </td>
 <td>
 plevy
@@ -584,7 +712,7 @@ Fixed merge conflicts
 html
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/962af3f130fee1b36b5ef3629cef60f617ff8696/docs/m_CS_plot.html" target="_blank">962af3f</a>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/962af3f130fee1b36b5ef3629cef60f617ff8696/docs/m_CS_plot.html" target="_blank">962af3f</a>
 </td>
 <td>
 plevy
@@ -601,7 +729,7 @@ Added target for sigma calculation and included in Beta MCMC
 html
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/8545d2af34338065df8f42e41ce059d76fddf6c5/docs/m_CS_plot.html" target="_blank">8545d2a</a>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/8545d2af34338065df8f42e41ce059d76fddf6c5/docs/m_CS_plot.html" target="_blank">8545d2a</a>
 </td>
 <td>
 ADCEH
@@ -618,7 +746,7 @@ LS prediction target added; MCMC for Beta job; LCM_WPB and CROME blags added
 Rmd
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/0fa064e60bcc45a10042fdc311124a05e626b180/analysis/m_CS_plot.Rmd" target="_blank">0fa064e</a>
+<a href="https://github.com/NERC-CEH/luct/blob/0fa064e60bcc45a10042fdc311124a05e626b180/analysis/m_CS_plot.Rmd" target="_blank">0fa064e</a>
 </td>
 <td>
 ADCEH
@@ -635,7 +763,7 @@ dA changed to D throughout
 html
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/0fa064e60bcc45a10042fdc311124a05e626b180/docs/m_CS_plot.html" target="_blank">0fa064e</a>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/0fa064e60bcc45a10042fdc311124a05e626b180/docs/m_CS_plot.html" target="_blank">0fa064e</a>
 </td>
 <td>
 ADCEH
@@ -652,7 +780,7 @@ dA changed to D throughout
 html
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/b0f7376258b1bbdf4f09af11bb643e66ed8d5efb/docs/m_CS_plot.html" target="_blank">b0f7376</a>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/b0f7376258b1bbdf4f09af11bb643e66ed8d5efb/docs/m_CS_plot.html" target="_blank">b0f7376</a>
 </td>
 <td>
 ADCEH
@@ -669,7 +797,7 @@ Target to combine blags added
 html
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/69c63f9f4ec97d056916e73c65fd29f92fb474cc/docs/m_CS_plot.html" target="_blank">69c63f9</a>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/69c63f9f4ec97d056916e73c65fd29f92fb474cc/docs/m_CS_plot.html" target="_blank">69c63f9</a>
 </td>
 <td>
 ADCEH
@@ -686,7 +814,7 @@ Changed git autocrlf to false
 html
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/d209f1e41449f695cec97db37554bcc2ead3e05f/docs/m_CS_plot.html" target="_blank">d209f1e</a>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/d209f1e41449f695cec97db37554bcc2ead3e05f/docs/m_CS_plot.html" target="_blank">d209f1e</a>
 </td>
 <td>
 ADCEH
@@ -703,7 +831,7 @@ Adding AgCensus plots
 html
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/623363291f34aa447fa1f33623af338ccece7a3c/docs/m_CS_plot.html" target="_blank">6233632</a>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/623363291f34aa447fa1f33623af338ccece7a3c/docs/m_CS_plot.html" target="_blank">6233632</a>
 </td>
 <td>
 ADCEH
@@ -720,7 +848,7 @@ Build site.
 Rmd
 </td>
 <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/60307cb7c34608ac706ef539ca0ee3f29cbc14ac/analysis/m_CS_plot.Rmd" target="_blank">60307cb</a>
+<a href="https://github.com/NERC-CEH/luct/blob/60307cb7c34608ac706ef539ca0ee3f29cbc14ac/analysis/m_CS_plot.Rmd" target="_blank">60307cb</a>
 </td>
 <td>
 ADCEH
@@ -735,18 +863,10 @@ Adding CS plots
 </tbody>
 </table>
 </div>
-
 <hr>
 </div>
 </div>
 </div>
-
-
-
-
-
-
-
 <pre class="r"><code># NOTE this notebook can be run manually or automatically by {targets}
 # So load the packages required by this notebook here
 # rather than relying on _targets.R to load them.
@@ -754,13 +874,16 @@ Adding CS plots
 # Set up the project environment, because {workflowr} knits each Rmd file 
 # in a new R session, and doesn&#39;t execute the project .Rprofile
 
-library(targets) # access data from the targets cache
-library(tictoc) # capture execution time
-library(here) # construct file paths relative to project root</code></pre>
-<pre><code>here() starts at /gpfs01/home/plevy/luct</code></pre>
-<pre class="r"><code>library(ggplot2) # data wrangling
-
-knitr::opts_chunk$set(dev = &quot;png&quot;,
+library(targets) # access data from the targets cache</code></pre>
+<pre><code>Warning: package &#39;targets&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>library(tictoc) # capture execution time</code></pre>
+<pre><code>Warning: package &#39;tictoc&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>library(here) # construct file paths relative to project root</code></pre>
+<pre><code>Warning: package &#39;here&#39; was built under R version 4.0.5</code></pre>
+<pre><code>here() starts at C:/Users/plevy/Documents/luct</code></pre>
+<pre class="r"><code>library(ggplot2) # data wrangling</code></pre>
+<pre><code>Warning: package &#39;ggplot2&#39; was built under R version 4.0.5</code></pre>
+<pre class="r"><code>knitr::opts_chunk$set(dev = &quot;png&quot;,
                       dev.args = list(png = list(type = &quot;cairo-png&quot;)),
                       optipng = &quot;-o1 -quiet&quot;)
                       
@@ -780,48 +903,6 @@ p &lt;- p + xlab(&quot;Land use in 1991&quot;)
 p &lt;- p + facet_wrap(~ time)
 p + scico::scale_fill_scico(palette = &quot;lajolla&quot;)</code></pre>
 <p><img src="figure/m_CS_plot.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-  <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig"
-  data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
-  
-Past versions of unnamed-chunk-2-1.png
-</button>
-  </p>
-
-<div id="fig-unnamed-chunk-2-1" class="collapse">
-  <div class="table-responsive">
-  <table class="table table-condensed table-hover">
-  <thead>
-  <tr>
-  <th>
-Version
-</th>
-  <th>
-Author
-</th>
-  <th>
-Date
-</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-  <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/623363291f34aa447fa1f33623af338ccece7a3c/docs/figure/m_CS_plot.Rmd/unnamed-chunk-2-1.png" target="_blank">6233632</a>
-</td>
-  <td>
-ADCEH
-</td>
-  <td>
-2021-08-20
-</td>
-  </tr>
-  </tbody>
-  </table>
-  </div>
-  </div>
-  
-
 <pre class="r"><code>## ----CSplotB, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap = &quot;Time series of $\\mathbf{B}$ matrix, showing the areas changing land use over time. The layout of panels follows the matrix itself, so rows represent the starting land use, columns represent the end land use. We assumed that the rates of change were constant during the period between surveys.&quot;----
 p &lt;- ggplot(blag$dt_B, aes(time, area))
 p &lt;- p + geom_line()
@@ -830,51 +911,9 @@ p &lt;- p + ylab(expression(paste(Area*&quot;, &quot;*~km^2/y)))
 p &lt;- p + facet_grid(u_from ~ u_to, scales = &quot;fixed&quot;)
 p &lt;- p + scale_x_continuous(limits = c(1970, 2020), breaks=c(1980, 2010))
 p</code></pre>
-<pre><code>Warning: Removed 50 row(s) containing missing values (geom_path).</code></pre>
-<pre><code>Warning: Removed 1800 rows containing missing values (geom_point).</code></pre>
+<pre><code>Warning: Removed 250 row(s) containing missing values (geom_path).</code></pre>
+<pre><code>Warning: Removed 9000 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/m_CS_plot.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-  <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig"
-  data-toggle="collapse" data-target="#fig-unnamed-chunk-2-2">
-  
-Past versions of unnamed-chunk-2-2.png
-</button>
-  </p>
-
-<div id="fig-unnamed-chunk-2-2" class="collapse">
-  <div class="table-responsive">
-  <table class="table table-condensed table-hover">
-  <thead>
-  <tr>
-  <th>
-Version
-</th>
-  <th>
-Author
-</th>
-  <th>
-Date
-</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-  <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/623363291f34aa447fa1f33623af338ccece7a3c/docs/figure/m_CS_plot.Rmd/unnamed-chunk-2-2.png" target="_blank">6233632</a>
-</td>
-  <td>
-ADCEH
-</td>
-  <td>
-2021-08-20
-</td>
-  </tr>
-  </tbody>
-  </table>
-  </div>
-  </div>
-  
-
 <pre class="r"><code>p &lt;- ggplot(blag$dt_G, aes(time, area))
 p &lt;- p + geom_line()
 p &lt;- p + geom_point()
@@ -883,51 +922,9 @@ p &lt;- p + ggtitle(&quot;Gross Gains&quot;)
 p &lt;- p + xlim(1970, 2020)
 p &lt;- p + facet_wrap(~ u, scales = &quot;fixed&quot;)
 p</code></pre>
-<pre><code>Warning: Removed 50 row(s) containing missing values (geom_path).</code></pre>
-<pre><code>Warning: Removed 300 rows containing missing values (geom_point).</code></pre>
+<pre><code>Warning: Removed 250 row(s) containing missing values (geom_path).</code></pre>
+<pre><code>Warning: Removed 1500 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/m_CS_plot.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-  <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig"
-  data-toggle="collapse" data-target="#fig-unnamed-chunk-2-3">
-  
-Past versions of unnamed-chunk-2-3.png
-</button>
-  </p>
-
-<div id="fig-unnamed-chunk-2-3" class="collapse">
-  <div class="table-responsive">
-  <table class="table table-condensed table-hover">
-  <thead>
-  <tr>
-  <th>
-Version
-</th>
-  <th>
-Author
-</th>
-  <th>
-Date
-</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-  <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/623363291f34aa447fa1f33623af338ccece7a3c/docs/figure/m_CS_plot.Rmd/unnamed-chunk-2-3.png" target="_blank">6233632</a>
-</td>
-  <td>
-ADCEH
-</td>
-  <td>
-2021-08-20
-</td>
-  </tr>
-  </tbody>
-  </table>
-  </div>
-  </div>
-  
-
 <pre class="r"><code>p &lt;- ggplot(blag$dt_L, aes(time, area))
 p &lt;- p + geom_line()
 p &lt;- p + geom_point()
@@ -936,52 +933,10 @@ p &lt;- p + ylab(expression(paste(Area*&quot;, &quot;*~km^2/y)))
 p &lt;- p + xlim(1970, 2020)
 p &lt;- p + facet_wrap(~ u, scales = &quot;fixed&quot;)
 p</code></pre>
-<pre><code>Warning: Removed 50 row(s) containing missing values (geom_path).
+<pre><code>Warning: Removed 250 row(s) containing missing values (geom_path).
 
-Warning: Removed 300 rows containing missing values (geom_point).</code></pre>
+Warning: Removed 1500 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/m_CS_plot.Rmd/unnamed-chunk-2-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-  <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig"
-  data-toggle="collapse" data-target="#fig-unnamed-chunk-2-4">
-  
-Past versions of unnamed-chunk-2-4.png
-</button>
-  </p>
-
-<div id="fig-unnamed-chunk-2-4" class="collapse">
-  <div class="table-responsive">
-  <table class="table table-condensed table-hover">
-  <thead>
-  <tr>
-  <th>
-Version
-</th>
-  <th>
-Author
-</th>
-  <th>
-Date
-</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-  <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/623363291f34aa447fa1f33623af338ccece7a3c/docs/figure/m_CS_plot.Rmd/unnamed-chunk-2-4.png" target="_blank">6233632</a>
-</td>
-  <td>
-ADCEH
-</td>
-  <td>
-2021-08-20
-</td>
-  </tr>
-  </tbody>
-  </table>
-  </div>
-  </div>
-  
-
 <pre class="r"><code>p &lt;- ggplot(blag$dt_D, aes(time, area))
 p &lt;- p + geom_line()
 p &lt;- p + geom_point()
@@ -990,78 +945,35 @@ p &lt;- p + ggtitle(&quot;Net Change&quot;)
 p &lt;- p + xlim(1970, 2020)
 p &lt;- p + facet_wrap(~ u, scales = &quot;fixed&quot;)
 p</code></pre>
-<pre><code>Warning: Removed 50 row(s) containing missing values (geom_path).
+<pre><code>Warning: Removed 250 row(s) containing missing values (geom_path).
 
-Warning: Removed 300 rows containing missing values (geom_point).</code></pre>
+Warning: Removed 1500 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/m_CS_plot.Rmd/unnamed-chunk-2-5.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-  <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig"
-  data-toggle="collapse" data-target="#fig-unnamed-chunk-2-5">
-  
-Past versions of unnamed-chunk-2-5.png
-</button>
-  </p>
-
-<div id="fig-unnamed-chunk-2-5" class="collapse">
-  <div class="table-responsive">
-  <table class="table table-condensed table-hover">
-  <thead>
-  <tr>
-  <th>
-Version
-</th>
-  <th>
-Author
-</th>
-  <th>
-Date
-</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-  <td>
-<a href="ssh://git@github.com/NERC-CEH/luct/blob/623363291f34aa447fa1f33623af338ccece7a3c/docs/figure/m_CS_plot.Rmd/unnamed-chunk-2-5.png" target="_blank">6233632</a>
-</td>
-  <td>
-ADCEH
-</td>
-  <td>
-2021-08-20
-</td>
-  </tr>
-  </tbody>
-  </table>
-  </div>
-  </div>
-  
-
 </div>
 <div id="timing" class="section level1 unnumbered">
 <h1>Timing</h1>
-<pre><code>Computation time (excl. render): 3.239 sec elapsed</code></pre>
+<pre><code>Computation time (excl. render): 7.72 sec elapsed</code></pre>
 <br>
 <p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo"
-  data-toggle="collapse" data-target="#workflowr-sessioninfo"
-  style = "display: block;">
-  
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
 </button>
 </p>
-
 <div id="workflowr-sessioninfo" class="collapse">
-
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.0 (2020-04-24)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: CentOS Linux 7 (Core)
+<pre><code>R version 4.0.4 (2021-02-15)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 17763)
 
 Matrix products: default
-BLAS/LAPACK: /gpfs01/apps/eb/software/OpenBLAS/0.3.9-GCC-9.3.0/lib/libopenblas_zenp-r0.3.9.so
 
 locale:
-[1] C
+[1] LC_COLLATE=English_United Kingdom.1252 
+[2] LC_CTYPE=English_United Kingdom.1252   
+[3] LC_MONETARY=English_United Kingdom.1252
+[4] LC_NUMERIC=C                           
+[5] LC_TIME=English_United Kingdom.1252    
 
 attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
@@ -1086,15 +998,13 @@ loaded via a namespace (and not attached):
 [40] farver_2.1.0        fs_1.5.0            digest_0.6.27      
 [43] stringi_1.7.3       bookdown_0.23       processx_3.5.2     
 [46] dplyr_1.0.7         qs_0.25.1           rprojroot_2.0.2    
-[49] grid_4.0.0          cli_3.0.1           tools_4.0.0        
+[49] grid_4.0.4          cli_3.0.1           tools_4.0.4        
 [52] magrittr_2.0.1      sass_0.4.0          tibble_3.1.3       
 [55] crayon_1.4.1        whisker_0.4         pkgconfig_2.0.3    
 [58] ellipsis_0.3.2      data.table_1.14.0   rmarkdown_2.10     
 [61] R6_2.5.0            igraph_1.2.6        git2r_0.28.0       
-[64] compiler_4.0.0     </code></pre>
+[64] compiler_4.0.4     </code></pre>
 </div>
-
-
 </div>
 
 
