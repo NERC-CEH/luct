@@ -398,6 +398,56 @@ list(
       data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
     cue = tar_cue(mode = "thorough")
   ),
+                    
+  # Exclude some data sources which we do not want to use
+  tar_target(
+    c_obs_uk,
+    set_exclusions(
+      c_obs_unc,
+      regions_toInclude = "uk",
+      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+    cue = tar_cue(mode = "thorough")
+  ),
+              
+  # Exclude some data sources which we do not want to use
+  tar_target(
+    c_obs_en,
+    set_exclusions(
+      c_obs_unc,
+      regions_toInclude = "en",
+      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+    cue = tar_cue(mode = "thorough")
+  ),
+                
+  # Exclude some data sources which we do not want to use
+  tar_target(
+    c_obs_sc,
+    set_exclusions(
+      c_obs_unc,
+      regions_toInclude = "sc",
+      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+    cue = tar_cue(mode = "thorough")
+  ),
+                
+  # Exclude some data sources which we do not want to use
+  tar_target(
+    c_obs_wa,
+    set_exclusions(
+      c_obs_unc,
+      regions_toInclude = "wa",
+      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+    cue = tar_cue(mode = "thorough")
+  ),
+                
+  # Exclude some data sources which we do not want to use
+  tar_target(
+    c_obs_ni,
+    set_exclusions(
+      c_obs_unc,
+      regions_toInclude = "ni",
+      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+    cue = tar_cue(mode = "thorough")
+  ),
   
   # Predict the Beta matrix by least-squares
   tar_target(
@@ -405,46 +455,180 @@ list(
     get_pred_ls(c_obs, start_year = 1990, end_year = 2020),
     cue = tar_cue(mode = "never")
   ),
-                    
-  # # Predict the posterior Beta matrix by MCMC in serial
-  # tar_target(
-    # c_B_post,
-    # get_post_mcmc_serial(c_obs, c_pred_ls, start_year = 2017, end_year = 2019, n_iter = 1000)
-  # ),
-  
+
   # Path to MCMC_Beta SLURM job file
   tar_target(
-    c_mcmc_fname_job,
-    fs::path_rel(here("slurm", "run_mcmc_beta_run14.job")),
+    c_mcmc_job_en,
+    fs::path_rel(here("slurm", "run_mcmc_beta_en.job")),
+    format = "file"
+  ),
+
+  # Path to MCMC_Beta SLURM job file
+  tar_target(
+    c_mcmc_job_sc,
+    fs::path_rel(here("slurm", "run_mcmc_beta_sc.job")),
+    format = "file"
+  ),
+
+  # Path to MCMC_Beta SLURM job file
+  tar_target(
+    c_mcmc_job_wa,
+    fs::path_rel(here("slurm", "run_mcmc_beta_wa.job")),
+    format = "file"
+  ),
+
+  # Path to MCMC_Beta SLURM job file
+  tar_target(
+    c_mcmc_job_ni,
+    fs::path_rel(here("slurm", "run_mcmc_beta_ni.job")),
+    format = "file"
+  ),
+
+  # Path to MCMC_Beta SLURM job file
+  tar_target(
+    c_mcmc_job_uk,
+    fs::path_rel(here("slurm", "run_mcmc_beta_uk.job")),
     format = "file"
   ),
 
   # Run a SLURM job to estimate Beta by MCMC
   tar_target(
-    c_mcmc_fname_Bmap,
-    run_mcmc_beta_job(c_mcmc_fname_job, dir_output = "output/output_run14",
-      v_times = 1950:2020, c_obs),
+    c_mcmc_out_en,
+    run_mcmc_beta_job(c_mcmc_job_en, dir_output = "output/output_en",
+      v_times = 1950:2020, c_obs_en),
+    cue = tar_cue(mode = "never"),
+    format = "file"
+  ),    
+
+  # Run a SLURM job to estimate Beta by MCMC
+  tar_target(
+    c_mcmc_out_sc,
+    run_mcmc_beta_job(c_mcmc_job_sc, dir_output = "output/output_sc",
+      v_times = 1950:2020, c_obs_sc),
+    cue = tar_cue(mode = "never"),
+    format = "file"
+  ),    
+
+  # Run a SLURM job to estimate Beta by MCMC
+  tar_target(
+    c_mcmc_out_wa,
+    run_mcmc_beta_job(c_mcmc_job_wa, dir_output = "output/output_wa",
+      v_times = 1950:2020, c_obs_wa),
+    cue = tar_cue(mode = "never"),
+    format = "file"
+  ),    
+
+  # Run a SLURM job to estimate Beta by MCMC
+  tar_target(
+    c_mcmc_out_ni,
+    run_mcmc_beta_job(c_mcmc_job_ni, dir_output = "output/output_ni",
+      v_times = 1950:2020, c_obs_ni),
+    cue = tar_cue(mode = "never"),
+    format = "file"
+  ),    
+
+  # Run a SLURM job to estimate Beta by MCMC
+  tar_target(
+    c_mcmc_out_uk,
+    run_mcmc_beta_job(c_mcmc_job_uk, dir_output = "output/output_uk",
+      v_times = 1950:2020, c_obs_uk),
     cue = tar_cue(mode = "never"),
     format = "file"
   ),    
 
   # Plot the results and write summary output
   tar_target(
-    c_post_B,
+    c_post_B_en,
     get_post_plots(
       start_time = 1950, # 2019 only just now?
       end_time = 2020, # 2019 only just now?
-      dir_output = "output/output_run14",
-      v_mcmc_fname_Bmap = c_mcmc_fname_Bmap,
+      dir_output = "output/output_en",
+      v_mcmc_fname_Bmap = c_mcmc_out_en,
       fig_start_time = 1950,
       fig_end_time   = 2020,
-      obs_unc = c_obs_unc, 
-      obs_exc = c_obs_unc, 
+      obs_unc = c_obs_en, 
+      obs_exc = c_obs_en, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
       blag_lcm = c_blag_lcm,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "always")
+  ),    
+
+  # Plot the results and write summary output
+  tar_target(
+    c_post_B_sc,
+    get_post_plots(
+      start_time = 1950, # 2019 only just now?
+      end_time = 2020, # 2019 only just now?
+      dir_output = "output/output_sc",
+      v_mcmc_fname_Bmap = c_mcmc_out_sc,
+      fig_start_time = 1950,
+      fig_end_time   = 2020,
+      obs_unc = c_obs_sc, 
+      obs_exc = c_obs_sc, 
+      #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
+      blag_lcm = c_blag_lcm,
+      start  = 1000,
+      mcmc_diag_plot_year = 2019), 
+    cue = tar_cue(mode = "always")
+  ),    
+
+  # Plot the results and write summary output
+  tar_target(
+    c_post_B_wa,
+    get_post_plots(
+      start_time = 1950, # 2019 only just now?
+      end_time = 2020, # 2019 only just now?
+      dir_output = "output/output_wa",
+      v_mcmc_fname_Bmap = c_mcmc_out_wa,
+      fig_start_time = 1950,
+      fig_end_time   = 2020,
+      obs_unc = c_obs_wa, 
+      obs_exc = c_obs_wa, 
+      #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
+      blag_lcm = c_blag_lcm,
+      start  = 1000,
+      mcmc_diag_plot_year = 2019), 
+    cue = tar_cue(mode = "always")
+  ),    
+
+  # Plot the results and write summary output
+  tar_target(
+    c_post_B_ni,
+    get_post_plots(
+      start_time = 1950, # 2019 only just now?
+      end_time = 2020, # 2019 only just now?
+      dir_output = "output/output_ni",
+      v_mcmc_fname_Bmap = c_mcmc_out_ni,
+      fig_start_time = 1950,
+      fig_end_time   = 2020,
+      obs_unc = c_obs_ni, 
+      obs_exc = c_obs_ni, 
+      #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
+      blag_lcm = c_blag_lcm,
+      start  = 1000,
+      mcmc_diag_plot_year = 2019), 
+    cue = tar_cue(mode = "always")
+  ),    
+
+  # Plot the results and write summary output
+  tar_target(
+    c_post_B_uk,
+    get_post_plots(
+      start_time = 1950, # 2019 only just now?
+      end_time = 2020, # 2019 only just now?
+      dir_output = "output/output_uk",
+      v_mcmc_fname_Bmap = c_mcmc_out_uk,
+      fig_start_time = 1950,
+      fig_end_time   = 2020,
+      obs_unc = c_obs_uk, 
+      obs_exc = c_obs_uk, 
+      #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
+      blag_lcm = c_blag_lcm,
+      start  = 1000,
+      mcmc_diag_plot_year = 2019), 
+    cue = tar_cue(mode = "always")
   ),    
 
   
@@ -559,7 +743,7 @@ list(
     },
     # Track the files returned by the command
     format = "file",
-    cue = tar_cue(mode = "thorough")
+    cue = tar_cue(mode = "never")
   )  # end m_data_comparison
   
   ## m_04 Quantify relative uncertainties ----

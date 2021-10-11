@@ -367,7 +367,7 @@ div.tocify {
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
 workflowr
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -377,7 +377,7 @@ workflowr
 </li>
 <li>
 <a data-toggle="tab" href="#checks">
-Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </a>
 </li>
 <li>
@@ -392,9 +392,9 @@ Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidde
 <p>
 <strong>Checks:</strong>
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-6
+7
 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-1
+0
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -417,21 +417,16 @@ The <em>Past versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-<strong>R Markdown file:</strong> uncommitted changes
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>R Markdown file:</strong> up-to-date
 </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes.
-To know which version of the R Markdown file created these
-results, you’ll want to first commit it to the Git repo. If
-you’re still working on the analysis, you can ignore this
-warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and
-build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you
+know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
@@ -520,20 +515,20 @@ makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree48b190b0c9c7fe5ed7c84ead6d1ebe6c87606c04targetblank48b190ba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree06fba5ba0350d2f8f571440db25ea0a7e24dbe82targetblank06fba5ba">
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/48b190b0c9c7fe5ed7c84ead6d1ebe6c87606c04" target="_blank">48b190b</a>
+<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/06fba5ba0350d2f8f571440db25ea0a7e24dbe82" target="_blank">06fba5b</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree48b190b0c9c7fe5ed7c84ead6d1ebe6c87606c04targetblank48b190ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree06fba5ba0350d2f8f571440db25ea0a7e24dbe82targetblank06fba5ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and
 connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/48b190b0c9c7fe5ed7c84ead6d1ebe6c87606c04" target="_blank">48b190b</a>.
+The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/06fba5ba0350d2f8f571440db25ea0a7e24dbe82" target="_blank">06fba5b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made to the
 R Markdown and HTML files.
 </p>
@@ -548,56 +543,36 @@ results were generated:
 <pre><code>
 Ignored files:
     Ignored:    .Rhistory
-    Ignored:    .Rproj.user/
     Ignored:    _targets/meta/process
     Ignored:    _targets/meta/progress
-    Ignored:    analysis/life_tables.xlsx
-    Ignored:    analysis/m_lifetables.pdf
-    Ignored:    analysis/m_time_interval_analysis.pdf
-    Ignored:    analysis/m_uqdata.pdf
-    Ignored:    analysis/m_uqdata_24_09.pdf
-    Ignored:    analysis/m_uqdata_BR.html
-    Ignored:    analysis/time_interval_uncert_est.html
-    Ignored:    analysis/time_interval_uncert_est.pdf
+    Ignored:    _targets/objects/c_post_B
+    Ignored:    _targets/scratch/
     Ignored:    data-raw
     Ignored:    data/
     Ignored:    output/
-    Ignored:    output_archive/
+    Ignored:    output_runX/
     Ignored:    renv/library/
-    Ignored:    renv/local/
     Ignored:    renv/staging/
-    Ignored:    targets_archive/
 
 Untracked files:
-    Untracked:  R/luct_AgCensus_0.R
-    Untracked:  R/luct_Fp_Fn.R
-    Untracked:  R/luct_plot_Bpost.R
-    Untracked:  R/luct_plot_Bpost_0.R
-    Untracked:  R/scratch.R
-    Untracked:  _targets/objects/c_obs
-    Untracked:  a_B.rda
-    Untracked:  analysis/Fp_B_variation_effects.xlsx
-    Untracked:  analysis/life_tables_example.xlsx
-    Untracked:  analysis/m_time_interval_analysis.Rmd
-    Untracked:  analysis/m_uqdata_24_09.Rmd
-    Untracked:  analysis/m_uqdata_BR.Rmd
-    Untracked:  analysis/m_uqdata_BR.docx
-    Untracked:  analysis/m_urban_split_by_region.Rmd
-    Untracked:  analysis/mcmc_Beta_permutations.xlsx
-    Untracked:  luct_rsync.sh
-    Untracked:  run_1.R
-    Untracked:  run_agc.R
-    Untracked:  slurm/DA2_Beta.Rmd
-    Untracked:  slurm/process_LCM_WPA.R
-    Untracked:  slurm/process_LCM_WPA.job
-    Untracked:  slurm/runLikU.job
-    Untracked:  slurm/runSampleU.job
-    Untracked:  slurm/runVectors.job
+    Untracked:  _targets/objects/c_B_post
+    Untracked:  _targets/objects/c_GL_FC
+    Untracked:  _targets/objects/c_cor_job
+    Untracked:  _targets/objects/c_dA_AgCensus
+    Untracked:  _targets/objects/c_df_A_AgCensus_Eng
+    Untracked:  _targets/objects/c_df_A_AgCensus_NIr
+    Untracked:  _targets/objects/c_df_A_AgCensus_Sco
+    Untracked:  _targets/objects/c_df_A_AgCensus_Wal
+    Untracked:  _targets/objects/c_df_uncert
+    Untracked:  _targets/objects/pred_ls
+    Untracked:  df_tar_meta.csv
+    Untracked:  slurm/run_mcmc_beta.sh
+    Untracked:  slurm/run_mcmc_beta_en.job
+    Untracked:  slurm/run_mcmc_beta_en.sh
+    Untracked:  slurm/run_mcmc_beta_run12.job
+    Untracked:  slurm/run_mcmc_beta_serial.R
 
 Unstaged changes:
-    Modified:   R/luct.R
-    Modified:   R/luct_AgCensus.R
-    Modified:   _targets.R
     Modified:   _targets/meta/.gitignore
     Modified:   _targets/meta/meta
     Modified:   _targets/objects/c_agc_en
@@ -607,16 +582,6 @@ Unstaged changes:
     Modified:   _targets/objects/c_agc_wa
     Modified:   _targets/objects/c_blag_AgCensus
     Modified:   _targets/objects/c_blag_CS
-    Modified:   _targets/objects/c_blag_MODIS
-    Modified:   _targets/objects/c_blag_fc
-    Modified:   _targets/objects/c_obs_all
-    Modified:   _targets/objects/c_obs_exc
-    Modified:   _targets/objects/c_obs_filled
-    Modified:   _targets/objects/c_obs_km2
-    Modified:   _targets/objects/c_obs_unc
-    Modified:   analysis/m_AgCensus_plot.Rmd
-    Modified:   run.R
-    Modified:   slurm/run_mcmc_beta.R
 
 </code></pre>
 <p>
@@ -661,6 +626,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/analysis/m_AgCensus_plot.Rmd" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+<td>
+WIP - Added region as a grouping variable throughout
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/m_AgCensus_plot.html" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+<td>
+WIP - Added region as a grouping variable throughout
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -913,21 +912,19 @@ Adding AgCensus plots
 # Set up the project environment, because {workflowr} knits each Rmd file 
 # in a new R session, and doesn&#39;t execute the project .Rprofile
 
-library(targets) # access data from the targets cache</code></pre>
-<pre><code>Warning: package &#39;targets&#39; was built under R version 4.0.5</code></pre>
-<pre class="r"><code>library(tictoc) # capture execution time</code></pre>
-<pre><code>Warning: package &#39;tictoc&#39; was built under R version 4.0.5</code></pre>
-<pre class="r"><code>library(here) # construct file paths relative to project root</code></pre>
-<pre><code>Warning: package &#39;here&#39; was built under R version 4.0.5</code></pre>
-<pre><code>here() starts at C:/Users/plevy/Documents/luct</code></pre>
-<pre class="r"><code>library(ggplot2) # data wrangling</code></pre>
-<pre><code>Warning: package &#39;ggplot2&#39; was built under R version 4.0.5</code></pre>
-<pre class="r"><code>library(units) # data wrangling</code></pre>
-<pre><code>Warning: package &#39;units&#39; was built under R version 4.0.5</code></pre>
-<pre><code>udunits database from C:/Users/plevy/Documents/luct/renv/library/R-4.0/x86_64-w64-mingw32/units/share/udunits/udunits2.xml</code></pre>
-<pre class="r"><code>library(ggforce) # data wrangling</code></pre>
-<pre><code>Warning: package &#39;ggforce&#39; was built under R version 4.0.5</code></pre>
-<pre class="r"><code>knitr::opts_chunk$set(dev = &quot;png&quot;,
+library(targets) # access data from the targets cache
+library(tictoc) # capture execution time
+library(here) # construct file paths relative to project root</code></pre>
+<pre><code>here() starts at /gws/nopw/j04/ceh_generic/plevy/luct</code></pre>
+<pre class="r"><code>library(ggplot2) # data wrangling
+library(units) # data wrangling</code></pre>
+<pre><code>Warning: multiple udunits databases present:
+ - /apps/jasmin/jaspy/miniconda_envs/jaspy3.7/m3-4.6.14/envs/jaspy3.7-m3-4.6.14-r20200606/share/udunits/udunits2.xml
+ - /usr/share/udunits/udunits2.xml</code></pre>
+<pre><code>udunits database from /apps/jasmin/jaspy/miniconda_envs/jaspy3.7/m3-4.6.14/envs/jaspy3.7-m3-4.6.14-r20200606/share/udunits/udunits2.xml</code></pre>
+<pre class="r"><code>library(ggforce) # data wrangling
+
+knitr::opts_chunk$set(dev = &quot;png&quot;,
                       dev.args = list(png = list(type = &quot;cairo-png&quot;)),
                       optipng = &quot;-o1 -quiet&quot;)
                       
@@ -942,6 +939,76 @@ tictoc::tic(&quot;Computation time (excl. render)&quot;)</code></pre>
 Figure 1.1: Time series of land use from the June Agricultural Census in England, 1980-2019. Points show uncorrected data; lines show corrected data; Green vertical lines show known step changes; Red vertical lines show suspected step changes which have been adjusted for.
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-ACplotEngland-1">
+Past versions of ACplotEngland-1.png
+</button>
+</p>
+<div id="fig-ACplotEngland-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_AgCensus_plot.Rmd/ACplotEngland-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_AgCensus_plot.Rmd/ACplotEngland-1.png" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_AgCensus_plot.Rmd/ACplotEngland-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/6f0ae2aa74c59a93a8999f1ab1aae7f9d8f5b50a/docs/figure/m_AgCensus_plot.Rmd/ACplotEngland-1.png" target="_blank">6f0ae2a</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <!--- } -->
 <!--- { ACplotScotland -->
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:ACplotScotland"></span>
@@ -949,6 +1016,76 @@ Figure 1.1: Time series of land use from the June Agricultural Census in England
 <p class="caption">
 Figure 1.2: Time series of land use from the June Agricultural Census in Scotland, 1980-2019. Points show uncorrected data; lines show corrected data; Green vertical lines show known step changes; Red vertical lines show suspected step changes which have been adjusted for.
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-ACplotScotland-1">
+Past versions of ACplotScotland-1.png
+</button>
+</p>
+<div id="fig-ACplotScotland-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_AgCensus_plot.Rmd/ACplotScotland-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_AgCensus_plot.Rmd/ACplotScotland-1.png" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_AgCensus_plot.Rmd/ACplotScotland-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/6f0ae2aa74c59a93a8999f1ab1aae7f9d8f5b50a/docs/figure/m_AgCensus_plot.Rmd/ACplotScotland-1.png" target="_blank">6f0ae2a</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <!--- } -->
 <!--- { ACplotWales -->
@@ -958,6 +1095,76 @@ Figure 1.2: Time series of land use from the June Agricultural Census in Scotlan
 Figure 1.3: Time series of land use from the June Agricultural Census in Wales, 1980-2019.
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-ACplotWales-1">
+Past versions of ACplotWales-1.png
+</button>
+</p>
+<div id="fig-ACplotWales-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_AgCensus_plot.Rmd/ACplotWales-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_AgCensus_plot.Rmd/ACplotWales-1.png" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_AgCensus_plot.Rmd/ACplotWales-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/6f0ae2aa74c59a93a8999f1ab1aae7f9d8f5b50a/docs/figure/m_AgCensus_plot.Rmd/ACplotWales-1.png" target="_blank">6f0ae2a</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <!--- } -->
 <!--- { plotNIreland -->
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:plotNIreland"></span>
@@ -965,6 +1172,76 @@ Figure 1.3: Time series of land use from the June Agricultural Census in Wales, 
 <p class="caption">
 Figure 1.4: Time series of land use from the June Agricultural Census in Northern Ireland, 1980-2019.
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plotNIreland-1">
+Past versions of plotNIreland-1.png
+</button>
+</p>
+<div id="fig-plotNIreland-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_AgCensus_plot.Rmd/plotNIreland-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_AgCensus_plot.Rmd/plotNIreland-1.png" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_AgCensus_plot.Rmd/plotNIreland-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/6f0ae2aa74c59a93a8999f1ab1aae7f9d8f5b50a/docs/figure/m_AgCensus_plot.Rmd/plotNIreland-1.png" target="_blank">6f0ae2a</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-08-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <!--- } -->
 <!--- { plot_A_all -->
@@ -974,6 +1251,43 @@ Figure 1.4: Time series of land use from the June Agricultural Census in Norther
 (#fig:plot_A_all)Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019.
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot_A_all-1">
+Past versions of plot_A_all-1.png
+</button>
+</p>
+<div id="fig-plot_A_all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_AgCensus_plot.Rmd/plot_A_all-1.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <!--- { plot_A_uk -->
 <div class="figure" style="text-align: center">
 <img src="figure/m_AgCensus_plot.Rmd/plot_A_uk-1.png" alt="Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019." width="672" />
@@ -981,11 +1295,118 @@ Figure 1.4: Time series of land use from the June Agricultural Census in Norther
 (#fig:plot_A_uk)Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019.
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot_A_uk-1">
+Past versions of plot_A_uk-1.png
+</button>
+</p>
+<div id="fig-plot_A_uk-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_AgCensus_plot.Rmd/plot_A_uk-1.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="figure" style="text-align: center">
 <img src="figure/m_AgCensus_plot.Rmd/plot_D_UK-1.png" alt="Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019." width="672" />
 <p class="caption">
 (#fig:plot_D_UK)Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019.
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot_D_UK-1">
+Past versions of plot_D_UK-1.png
+</button>
+</p>
+<div id="fig-plot_D_UK-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_AgCensus_plot.Rmd/plot_D_UK-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_AgCensus_plot.Rmd/plot_D_UK-1.png" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_AgCensus_plot.Rmd/plot_D_UK-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/0fa064e60bcc45a10042fdc311124a05e626b180/docs/figure/m_AgCensus_plot.Rmd/plot_D_UK-1.png" target="_blank">0fa064e</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <!--- { plot_D_all -->
 <div class="figure" style="text-align: center">
@@ -994,11 +1415,48 @@ Figure 1.4: Time series of land use from the June Agricultural Census in Norther
 (#fig:plot_D_all)Time series of net land-use change from the June Agricultural Census in the UK, 1980-2019.
 </p>
 </div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot_D_all-1">
+Past versions of plot_D_all-1.png
+</button>
+</p>
+<div id="fig-plot_D_all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_AgCensus_plot.Rmd/plot_D_all-1.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <!--- } -->
 </div>
 <div id="timing" class="section level1 unnumbered">
 <h1>Timing</h1>
-<pre><code>Computation time (excl. render): 9.11 sec elapsed</code></pre>
+<pre><code>Computation time (excl. render): 17.509 sec elapsed</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1008,18 +1466,20 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.0.4 (2021-02-15)
-Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 17763)
+<pre><code>R version 3.6.3 (2020-02-29)
+Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
 
 Matrix products: default
+BLAS/LAPACK: /apps/jasmin/jaspy/miniconda_envs/jaspy3.7/m3-4.6.14/envs/jaspy3.7-m3-4.6.14-r20200606/lib/libopenblasp-r0.3.9.so
 
 locale:
-[1] LC_COLLATE=English_United Kingdom.1252 
-[2] LC_CTYPE=English_United Kingdom.1252   
-[3] LC_MONETARY=English_United Kingdom.1252
-[4] LC_NUMERIC=C                           
-[5] LC_TIME=English_United Kingdom.1252    
+ [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8    
+ [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
+ [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
@@ -1045,12 +1505,12 @@ loaded via a namespace (and not attached):
 [40] farver_2.1.0        fs_1.5.0            digest_0.6.27      
 [43] stringi_1.7.3       qs_0.25.1           bookdown_0.23      
 [46] processx_3.5.2      dplyr_1.0.7         polyclip_1.10-0    
-[49] rprojroot_2.0.2     grid_4.0.4          cli_3.0.1          
-[52] tools_4.0.4         magrittr_2.0.1      sass_0.4.0         
+[49] rprojroot_2.0.2     grid_3.6.3          cli_3.0.1          
+[52] tools_3.6.3         magrittr_2.0.1      sass_0.4.0         
 [55] tibble_3.1.3        crayon_1.4.1        whisker_0.4        
 [58] pkgconfig_2.0.3     MASS_7.3-53         ellipsis_0.3.2     
 [61] data.table_1.14.0   rmarkdown_2.10      R6_2.5.0           
-[64] igraph_1.2.6        git2r_0.28.0        compiler_4.0.4     </code></pre>
+[64] igraph_1.2.6        git2r_0.28.0        compiler_3.6.3     </code></pre>
 </div>
 </div>
 

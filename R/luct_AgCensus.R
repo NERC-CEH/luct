@@ -653,7 +653,9 @@ wrangle_MODIS_urban <- function(fpath =
   # calculate net change  by difference
   dt_D <- dt_A[, .(time, area = c(NA, diff(area)), data_source), by = .(region, u)]
   # infer that change is all gain, no losses
-  dt_G <- dt_A
-  dim(dt_A)
-  return(list(dt_A = dt_A, dt_D = dt_D, dt_G = dt_G)) 
+  dt_G <- dt_D
+  dt_L <- dt_D
+  dt_L$area <- 0
+  dim(dt_D)
+  return(list(dt_G = dt_G, dt_L = dt_L, dt_A = dt_A, dt_D = dt_D)) 
 }

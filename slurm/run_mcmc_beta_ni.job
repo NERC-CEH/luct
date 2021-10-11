@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH -p par-single
+#SBATCH --job-name=mcmcb_ni
+#SBATCH -o output/output_ni/mcmcb_%A_%a.out
+#SBATCH -e output/output_ni/mcmcb_%A_%a.err
+#SBATCH -t 01:30:00
+#SBATCH --array=1-70
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} output/output_ni" slurm/run_mcmc_beta_ni.R "output/output_ni/console${SLURM_ARRAY_TASK_ID}.Rout"

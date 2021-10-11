@@ -324,23 +324,24 @@ wrangle_FC <- function(v_fpath =
   dt_L <- as.data.table(df_defn)
   dt_L$area <- drop_units(dt_L$area)
 
-  # initialise a copy for net change
-  dt_D <- dt_L
-  dt <- merge(dt_L, dt_G, all.x = TRUE, by = c("region", "time"))
-  dt_D$area <- dt$area.y - dt$area.x
-  dt_D$area <- set_units(dt_D$area, m^2)
-  dt_D$area <- drop_units(dt_D$area)
+  # # calculate net change where both  G & L available
+  # dt_D <- merge(dt_G, dt_L, all.x = TRUE, by = c("region", "time"))
+  # dt_D$area <- dt_D$area.x - dt_D$area.y
+  # dt_D$area <- set_units(dt_D$area, m^2)
+  # dt_D$area <- drop_units(dt_D$area)
+  # # drop cols and correct names after merge
+  # dt_D <- dt_D[, .(time, region, area, u = u.x, data_source = data_source.x)]
   
-  # initialise a copy for absolute area
-  dt_A  <- dt_D
-  # assume initial area of forest in 1990 worked out previously - check this
-  initArea_uk <- (36312.07 * 1e6) - sum(dt_D$area)
-  # add same for other countries when available
-  #initArea_en <- (xxx * 1e6) - sum(dt_D$area)
-  dt_A <- dt_A[region == "uk", area := initArea_uk + cumsum(area)]
-  #dt_A <- dt_A[region != "uk", area := NA] # only do for UK just now
+  # # initialise a copy for absolute area
+  # dt_A  <- dt_D
+  # # assume initial area of forest in 1990 worked out previously - check this
+  # initArea_uk <- (36312.07 * 1e6) - sum(dt_D$area)
+  # # add same for other countries when available
+  # #initArea_en <- (xxx * 1e6) - sum(dt_D$area)
+  # dt_A <- dt_A[region == "uk", area := initArea_uk + cumsum(area)]
+  # #dt_A <- dt_A[region != "uk", area := NA] # only do for UK just now
   
-  return(list(dt_A = dt_A, dt_D = dt_D, dt_G = dt_G, dt_L = dt_L))
+  return(list(dt_G = dt_G, dt_L = dt_L))
 }
 
 
@@ -646,16 +647,17 @@ set_exclusions <- function(
   obs$dt_L <- obs$dt_L[data_source %in% data_sources_toInclude & region %in% regions_toInclude]
   obs$dt_D <- obs$dt_D[data_source %in% data_sources_toInclude & region %in% regions_toInclude]
 
-  # zeroes are actually missing values
+  ##* WIP are some
+  # zeroes are actually missing values?
   # should remove earlier
   # obs$dt_A$area[obs$dt_A$area == 0]    <- NA
-  obs$dt_D$area[obs$dt_D$area == 0]    <- NA
-  obs$dt_D$area[is.nan(obs$dt_D$area)] <- NA
-  obs$dt_G$area[obs$dt_G$area == 0]    <- NA
-  obs$dt_G$area[is.nan(obs$dt_G$area)] <- NA
-  obs$dt_L$area[obs$dt_L$area == 0]    <- NA
-  obs$dt_L$area[is.nan(obs$dt_L$area)] <- NA
-  obs$dt_B$area[obs$dt_B$area == 0] <- NA
+  # obs$dt_D$area[obs$dt_D$area == 0]    <- NA
+  # obs$dt_D$area[is.nan(obs$dt_D$area)] <- NA
+  # obs$dt_G$area[obs$dt_G$area == 0]    <- NA
+  # obs$dt_G$area[is.nan(obs$dt_G$area)] <- NA
+  # obs$dt_L$area[obs$dt_L$area == 0]    <- NA
+  # obs$dt_L$area[is.nan(obs$dt_L$area)] <- NA
+  # obs$dt_B$area[obs$dt_B$area == 0] <- NA
 
   # unique(obs$dt_D$data_source); 
   # unique(obs$dt_B$data_source)
@@ -815,11 +817,24 @@ get_loglik <- function(v_B,
     # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = max(100, dt_L$sigma*abs(dt_L$area)), log = T)
     # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = max(100, dt_D$sigma*abs(dt_D$area)), log = T)
 
-    # run 13 = longer 10X pulsar - use variable CV for sigma in obs with minimum sd of 100 km2, and Fp/Fn rates
-    v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = pmax(100, dt_B$sigma*abs(dt_B$area)), log = T)
-    v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = pmax(100, dt_G$sigma*abs(dt_G$area)), log = T)
-    v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = pmax(100, dt_L$sigma*abs(dt_L$area)), log = T)
-    v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = pmax(100, dt_D$sigma*abs(dt_D$area)), log = T)
+    # # run 13 = longer 10X pulsar - use variable CV for sigma in obs with minimum sd of 100 km2, and Fp/Fn rates
+    # v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = pmax(100, dt_B$sigma*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = pmax(100, dt_G$sigma*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = pmax(100, dt_L$sigma*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = pmax(100, dt_D$sigma*abs(dt_D$area)), log = T)
+    
+    # # run 10/10/2021 - use variable CV for sigma in obs with minimum sd of 100 km2 for WP-B data but not for WP-A data, and Fp/Fn rates
+    # v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = pmax(5 + 100*dt_B$apply_correction, dt_B$sigma*abs(dt_B$area)), log = T)
+    # v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = pmax(5 + 100*dt_G$apply_correction, dt_G$sigma*abs(dt_G$area)), log = T)
+    # v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = pmax(5 + 100*dt_L$apply_correction, dt_L$sigma*abs(dt_L$area)), log = T)
+    # v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = pmax(5 + 100*dt_D$apply_correction, dt_D$sigma*abs(dt_D$area)), log = T)
+    
+    # run 11/10/2021 - use variable CV for sigma in obs with minimum sd of 100 km2 for WP-B data but not for WP-A data, and Fp/Fn rates
+    # regression approach to sigma - change apply_correction to min_sigma and assign in df_uncert
+    v_llik_B <- dnorm(dt_B$area * (1- dt_B$Fp * 0.66), mean = dt_B$pred, sd = 5 + 100*dt_B$apply_correction + dt_B$sigma*abs(dt_B$area), log = T)
+    v_llik_G <- dnorm(dt_G$area * (1- dt_G$Fp * 0.66), mean = dt_G$pred, sd = 5 + 100*dt_G$apply_correction + dt_G$sigma*abs(dt_G$area), log = T)
+    v_llik_L <- dnorm(dt_L$area * (1- dt_L$Fp * 0.66), mean = dt_L$pred, sd = 5 + 100*dt_L$apply_correction + dt_L$sigma*abs(dt_L$area), log = T)
+    v_llik_D <- dnorm(dt_D$area * (1- dt_D$Fp * 0.66), mean = dt_D$pred, sd = 5 + 100*dt_D$apply_correction + dt_D$sigma*abs(dt_D$area), log = T)
 
     # # run 11 pulsar - use variable CV for sigma only in EO obs where correction needs applied, with minimum sd of 100 km2, and Fp/Fn rates
     # # scale from 0 (no effect, all = cv_AgCensus) to 1 (full effect of NRMSE*r2 scaling)
@@ -1153,7 +1168,7 @@ run_mcmc_beta_job <- function(
   err <- system(cmd)
   # and return the years and paths of the output files
   # these should match slurm/run_mcmc_beta.R, but not essential - only ones that are tracked
-  v_fnames <- fs::path_rel(here(dir_output, paste0("mcmcB_map", v_times, ".qs")))
+  v_fnames <- fs::path_rel(here(dir_output, paste0("mcmcB_map", v_times[length(v_times)], ".qs")))
   return(v_fnames)
 }
 
