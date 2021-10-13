@@ -220,12 +220,57 @@ list(
   
   # Get BLAG from CORINE Level1 output
   tar_target(
-    c_blag_corine,
+    c_blag_corine_uk,
     getBLAG_fromU(
       v_times  = c_level1_cor$v_times,
       v_fnames = c_level1_cor$v_fnames,
-      name_data_source = "CORINE", names_u),
-    cue = tar_cue(mode = "never")
+      name_data_source = "CORINE", 
+      region = "uk", names_u),
+    cue = tar_cue(mode = "thorough")
+  ),
+  
+  # Get BLAG from CORINE Level1 output
+  tar_target(
+    c_blag_corine_en,
+    getBLAG_fromU(
+      v_times  = c_level1_cor$v_times,
+      v_fnames = c_level1_cor$v_fnames,
+      name_data_source = "CORINE", 
+      region = "en", names_u),
+    cue = tar_cue(mode = "thorough")
+  ),
+  
+  # Get BLAG from CORINE Level1 output
+  tar_target(
+    c_blag_corine_sc,
+    getBLAG_fromU(
+      v_times  = c_level1_cor$v_times,
+      v_fnames = c_level1_cor$v_fnames,
+      name_data_source = "CORINE", 
+      region = "sc", names_u),
+    cue = tar_cue(mode = "thorough")
+  ),
+  
+  # Get BLAG from CORINE Level1 output
+  tar_target(
+    c_blag_corine_wa,
+    getBLAG_fromU(
+      v_times  = c_level1_cor$v_times,
+      v_fnames = c_level1_cor$v_fnames,
+      name_data_source = "CORINE", 
+      region = "wa", names_u),
+    cue = tar_cue(mode = "thorough")
+  ),
+  
+  # Get BLAG from CORINE Level1 output
+  tar_target(
+    c_blag_corine_ni,
+    getBLAG_fromU(
+      v_times  = c_level1_cor$v_times,
+      v_fnames = c_level1_cor$v_fnames,
+      name_data_source = "CORINE", 
+      region = "ni", names_u),
+    cue = tar_cue(mode = "thorough")
   ),
 
   # Path to IACS SLURM job file
@@ -244,11 +289,12 @@ list(
     
   # Get BLAG from IACS Level1 output
   tar_target(
-    c_blag_iacs,
+    c_blag_iacs_en,
     getBLAG_fromU(
       v_times  = c_level1_iacs$v_times,
       v_fnames = c_level1_iacs$v_fnames,
-      name_data_source = "IACS", names_u),
+      name_data_source = "IACS", 
+      region = "en", names_u),
     cue = tar_cue(mode = "never")
   ),
   
@@ -268,11 +314,34 @@ list(
     
   # Get BLAG from LCC Level1 output
   tar_target(
-    c_blag_lcc,
+    c_blag_lcc_en,
     getBLAG_fromU(
       v_times  = c_level1_lcc$v_times,
       v_fnames = c_level1_lcc$v_fnames,
-      name_data_source = "LCC", names_u),
+      name_data_source = "LCC", 
+      region = "en", names_u),
+    cue = tar_cue(mode = "never")
+  ),
+      
+  # Get BLAG from LCC Level1 output
+  tar_target(
+    c_blag_lcc_sc,
+    getBLAG_fromU(
+      v_times  = c_level1_lcc$v_times,
+      v_fnames = c_level1_lcc$v_fnames,
+      name_data_source = "LCC", 
+      region = "sc", names_u),
+    cue = tar_cue(mode = "never")
+  ),
+        
+  # Get BLAG from LCC Level1 output
+  tar_target(
+    c_blag_lcc_wa,
+    getBLAG_fromU(
+      v_times  = c_level1_lcc$v_times,
+      v_fnames = c_level1_lcc$v_fnames,
+      name_data_source = "LCC", 
+      region = "wa", names_u),
     cue = tar_cue(mode = "never")
   ),
   
@@ -299,12 +368,57 @@ list(
     
   # Get BLAG from LCM Level1 output
   tar_target(
-    c_blag_lcm,
+    c_blag_lcm_en,
     getBLAG_fromU(
       v_times  = c_level1_lcm_masked$v_times,
       v_fnames = c_level1_lcm_masked$v_fnames,
-      name_data_source = "LCM", names_u),
-    cue = tar_cue(mode = "never")
+      name_data_source = "LCM", 
+      region = "en", names_u),
+    cue = tar_cue(mode = "thorough")
+  ),
+     
+  # Get BLAG from LCM Level1 output
+  tar_target(
+    c_blag_lcm_sc,
+    getBLAG_fromU(
+      v_times  = c_level1_lcm_masked$v_times,
+      v_fnames = c_level1_lcm_masked$v_fnames,
+      name_data_source = "LCM", 
+      region = "sc", names_u),
+    cue = tar_cue(mode = "thorough")
+  ),
+            
+  # Get BLAG from LCM Level1 output
+  tar_target(
+    c_blag_lcm_wa,
+    getBLAG_fromU(
+      v_times  = c_level1_lcm_masked$v_times,
+      v_fnames = c_level1_lcm_masked$v_fnames,
+      name_data_source = "LCM", 
+      region = "wa", names_u),
+    cue = tar_cue(mode = "thorough")
+  ),
+                  
+  # Get BLAG from LCM Level1 output
+  tar_target(
+    c_blag_lcm_ni,
+    getBLAG_fromU(
+      v_times  = c_level1_lcm_masked$v_times,
+      v_fnames = c_level1_lcm_masked$v_fnames,
+      name_data_source = "LCM", 
+      region = "ni", names_u),
+    cue = tar_cue(mode = "thorough")
+  ),
+                        
+  # Get BLAG from LCM Level1 output
+  tar_target(
+    c_blag_lcm_uk,
+    getBLAG_fromU(
+      v_times  = c_level1_lcm_masked$v_times,
+      v_fnames = c_level1_lcm_masked$v_fnames,
+      name_data_source = "LCM", 
+      region = "uk", names_u),
+    cue = tar_cue(mode = "thorough")
   ),
         
   # Run a SLURM job to process CROME data
@@ -320,7 +434,8 @@ list(
     getBLAG_fromU(
       v_times  = c_level1_crome$v_times,
       v_fnames = c_level1_crome$v_fnames,
-      name_data_source = "CROME", names_u),
+      name_data_source = "CROME", 
+      region = "en", names_u),
     cue = tar_cue(mode = "never")
   ),
         
@@ -328,7 +443,21 @@ list(
   tar_target(
     c_obs_all,
     combine_blags(
-      l_blags = list(c_blag_AgCensus, c_blag_MODIS, c_blag_CS, c_blag_corine, c_blag_fc, c_blag_iacs, c_blag_lcc, c_blag_lcm, c_blag_crome)),
+      l_blags = list(c_blag_AgCensus, c_blag_MODIS, c_blag_CS, c_blag_fc, 
+      c_blag_corine_uk, 
+      c_blag_corine_en,
+      c_blag_corine_sc, 
+      c_blag_corine_wa, 
+      c_blag_corine_ni, 
+      c_blag_crome, c_blag_iacs_en, 
+      c_blag_lcc_en, 
+      c_blag_lcc_sc, 
+      c_blag_lcc_wa, 
+      c_blag_lcm_en,
+      c_blag_lcm_sc,
+      c_blag_lcm_wa,
+      c_blag_lcm_ni,
+      c_blag_lcm_uk)),
     cue = tar_cue(mode = "thorough")
   ),
               
@@ -388,24 +517,13 @@ list(
       c_fname_df_uncert), 
     cue = tar_cue(mode = "thorough")
   ),
-            
-  # Exclude some data sources which we do not want to use
-  tar_target(
-    c_obs,
-    set_exclusions(
-      c_obs_unc,
-      regions_toInclude = v_region,
-      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
-    cue = tar_cue(mode = "thorough")
-  ),
-                    
+                               
   # Exclude some data sources which we do not want to use
   tar_target(
     c_obs_uk,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "uk",
-      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+      regions_toInclude = "uk"),
     cue = tar_cue(mode = "thorough")
   ),
               
@@ -414,8 +532,7 @@ list(
     c_obs_en,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "en",
-      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+      regions_toInclude = "en"),
     cue = tar_cue(mode = "thorough")
   ),
                 
@@ -424,8 +541,7 @@ list(
     c_obs_sc,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "sc",
-      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+      regions_toInclude = "sc"),
     cue = tar_cue(mode = "thorough")
   ),
                 
@@ -434,8 +550,7 @@ list(
     c_obs_wa,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "wa",
-      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+      regions_toInclude = "wa"),
     cue = tar_cue(mode = "thorough")
   ),
                 
@@ -444,15 +559,14 @@ list(
     c_obs_ni,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "ni",
-      data_sources_toInclude = c("AgCensus", "MODIS", "CS", "FC")),
+      regions_toInclude = "ni"),
     cue = tar_cue(mode = "thorough")
   ),
   
   # Predict the Beta matrix by least-squares
   tar_target(
     c_pred_ls,
-    get_pred_ls(c_obs, start_year = 1990, end_year = 2020),
+    get_pred_ls(c_obs_uk, start_year = 1990, end_year = 2020),
     cue = tar_cue(mode = "never")
   ),
 
@@ -496,7 +610,7 @@ list(
     c_mcmc_out_en,
     run_mcmc_beta_job(c_mcmc_job_en, dir_output = "output/output_en",
       v_times = 1950:2020, c_obs_en),
-    cue = tar_cue(mode = "never"),
+    cue = tar_cue(mode = "thorough"),
     format = "file"
   ),    
 
@@ -505,7 +619,7 @@ list(
     c_mcmc_out_sc,
     run_mcmc_beta_job(c_mcmc_job_sc, dir_output = "output/output_sc",
       v_times = 1950:2020, c_obs_sc),
-    cue = tar_cue(mode = "never"),
+    cue = tar_cue(mode = "thorough"),
     format = "file"
   ),    
 
@@ -514,7 +628,7 @@ list(
     c_mcmc_out_wa,
     run_mcmc_beta_job(c_mcmc_job_wa, dir_output = "output/output_wa",
       v_times = 1950:2020, c_obs_wa),
-    cue = tar_cue(mode = "never"),
+    cue = tar_cue(mode = "thorough"),
     format = "file"
   ),    
 
@@ -523,7 +637,7 @@ list(
     c_mcmc_out_ni,
     run_mcmc_beta_job(c_mcmc_job_ni, dir_output = "output/output_ni",
       v_times = 1950:2020, c_obs_ni),
-    cue = tar_cue(mode = "never"),
+    cue = tar_cue(mode = "thorough"),
     format = "file"
   ),    
 
@@ -532,7 +646,7 @@ list(
     c_mcmc_out_uk,
     run_mcmc_beta_job(c_mcmc_job_uk, dir_output = "output/output_uk",
       v_times = 1950:2020, c_obs_uk),
-    cue = tar_cue(mode = "never"),
+    cue = tar_cue(mode = "thorough"),
     format = "file"
   ),    
 
@@ -552,7 +666,7 @@ list(
       blag_lcm = c_blag_lcm,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   # Plot the results and write summary output
@@ -571,7 +685,7 @@ list(
       blag_lcm = c_blag_lcm,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   # Plot the results and write summary output
@@ -590,7 +704,7 @@ list(
       blag_lcm = c_blag_lcm,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   # Plot the results and write summary output
@@ -609,7 +723,7 @@ list(
       blag_lcm = c_blag_lcm,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   # Plot the results and write summary output
@@ -628,7 +742,7 @@ list(
       blag_lcm = c_blag_lcm,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   

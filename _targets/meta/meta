@@ -51,21 +51,35 @@ c_mcmc_job_sc|stem|30d29ef5669f091d|18c18c19c3f25130|c3d912a59d253740|1172683752
 c_mcmc_job_en|stem|eb5098be4c5108ea|6ca760040a993410|c3d912a59d253740|1369326301|slurm/run_mcmc_beta_en.job|t18908.9949884259s|53ebb00e2399067e|355|file|vector|||0.004||
 c_blag_MODIS|stem|6878dd60fdef3367|f94878a090861401|7b9e7324f2848ab9|2007762235||t18909.9582407407s|dc7a753e3e0eb12d|1430|qs|vector|||26.538||
 c_blag_fc|stem|7c17fea5c47ba19f|5705bf70fe75eb8a|745261364822f58c|-1229794990||t18910.025775463s|d3959e355ede0ff3|18225|qs|vector|||11.498|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
-c_obs_all|stem|5ed91ce2c46a4bb6|117d40cfcdfe3fc6|261101a923bf8bcc|-1577379319||t18910.025787037s|e65fd5eb360a2bdd|74441|qs|vector|||0.15||
-c_obs_km2|stem|409f490e70d762cc|5d3af5bda2bffbf7|24de1a630d1ee653|1648656204||t18910.0257986111s|c1e488ddec7cca4a|87357|qs|vector|||0.214||
-c_obs_filled|stem|0f882784f1b4848a|acde206b72cfbd45|de16fcb412927746|1979787992||t18910.0258101852s|fac4f5fdbf5aec0b|136652|qs|vector|||0.933||
-c_obs_unc|stem|3b1e03a6496a20ab|10cc2b94be75e08a|d5ee595fad830744|-1328037812||t18910.0258217593s|99988ab44dee1571|150398|qs|vector|||0.742||
-c_obs_wa|stem|d2a5b2ee27eaa728|b573ef9ad28c2b06|06699e7f98e0c02a|-1348896088||t18910.0258333333s|b5998d21e419bf0f|43603|qs|vector|||0.279||
-c_obs_uk|stem|ea49442a41bd8bf5|09a7a28934bd6dc8|06699e7f98e0c02a|2104595409||t18910.0258449074s|806209622d1f43f4|46738|qs|vector|||0.028||
-c_obs_sc|stem|23c1b3aae49302aa|95ecc5475793b264|06699e7f98e0c02a|1493848491||t18910.0258449074s|80c1d3077e1d2778|43392|qs|vector|||0.034||
-c_obs_ni|stem|faabed10a3b3e3b7|ab201e9375fd3126|06699e7f98e0c02a|237336567||t18910.0258564815s|33692da96434e7d9|45315|qs|vector|||0.036||
-c_obs|stem|c294e096a3072a05|094f126f4db481a7|feea32bb5e2150a2|283974285||t18910.0258564815s|175efa33fef37547|97509|qs|vector|||0.061||
-c_obs_en|stem|c1510ec7f32fd03c|e5d499ac76b3545a|06699e7f98e0c02a|766057186||t18910.0258680556s|2a590fa58df5cffd|43544|qs|vector|||0.038||
-c_mcmc_out_wa|stem|e0e36a92cd6d7d2d|462c2512e99e9076|178a38e085240314|-458704065|output/output_wa/mcmcB_map2020.qs|t18910.7638541667s|0c79ab4d5be76e6d|422|file|vector|||7.214|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
-c_mcmc_out_uk|stem|5e63516fd66599eb|37e6e18c7d4ffb43|ee219639edf599ad|1847413738|output/output_uk/mcmcB_map2020.qs|t18910.7871875s|d66a5224e01e4f0c|425|file|vector|||0.054||
-c_mcmc_out_sc|stem|11894cb72a66cc9f|4f50e5b4a2f719f5|dd2f4f2b6ab0d685|1230143553|output/output_sc/mcmcB_map2020.qs|t18910.7655555556s|b6099e1bec5fd49f|419|file|vector|||0.044||
-c_mcmc_out_ni|stem|9faa91073734f512|0f857b8ba1f3df5a|febcad3fdd62ba7b|-151659975|output/output_ni/mcmcB_map2020.qs|t18910.7628819444s|cc5b6dbe9d597cc2|424|file|vector|||0.045||
-c_mcmc_out_en|stem|3484f25410616e84|d7ecb118d990e83a|68be2a38d7f099d1|-1126772580|output/output_en/mcmcB_map2020.qs|t18910.770775463s|d66a5224e01e4f0c|425|file|vector|||0.066||
+c_post_B_wa|stem|189ce8d14189e0b8|6604b444e5396fed|de168e9d855db5bc|986009804||t18911.3275810185s|b9495aef56adcd4d|664101632|qs|vector|||292.841|Removed 1 rows containing missing values geom_path.|
+c_post_B_uk|stem|27fc36ccdeebdf92|49f3f729d2d86b1a|dcc8ca29da61f326|-1971820211||t18911.3305787037s|85647ba8f01d6be4|640011969|qs|vector|||230.247|Removed 1 rows containing missing values geom_path.|
+c_post_B_sc|stem|2a758feef1d894d1|143fa2c4677b9ed2|cd051efdf92c88f0|655006643||t18911.3334143519s|f7766deb2283368e|653122176|qs|vector|||217.046|Removed 1 rows containing missing values geom_path.|
+c_post_B_ni|stem|7a7fffa203cbd3c4|6e38308ccde7a14d|0d3b33f0839b8d34|-958703566||t18911.3363773148s|d50f52c4a8cdc0e5|632012399|qs|vector|||226.453|Removed 1 rows containing missing values geom_path.|
+c_post_B_en|stem|adcbdb9a1c1809a6|c8add40333413fa3|c32d4818f7099c08|1700320878||t18911.339224537s|6bd9be8888ae5d2a|661741411|qs|vector|||216.95|Removed 1 rows containing missing values geom_path.|
+c_blag_corine_wa|stem|54f66a3e47633333|3510deeb500b74d3|cf83f933f15f7084|403835317||t18912.6590277778s|2dbe80d9c3d55121|2396|qs|vector|||293.93|Discarded datum OSGB 1936 in Proj4 definition|
+c_blag_corine_en|stem|3a1d6434b49caafe|28c4173c78583277|cf83f933f15f7084|1194972345||t18912.6626736111s|bb35d83bd743d189|2534|qs|vector|||314.184|Discarded datum OSGB 1936 in Proj4 definition|
+c_blag_corine_uk|stem|10624dee76d76e4b|12155a0b2d2681be|cf83f933f15f7084|-2068293645||t18912.6663773148s|7c4cf61d345b15ec|2607|qs|vector|||320.007|Discarded datum OSGB 1936 in Proj4 definition|
+c_blag_corine_ni|stem|385df4f7d68b7e08|4d72803246a913d2|cf83f933f15f7084|453610031||t18912.67s|b90ddd574df837f0|2292|qs|vector|||310.22|Discarded datum OSGB 1936 in Proj4 definition|
+c_blag_corine_sc|stem|9f332e5e2ae609f9|8329b5b9fcb3ed7e|cf83f933f15f7084|1431731056||t18912.6739930556s|48d589e89b9d1403|2559|qs|vector|||343.421|Discarded datum OSGB 1936 in Proj4 definition|
+c_blag_iacs_en|stem|04f3b2c1c03e6269|988dbc8239d40d9b|1f7a3c81bfe32703|577467111||t18913.3974305556s|2b03e3c71a3f76b5|5036|qs|vector|||556.727|Discarded datum Unknown_based_on_Airy_1830_ellipsoid in Proj4 definition|
+c_blag_lcc_sc|stem|320f084d096a5845|060ec9971a869337|8a38b24a239c55b3|720334729||t18913.4079282407s|ea29d5fb82e285b1|1223|qs|vector|||344.227|Discarded datum Unknown_based_on_Airy_1830_ellipsoid in Proj4 definition|
+c_blag_lcc_en|stem|7fceb73ab6358bd4|f3237a51f815f891|8a38b24a239c55b3|1625539389||t18913.4118518519s|a0a657e67e0d9548|1248|qs|vector|||338.647|Discarded datum Unknown_based_on_Airy_1830_ellipsoid in Proj4 definition|
+c_blag_lcc_wa|stem|21519d6759edcacd|dfbfaf49dfa8b72a|8a38b24a239c55b3|1785749770||t18913.4148611111s|bf6c4ee4d331679c|1218|qs|vector|||259.145|Discarded datum Unknown_based_on_Airy_1830_ellipsoid in Proj4 definition|
+c_blag_lcm_en|stem|6c3ea9225f87228f|91353833fabb9aca|5a1d2419b8e46324|333957324||t18913.4236226852s|4835bc0d3d148e92|4575|qs|vector|||756.798||
+c_blag_lcm_wa|stem|a4750057993b7eea|0b1106e697a5ada9|5a1d2419b8e46324|-2065973394||t18913.4362731481s|ce1eeb99f8ce526c|4299|qs|vector|||1092.671||
+c_blag_lcm_uk|stem|0d7eab9f10513c96|1ae90bd0f07ab27e|5a1d2419b8e46324|-225404794||t18913.4443865741s|e6420496fecb67d8|4703|qs|vector|||699.986||
+c_blag_lcm_ni|stem|a33247f96efd5405|09ff2c0c2c28113c|5a1d2419b8e46324|-2067712799||t18913.4505439815s|e08c40499959e0a1|4297|qs|vector|||531.999||
+c_blag_lcm_sc|stem|962617011ba26d78|81edbfdf98dff3d6|5a1d2419b8e46324|1966021457||t18913.4570833333s|442d216cae70645d|4487|qs|vector|||563.782||
+c_obs_all|stem|4a3fb1c3e12fa332|150347712c0cba35|7545c361f813736b|-1577379319||t18913.4570949074s|cb103a7f7ecae772|86449|qs|vector|||0.055||
+c_obs_km2|stem|82ae325be7b831ac|5d3af5bda2bffbf7|1a456f6f3bd412cf|1648656204||t18913.4571064815s|617351bf7b648edb|106654|qs|vector|||0.062||
+c_obs_filled|stem|63db81f28690d2b5|acde206b72cfbd45|d1b4d7bf7ffdd888|1979787992||t18913.4571180556s|cad6a02b8c2f3563|203024|qs|vector|||0.721||
+c_obs_unc|stem|fc2362b87fd8cff6|10cc2b94be75e08a|f17a30756046baaf|-1328037812||t18913.4571296296s|2151ee2f80970a6e|218761|qs|vector|||0.183||
+c_obs|stem|71efc79238ed5444|094f126f4db481a7|c15aafbebaf80530|283974285||t18913.4571759259s|c8b1787dc2e6210b|100017|qs|vector|||0.052||
+c_obs_en|stem|a57b2bff6f90b6d7|2b2ebfe1a2353c9a|b937e119abd32f97|766057186||t18913.5194097222s|8b0ff694a3b39c2d|72898|qs|vector|||4.9|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
+c_obs_wa|stem|e27079a82678e31f|a58a828fa9546b2b|b937e119abd32f97|-1348896088||t18913.5194097222s|89239d16730be8e4|69418|qs|vector|||0.081||
+c_obs_uk|stem|1307d9a8b4dc8ac4|cf92eead86c3dbd8|b937e119abd32f97|2104595409||t18913.5194212963s|2617eda6d126f943|71040|qs|vector|||0.015||
+c_obs_ni|stem|ea314ac9fc5a8a5c|8e509e5fd358f7a6|b937e119abd32f97|237336567||t18913.5194212963s|288a18a65dc4079d|68709|qs|vector|||0.012||
+c_obs_sc|stem|966506e55a4e3eac|8e138ea255e93ae8|b937e119abd32f97|1493848491||t18913.5194328704s|d7ff3ea0b5848c6a|69436|qs|vector|||0.045||
 getAreaGrossLoss_fromBeta|function|45a4fe6d7edd6124||||||||||||||
 wrangle_AgCensus_Eng_1|function|e8e7dd04646479b0||||||||||||||
 run_corine_job|function|4f3c1069eccca594||||||||||||||
@@ -113,7 +127,7 @@ get_post_plots|function|b4ac0bbb5399ac7c||||||||||||||
 correct_blag|function|c45975a0920102ad||||||||||||||
 get_blag_cs|function|8f938e5e1dc3ad68||||||||||||||
 join_AgCensus|function|f04f245fa23f85f4||||||||||||||
-getBLAG|function|dc25c734d464413d||||||||||||||
+getBLAG|function|3eeab27d3275987c||||||||||||||
 get_uncert_scaling|function|73709893f8c1d2be||||||||||||||
 wrangle_AgCensus_historical|function|0c05b9162a35a950||||||||||||||
 wrangle_MODIS_urban|function|f32e8363e1b5a2c5||||||||||||||
@@ -125,10 +139,10 @@ process_AgCensus_NIr|function|641295ffb1182da0||||||||||||||
 process_AgCensus_Wal|function|d063fbd65a7ea64e||||||||||||||
 process_AgCensus_Eng|function|735a3afe2f2aa544||||||||||||||
 process_AgCensus_Sco|function|21a6d41e39a2c58c||||||||||||||
-get_pred_ls|function|32ba681c958ac3ab||||||||||||||
-getBLAG_fromU|function|bf86b871ba5b0184||||||||||||||
-c_post_B_wa|stem|189ce8d14189e0b8|6604b444e5396fed|de168e9d855db5bc|986009804||t18911.3275810185s|b9495aef56adcd4d|664101632|qs|vector|||292.841|Removed 1 rows containing missing values geom_path.|
-c_post_B_uk|stem|27fc36ccdeebdf92|49f3f729d2d86b1a|dcc8ca29da61f326|-1971820211||t18911.3305787037s|85647ba8f01d6be4|640011969|qs|vector|||230.247|Removed 1 rows containing missing values geom_path.|
-c_post_B_sc|stem|2a758feef1d894d1|143fa2c4677b9ed2|cd051efdf92c88f0|655006643||t18911.3334143519s|f7766deb2283368e|653122176|qs|vector|||217.046|Removed 1 rows containing missing values geom_path.|
-c_post_B_ni|stem|7a7fffa203cbd3c4|6e38308ccde7a14d|0d3b33f0839b8d34|-958703566||t18911.3363773148s|d50f52c4a8cdc0e5|632012399|qs|vector|||226.453|Removed 1 rows containing missing values geom_path.|
-c_post_B_en|stem|adcbdb9a1c1809a6|c8add40333413fa3|c32d4818f7099c08|1700320878||t18911.339224537s|6bd9be8888ae5d2a|661741411|qs|vector|||216.95|Removed 1 rows containing missing values geom_path.|
+get_pred_ls|function|4efc22ae8fdd6116||||||||||||||
+getBLAG_fromU|function|3f5375ea9d3b81a2||||||||||||||
+c_mcmc_out_en|stem|ae041f1057071d01|d7ecb118d990e83a|8d32c5343408ea67|-1126772580|output/output_en/mcmcB_map2020.qs|t18911.0695833333s|0dd407bf2b677bc2|418|file|vector|||4.84|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
+c_mcmc_out_wa|stem|9f18bc1f745cd313|462c2512e99e9076|2470e46b3fdeb463|-458704065|output/output_wa/mcmcB_map2020.qs|t18911.0369212963s|9cbfb857ab8b4c55|423|file|vector|||1.289||
+c_mcmc_out_uk|stem|1d801bc2f632bd88|37e6e18c7d4ffb43|fdf45a1b6079e403|1847413738|output/output_uk/mcmcB_map2020.qs|t18911.0409490741s|b6099e1bec5fd49f|419|file|vector|||0.897||
+c_mcmc_out_ni|stem|6fe676bf2c1c7248|0f857b8ba1f3df5a|760bbfcc79fbbd6e|-151659975|output/output_ni/mcmcB_map2020.qs|t18911.0359259259s|cc5b6dbe9d597cc2|424|file|vector|||0.775||
+c_mcmc_out_sc|stem|f790edae7748559b|4f50e5b4a2f719f5|6750e08d6d0da139|1230143553|output/output_sc/mcmcB_map2020.qs|t18911.039837963s|58772b208bb3c33b|420|file|vector|||0.052||

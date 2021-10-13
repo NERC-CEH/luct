@@ -163,7 +163,7 @@ getAreaNetChange_fromBeta <- function(v_B, n_u = sqrt(length(v_B))){
 #' @examples
 #' blag <- getBLAG(a_B, names_u)
 getBLAG <- function(a_B, names_u = names_u, name_data_source = "",
-      v_times = 1:dim(a_B)[3], cellArea = cellArea){
+      region = NA, v_times = 1:dim(a_B)[3], cellArea = cellArea){
   n_u <- dim(a_B)[1]
   n_t <- dim(a_B)[3]
   if (n_u != length(names_u)) stop("Mismatch in number of land-use classes.")
@@ -250,6 +250,13 @@ getBLAG <- function(a_B, names_u = names_u, name_data_source = "",
   dt_B$data_source <- name_data_source
   dt_G$data_source <- name_data_source
   dt_L$data_source <- name_data_source
+  
+  # add region name as a column
+  dt_A$region <- region
+  dt_D$region <- region
+  dt_B$region <- region
+  dt_G$region <- region
+  dt_L$region <- region
 
   return(list(
     v_times = v_times,
@@ -316,13 +323,18 @@ getBetaRateMatrices <- function(a_B, names_u = names_u,
 #' @export
 #' @examples
 #' blag <- getBLAG_fromU(v_times = c(2000, 2006),
-#'   v_fnames = c("data/CORINE/Level1/r_U_cor_1000m_2000.tif", "data/CORINE/Level1/r_U_cor_1000m_2006.tif"),
-#'   name_data_source = "CORINE")
+#'   v_fnames = c("data/CORINE/Level1/r_U_cor_1000m_2000.tif", 
+#'        "data/CORINE/Level1/r_U_cor_1000m_2006.tif"),
+#'   name_data_source = "CORINE", 
+#'   region = "sc",
+#'   names_u = names_u)
 getBLAG_fromU <- function(
   v_times,
   v_fnames,
   name_data_source, 
-  names_u, returnU = FALSE){
+  region = "uk",
+  names_u, 
+  returnU = FALSE){
   
   file.exists(v_fnames)
   s_U <- stack(v_fnames)
@@ -342,6 +354,21 @@ getBLAG_fromU <- function(
   dt_U$u <- names_u[dt_U$u] 
   levels(dt_U$u) <- names_u
 
+  # mask out regions to be excluded
+  # read the mask file with the matching resolution
+  # region is called "country" in mask file - to be fixed
+  fname <- paste0("./data-raw/mask/dt_land_", res(s_U)[1], "m.qs")
+  dt_mask <- qread(fname)
+  v_region_id <-  c(1, 2, 3, 4)
+  v_region_all <-  c("en", "sc", "wa", "ni", "uk")
+  country_id <- match(region, v_region_all)
+  if (region == "uk") country_id <- v_region_id
+  dt <- merge(dt_mask, dt_U)
+  dt <- dt[country %in% country_id]
+  # dim(dt)
+  # names(dt) # "x"    "y"    "time" "u"
+  dt_U <- dt[, .(x, y, time, u)]
+  
   # B matrix
   a_B <- getBetaMatrices(dt_U, names_u = names_u, cellArea = cellArea, 
     removeDiag = FALSE, rateOfChange = FALSE)
@@ -351,7 +378,7 @@ getBLAG_fromU <- function(
   
   #** get this correct
   blag <- getBLAG(a_B, names_u = names_u, name_data_source = name_data_source,
-    v_times = v_times, cellArea = cellArea)
+    region = region, v_times = v_times, cellArea = cellArea)
 
   # make list of items to return
   l <- list(
