@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -p par-single
+#SBATCH -p short-serial-4hr
 #SBATCH --job-name=mcmcb_sc
 #SBATCH -o output/output_sc/mcmcb_%A_%a.out
 #SBATCH -e output/output_sc/mcmcb_%A_%a.err

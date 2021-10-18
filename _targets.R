@@ -166,7 +166,7 @@ list(
     c(fs::path_rel(here("data-raw/FC/timeSeries", 
         "forest_planting_byYear_ha.csv")),
       fs::path_rel(here("data-raw/FC/timeSeries", 
-        "Deforestation_Areas_for_CEH_1990-2019.xlsx"))),
+        "Deforestation_Areas_for_CEH_1990-2020.xlsx"))),
     format = "file"
   ),
 
@@ -610,7 +610,7 @@ list(
     c_mcmc_out_en,
     run_mcmc_beta_job(c_mcmc_job_en, dir_output = "output/output_en",
       v_times = 1950:2020, c_obs_en),
-    cue = tar_cue(mode = "thorough"),
+    cue = tar_cue(mode = "never"),
     format = "file"
   ),    
 
@@ -619,7 +619,7 @@ list(
     c_mcmc_out_sc,
     run_mcmc_beta_job(c_mcmc_job_sc, dir_output = "output/output_sc",
       v_times = 1950:2020, c_obs_sc),
-    cue = tar_cue(mode = "thorough"),
+    cue = tar_cue(mode = "never"),
     format = "file"
   ),    
 
@@ -628,7 +628,7 @@ list(
     c_mcmc_out_wa,
     run_mcmc_beta_job(c_mcmc_job_wa, dir_output = "output/output_wa",
       v_times = 1950:2020, c_obs_wa),
-    cue = tar_cue(mode = "thorough"),
+    cue = tar_cue(mode = "never"),
     format = "file"
   ),    
 
@@ -637,7 +637,7 @@ list(
     c_mcmc_out_ni,
     run_mcmc_beta_job(c_mcmc_job_ni, dir_output = "output/output_ni",
       v_times = 1950:2020, c_obs_ni),
-    cue = tar_cue(mode = "thorough"),
+    cue = tar_cue(mode = "never"),
     format = "file"
   ),    
 
@@ -646,7 +646,7 @@ list(
     c_mcmc_out_uk,
     run_mcmc_beta_job(c_mcmc_job_uk, dir_output = "output/output_uk",
       v_times = 1950:2020, c_obs_uk),
-    cue = tar_cue(mode = "thorough"),
+    cue = tar_cue(mode = "never"),
     format = "file"
   ),    
 
@@ -663,7 +663,7 @@ list(
       obs_unc = c_obs_en, 
       obs_exc = c_obs_en, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
-      blag_lcm = c_blag_lcm,
+      blag_lcm = c_blag_lcm_uk,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
     cue = tar_cue(mode = "never")
@@ -682,7 +682,7 @@ list(
       obs_unc = c_obs_sc, 
       obs_exc = c_obs_sc, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
-      blag_lcm = c_blag_lcm,
+      blag_lcm = c_blag_lcm_uk,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
     cue = tar_cue(mode = "never")
@@ -701,7 +701,7 @@ list(
       obs_unc = c_obs_wa, 
       obs_exc = c_obs_wa, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
-      blag_lcm = c_blag_lcm,
+      blag_lcm = c_blag_lcm_uk,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
     cue = tar_cue(mode = "never")
@@ -720,7 +720,7 @@ list(
       obs_unc = c_obs_ni, 
       obs_exc = c_obs_ni, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
-      blag_lcm = c_blag_lcm,
+      blag_lcm = c_blag_lcm_uk,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
     cue = tar_cue(mode = "never")
@@ -739,7 +739,7 @@ list(
       obs_unc = c_obs_uk, 
       obs_exc = c_obs_uk, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
-      blag_lcm = c_blag_lcm,
+      blag_lcm = c_blag_lcm_uk,
       start  = 1000,
       mcmc_diag_plot_year = 2019), 
     cue = tar_cue(mode = "never")
