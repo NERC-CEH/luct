@@ -24,7 +24,6 @@ c_file_AgCensus_NIr|stem|8e456a53504cb7b2|86e727e2d4b20acd|c3d912a59d253740|-527
 c_lcm_fname_job|stem|272abb3683cb0ae6|c6a11ebc79b55220|c3d912a59d253740|-658116698|slurm/process_LCM.job|t18872.4852083333s|15a2beec65aeeb81|357|file|vector|||0.01||
 c_file_AgCensus_Sco|stem|ea065511f3e8931d|2f6199e74eed0ffe|fab81d2d0edc890a|280904580|data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_1883-2014.csv*data-raw/AgCensus/Scotland/AgCensus_Scotland_ha_2009-2020.csv|t18907.4155902778s|8663dbe0887e4b3e|7256|file|vector|||0.007||
 c_file_CS|stem|e4b2cfb77eb4a5af|9365f60c7a756d02|c3d912a59d253740|-1268892762|data-raw/CS/UK_LUC_matrices_2018i.csv|t18547.4430555556s|b42b8461c0f40f0c|126944|file|vector|||0.004||
-c_file_fc|stem|8e3950567bf20560|a39378e277395399|fab81d2d0edc890a|2000033675|data-raw/FC/timeSeries/forest_planting_byYear_ha.csv*data-raw/FC/timeSeries/Deforestation_Areas_for_CEH_1990-2019.xlsx|t18906.6759490741s|d9db827e7bd774be|55270|file|vector|||5.72|package scales was built under R version 4.0.5|
 c_file_AgCensus_Wal|stem|d130328e9886aa85|5ce0c10b83c9f502|fab81d2d0edc890a|-1497989274|data-raw/AgCensus/Wales/AgCensus_Wales_ha_1867-2012.csv*data-raw/AgCensus/Wales/AgCensus_Wales_ha_1998-2020.csv|t18891.6156712963s|ec06965a741da97e|9534|file|vector|||0.007||
 c_file_agc_hist|stem|9d3980c716553e69|3e767b591cd9a313|c3d912a59d253740|-286581352|data-raw/AgCensus/all_LU_stats_FULLSERIES_km2.csv|t18752.3693402778s|57066e0d78f758e5|62452|file|vector|||0.004||
 c_fname_df_uncert|stem|b9dbd1d5da37dea7|bbe6427b90b29c72|c3d912a59d253740|-276174043|data/df_uncert.qs|t18900.8081597222s|471094a96b72058b|742|file|vector|||17.268|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
@@ -45,7 +44,6 @@ c_blag_AgCensus|stem|1c727703ad0ec13c|cd884abcef6dfafd|752619968268ff2b|-2231984
 m_AgCensus_plot|stem|ef066efa646357f3|30b7d2897fd75762|542a01d12cefd919|1692812895|analysis/m_AgCensus_plot.Rmd|t18908.9494791667s|c53f63e6f91f1a51|6753|file|vector|||82.759||
 m_data_comparison|stem|34e99fc5b26d5af2|43359537e98f892e|63edc889a20f32b4|-1476448528|analysis/m_data_comparison.Rmd|t18908.9494791667s|7928848359a93423|16974|file|vector|||135.167||
 c_blag_MODIS|stem|6878dd60fdef3367|f94878a090861401|7b9e7324f2848ab9|2007762235||t18909.9582407407s|dc7a753e3e0eb12d|1430|qs|vector|||26.538||
-c_blag_fc|stem|7c17fea5c47ba19f|5705bf70fe75eb8a|745261364822f58c|-1229794990||t18910.025775463s|d3959e355ede0ff3|18225|qs|vector|||11.498|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
 c_blag_corine_wa|stem|54f66a3e47633333|3510deeb500b74d3|cf83f933f15f7084|403835317||t18912.6590277778s|2dbe80d9c3d55121|2396|qs|vector|||293.93|Discarded datum OSGB 1936 in Proj4 definition|
 c_blag_corine_en|stem|3a1d6434b49caafe|28c4173c78583277|cf83f933f15f7084|1194972345||t18912.6626736111s|bb35d83bd743d189|2534|qs|vector|||314.184|Discarded datum OSGB 1936 in Proj4 definition|
 c_blag_corine_uk|stem|10624dee76d76e4b|12155a0b2d2681be|cf83f933f15f7084|-2068293645||t18912.6663773148s|7c4cf61d345b15ec|2607|qs|vector|||320.007|Discarded datum OSGB 1936 in Proj4 definition|
@@ -60,26 +58,28 @@ c_blag_lcm_wa|stem|a4750057993b7eea|0b1106e697a5ada9|5a1d2419b8e46324|-206597339
 c_blag_lcm_uk|stem|0d7eab9f10513c96|1ae90bd0f07ab27e|5a1d2419b8e46324|-225404794||t18913.4443865741s|e6420496fecb67d8|4703|qs|vector|||699.986||
 c_blag_lcm_ni|stem|a33247f96efd5405|09ff2c0c2c28113c|5a1d2419b8e46324|-2067712799||t18913.4505439815s|e08c40499959e0a1|4297|qs|vector|||531.999||
 c_blag_lcm_sc|stem|962617011ba26d78|81edbfdf98dff3d6|5a1d2419b8e46324|1966021457||t18913.4570833333s|442d216cae70645d|4487|qs|vector|||563.782||
-c_obs_all|stem|4a3fb1c3e12fa332|150347712c0cba35|7545c361f813736b|-1577379319||t18913.4570949074s|cb103a7f7ecae772|86449|qs|vector|||0.055||
-c_obs_km2|stem|82ae325be7b831ac|5d3af5bda2bffbf7|1a456f6f3bd412cf|1648656204||t18913.4571064815s|617351bf7b648edb|106654|qs|vector|||0.062||
-c_obs_filled|stem|63db81f28690d2b5|acde206b72cfbd45|d1b4d7bf7ffdd888|1979787992||t18913.4571180556s|cad6a02b8c2f3563|203024|qs|vector|||0.721||
-c_obs_unc|stem|fc2362b87fd8cff6|10cc2b94be75e08a|f17a30756046baaf|-1328037812||t18913.4571296296s|2151ee2f80970a6e|218761|qs|vector|||0.183||
 c_obs|stem|71efc79238ed5444|094f126f4db481a7|c15aafbebaf80530|283974285||t18913.4571759259s|c8b1787dc2e6210b|100017|qs|vector|||0.052||
-c_obs_en|stem|a57b2bff6f90b6d7|2b2ebfe1a2353c9a|b937e119abd32f97|766057186||t18913.5194097222s|8b0ff694a3b39c2d|72898|qs|vector|||4.9|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
-c_obs_wa|stem|e27079a82678e31f|a58a828fa9546b2b|b937e119abd32f97|-1348896088||t18913.5194097222s|89239d16730be8e4|69418|qs|vector|||0.081||
-c_obs_uk|stem|1307d9a8b4dc8ac4|cf92eead86c3dbd8|b937e119abd32f97|2104595409||t18913.5194212963s|2617eda6d126f943|71040|qs|vector|||0.015||
-c_obs_ni|stem|ea314ac9fc5a8a5c|8e509e5fd358f7a6|b937e119abd32f97|237336567||t18913.5194212963s|288a18a65dc4079d|68709|qs|vector|||0.012||
-c_obs_sc|stem|966506e55a4e3eac|8e138ea255e93ae8|b937e119abd32f97|1493848491||t18913.5194328704s|d7ff3ea0b5848c6a|69436|qs|vector|||0.045||
-c_mcmc_out_en|stem|ae041f1057071d01|d7ecb118d990e83a|8d32c5343408ea67|-1126772580|output/output_en/mcmcB_map2020.qs|t18911.0695833333s|0dd407bf2b677bc2|418|file|vector|||4.84|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
-c_mcmc_out_wa|stem|9f18bc1f745cd313|462c2512e99e9076|2470e46b3fdeb463|-458704065|output/output_wa/mcmcB_map2020.qs|t18911.0369212963s|9cbfb857ab8b4c55|423|file|vector|||1.289||
-c_mcmc_out_uk|stem|1d801bc2f632bd88|37e6e18c7d4ffb43|fdf45a1b6079e403|1847413738|output/output_uk/mcmcB_map2020.qs|t18911.0409490741s|b6099e1bec5fd49f|419|file|vector|||0.897||
-c_mcmc_out_ni|stem|6fe676bf2c1c7248|0f857b8ba1f3df5a|760bbfcc79fbbd6e|-151659975|output/output_ni/mcmcB_map2020.qs|t18911.0359259259s|cc5b6dbe9d597cc2|424|file|vector|||0.775||
-c_mcmc_out_sc|stem|f790edae7748559b|4f50e5b4a2f719f5|6750e08d6d0da139|1230143553|output/output_sc/mcmcB_map2020.qs|t18911.039837963s|58772b208bb3c33b|420|file|vector|||0.052||
 c_mcmc_job_wa|stem|c548dba4f066da98|339f6c738ee7bda3|c3d912a59d253740|-552242467|slurm/run_mcmc_beta_wa.job|t18913.5628703704s|4b961c631a2d04c8|360|file|vector|||12.348|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
 c_mcmc_job_ni|stem|6fd363533552628e|5e85147bc5ea92d4|c3d912a59d253740|-73419243|slurm/run_mcmc_beta_ni.job|t18913.5563310185s|4b961c631a2d04c8|360|file|vector|||0.012||
 c_mcmc_job_sc|stem|d7c379ae018d6084|18c18c19c3f25130|c3d912a59d253740|1172683752|slurm/run_mcmc_beta_sc.job|t18913.5627430556s|4b961c631a2d04c8|360|file|vector|||0.011||
 c_mcmc_job_en|stem|327446a6728b57ff|6ca760040a993410|c3d912a59d253740|1369326301|slurm/run_mcmc_beta_en.job|t18913.5624305556s|cb356512a9ae71c0|361|file|vector|||0.012||
 c_mcmc_job_uk|stem|ec5c25789364a3da|6a3fb93333fb6dd2|c3d912a59d253740|1489396717|slurm/run_mcmc_beta_uk.job|t18913.5630324074s|4b961c631a2d04c8|360|file|vector|||0.012||
+c_file_fc|stem|a4c7b1044ff656d0|68d695eeb5e836ce|fab81d2d0edc890a|2000033675|data-raw/FC/timeSeries/forest_planting_byYear_ha.csv*data-raw/FC/timeSeries/Deforestation_Areas_for_CEH.xlsx|t18918.0176273148s|b2cf3e486d848f8a|82191|file|vector|||4.296|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
+c_blag_fc|stem|1ea888fc8af32d38|5705bf70fe75eb8a|46849532f639b67c|-1229794990||t18918.0194907407s|599b59440bbfb46b|20139|qs|vector|||0.256||
+c_obs_all|stem|8f213e29ac9d944b|150347712c0cba35|6da5e86956a92483|-1577379319||t18918.019525463s|64d3a3437fb21cdb|88286|qs|vector|||0.058||
+c_obs_km2|stem|e304db29bd4f3b80|5d3af5bda2bffbf7|761aac2ee4d4fade|1648656204||t18918.0195486111s|d63dd651d547a2cf|107994|qs|vector|||0.072||
+c_obs_filled|stem|7f7315db7e7abb02|acde206b72cfbd45|df9f9dc6a1738631|1979787992||t18918.0195601852s|39663675b0a5c75b|202952|qs|vector|||0.578||
+c_obs_unc|stem|b1ad1ec516ea9a9f|10cc2b94be75e08a|d2a066f07e1b7916|-1328037812||t18918.0195717593s|d82c1d7e1e084466|218670|qs|vector|||0.362||
+c_obs_en|stem|13390e2766ebf028|2b2ebfe1a2353c9a|2ebe1a1e81c544ab|766057186||t18918.0195833333s|f0cdff4abaecfe17|72889|qs|vector|||0.112||
+c_obs_wa|stem|1475e8b5d8732b96|a58a828fa9546b2b|2ebe1a1e81c544ab|-1348896088||t18918.0195833333s|ec1d5886eb0f39d9|69382|qs|vector|||0.014||
+c_obs_uk|stem|4f32cef621db7fe6|cf92eead86c3dbd8|2ebe1a1e81c544ab|2104595409||t18918.0195949074s|fea3c824dba30c02|71036|qs|vector|||0.256||
+c_obs_ni|stem|21b3462e9e1c871d|8e509e5fd358f7a6|2ebe1a1e81c544ab|237336567||t18918.0196064815s|dbe7000e28022069|68813|qs|vector|||0.013||
+c_obs_sc|stem|105a7f0c16fd60f5|8e138ea255e93ae8|2ebe1a1e81c544ab|1493848491||t18918.0196180556s|c21fdf918c6b2534|69424|qs|vector|||0.012||
+c_mcmc_out_en|stem|5101a4a5c92a9108|d7ecb118d990e83a|e33217f6e1bdd318|-1126772580|output/output_en/mcmcB_map2020.qs|t18913.5996759259s|0c79ab4d5be76e6d|422|file|vector|||6.008|multiple udunits databases present  appsjasminjaspyminiconda_envsjaspy3.7m34.6.14envsjaspy3.7m34.6.14r20200606shareudunitsudunits2.xml  usrshareudunitsudunits2.xml|
+c_mcmc_out_wa|stem|98a8279e41318e6f|462c2512e99e9076|409a7a701b28082e|-458704065|output/output_wa/mcmcB_map2020.qs|t18913.5992013889s|d66a5224e01e4f0c|425|file|vector|||1.186||
+c_mcmc_out_uk|stem|359b3ba5d9e64a4f|37e6e18c7d4ffb43|588887a14847ab92|1847413738|output/output_uk/mcmcB_map2020.qs|t18913.5970486111s|9cbfb857ab8b4c55|423|file|vector|||0.917||
+c_mcmc_out_ni|stem|306c8ac0a20afe0e|0f857b8ba1f3df5a|65dc232ca3f57b51|-151659975|output/output_ni/mcmcB_map2020.qs|t18913.5890277778s|b6099e1bec5fd49f|419|file|vector|||0.071||
+c_mcmc_out_sc|stem|211706157bd93990|4f50e5b4a2f719f5|41107f62f3d4b62a|1230143553|output/output_sc/mcmcB_map2020.qs|t18913.600775463s|0c79ab4d5be76e6d|422|file|vector|||0.912||
 getAreaGrossLoss_fromBeta|function|45a4fe6d7edd6124||||||||||||||
 wrangle_AgCensus_Eng_1|function|e8e7dd04646479b0||||||||||||||
 run_corine_job|function|4f3c1069eccca594||||||||||||||
@@ -115,7 +115,7 @@ run_iacs_job|function|39327c4b60a8f5ee||||||||||||||
 convert_units|function|4dea7f7a20621df0||||||||||||||
 names_u_chess|object|f73e942fda700ef0||||||||||||||
 getAreaTimeSeries|function|010c79abf38ad9cc||||||||||||||
-wrangle_FC|function|e44b9cca5c338a4e||||||||||||||
+wrangle_FC|function|a24b1f1995e25fc0||||||||||||||
 getVectors|function|407f7db334f5ac53||||||||||||||
 get_nrmse|function|de4c77c844b9bd06||||||||||||||
 %!in%|function|d24164870a4a045a||||||||||||||
@@ -123,7 +123,7 @@ colour_u|object|d2c87d8d820d79a9||||||||||||||
 apply_mask|function|672a06a7fac63e7c||||||||||||||
 v_region|object|967c2759456dc93f||||||||||||||
 get_loglik|function|f68f027f44ea34cd||||||||||||||
-get_post_plots|function|b4ac0bbb5399ac7c||||||||||||||
+get_post_plots|function|79e71e4c2d5aa2e4||||||||||||||
 correct_blag|function|c45975a0920102ad||||||||||||||
 get_blag_cs|function|8f938e5e1dc3ad68||||||||||||||
 join_AgCensus|function|f04f245fa23f85f4||||||||||||||
@@ -141,8 +141,8 @@ process_AgCensus_Eng|function|735a3afe2f2aa544||||||||||||||
 process_AgCensus_Sco|function|21a6d41e39a2c58c||||||||||||||
 get_pred_ls|function|4efc22ae8fdd6116||||||||||||||
 getBLAG_fromU|function|3f5375ea9d3b81a2||||||||||||||
-c_post_B_en|stem|9271aa5aa79fda5b|e54f127800112ad4|4b2f6a662316b20f|1700320878||t18913.6170717593s|45b079a874f2b74a|673134116|qs|vector|||286.019|Removed 1 rows containing missing values geom_path.|
-c_post_B_wa|stem|d6a4312bad3e36b0|766c0a8d6ea0c2ad|c24fea99b6b29d1d|986009804||t18913.6204513889s|be8c9ca26ee5b2b3|664502431|qs|vector|||264.342|Removed 1 rows containing missing values geom_path.|
-c_post_B_uk|stem|7928a9fa680492cc|09899c99b40d8948|4853d6cb5dea1bf4|-1971820211||t18913.6238773148s|88335f1bdb22e3d0|657570423|qs|vector|||268.194|Removed 1 rows containing missing values geom_path.|
-c_post_B_ni|stem|a80805bd2b0083ad|7bfb4ca0d590f7c0|133e3f0534440d5b|-958703566||t18913.6270949074s|96a507ce664bb8a0|634596679|qs|vector|||249.093|Removed 1 rows containing missing values geom_path.|
-c_post_B_sc|stem|19d5bd894a254ef0|3471176d1834c547|bf2a6ee1134cd253|655006643||t18913.6303472222s|3f308f40c6b3c646|652178621|qs|vector|||249.497|Removed 1 rows containing missing values geom_path.|
+c_post_B_en|stem|487e8527cde10be9|9d7f9280257c36c8|6e339798e2d6ae35|1700320878||t18918.4828240741s|f4cd7cb70388c7db|382363400|qs|vector|||243.716|Removed 1 rows containing missing values geom_path.|
+c_post_B_wa|stem|512bf4e0f50362c3|bfaa0a520e2cced3|94850192c0a52f78|986009804||t18918.4861574074s|f9563ead4ab15c01|345417773|qs|vector|||271.262|Removed 1 rows containing missing values geom_path.|
+c_post_B_uk|stem|6039a063574bba7d|a9e6d0c2f447c434|429b62a8b85b7cd0|-1971820211||t18918.4889699074s|76693af56d076876|379830273|qs|vector|||224.676|Removed 1 rows containing missing values geom_path.|
+c_post_B_ni|stem|77694f775e2c1f26|2f41bb2151cfb5c9|ce880fedebe0ade2|-958703566||t18918.4916550926s|d241332818ce6a09|335891569|qs|vector|||214.217|Removed 1 rows containing missing values geom_path.|
+c_post_B_sc|stem|483f6fa76c3c9bcf|4cd0c886345ae934|7793693cf8eccb2b|655006643||t18918.4944444444s|e35a385e5e34bff6|370981915|qs|vector|||220.735|Removed 1 rows containing missing values geom_path.|

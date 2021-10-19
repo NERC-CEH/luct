@@ -61,8 +61,8 @@ sd_prior    <- rep(500, n_u^2)
 upper_prior <- rep(10000, n_u^2)
 # restrict the range for "other" land, which shouldn't change
 ind_other <- c(6, 12, 18, 24, 30:36)
-sd_prior[ind_other] <- 1
-upper_prior[ind_other] <- 1
+sd_prior[ind_other] <- 5
+upper_prior[ind_other] <- 1000
 
 prior <- createTruncatedNormalPrior(
    mean = rep(0, n_u^2), 

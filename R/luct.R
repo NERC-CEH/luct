@@ -286,7 +286,7 @@ wrangle_CS <- function(fpath = "./data-raw/CS/UK_LUC_matrices_2018i.csv"){
 #' x <- wrangle_FC(c(fpath1, fpath2))
 wrangle_FC <- function(v_fpath = 
   c("./data-raw/FC/timeSeries/forest_planting_byYear_ha.csv",
-    "./data-raw/FC/timeSeries/Deforestation_Areas_for_CEH_1990-2019.xlsx")){
+    "./data-raw/FC/timeSeries/Deforestation_Areas_for_CEH.xlsx")){
 
   # read data on afforestation
   df_affn <- read.csv(v_fpath[1])
@@ -306,7 +306,7 @@ wrangle_FC <- function(v_fpath =
 
   # read data on deforestation
   df_defn <- read_excel(v_fpath[2],
-    sheet  = "Def Time series 1990-2019i", skip = 3)
+    sheet  = "Def Time series", skip = 3)
   df_defn <- with(df_defn[1:30,], data.frame(time = as.numeric(Year), 
     area_uk = area_uk, 
     area_en = area_en,
@@ -1979,6 +1979,8 @@ get_post_plots <- function(
     df_G = df_G_post_long,
     df_L = df_L_post_long,
     df_D = df_D_post_long,
-    a_B_post = a_B_post
+    a_B_post = a_B_post,
+    a_B_post_map = a_B_post_map,
+    a_B_post_q = a_B_post_q
     ))
 }

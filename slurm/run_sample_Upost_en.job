@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH -p short-serial
+#SBATCH --job-name=sampleU_en
+#SBATCH -o output/output_en/sampleU_%A_%a.out
+#SBATCH -e output/output_en/sampleU_%A_%a.err
+#SBATCH -t 12:30:00
+#SBATCH --array=1-4
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 100 en" slurm/sample_Upost.R "output/output_en/console_sample_Upost_100_${SLURM_ARRAY_TASK_ID}.Rout"

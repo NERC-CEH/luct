@@ -166,7 +166,7 @@ list(
     c(fs::path_rel(here("data-raw/FC/timeSeries", 
         "forest_planting_byYear_ha.csv")),
       fs::path_rel(here("data-raw/FC/timeSeries", 
-        "Deforestation_Areas_for_CEH_1990-2020.xlsx"))),
+        "Deforestation_Areas_for_CEH.xlsx"))),
     format = "file"
   ),
 
@@ -664,9 +664,9 @@ list(
       obs_exc = c_obs_en, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
       blag_lcm = c_blag_lcm_uk,
-      start  = 1000,
+      start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "always")
   ),    
 
   # Plot the results and write summary output
@@ -683,9 +683,9 @@ list(
       obs_exc = c_obs_sc, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
       blag_lcm = c_blag_lcm_uk,
-      start  = 1000,
+      start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "always")
   ),    
 
   # Plot the results and write summary output
@@ -702,9 +702,9 @@ list(
       obs_exc = c_obs_wa, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
       blag_lcm = c_blag_lcm_uk,
-      start  = 1000,
+      start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "always")
   ),    
 
   # Plot the results and write summary output
@@ -721,9 +721,9 @@ list(
       obs_exc = c_obs_ni, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
       blag_lcm = c_blag_lcm_uk,
-      start  = 1000,
+      start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "always")
   ),    
 
   # Plot the results and write summary output
@@ -740,9 +740,9 @@ list(
       obs_exc = c_obs_uk, 
       #v_data_source = c("AgCensus", "MODIS", "CS", "FC", "IACS"),
       blag_lcm = c_blag_lcm_uk,
-      start  = 1000,
+      start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "never")
+    cue = tar_cue(mode = "always")
   ),    
 
   
