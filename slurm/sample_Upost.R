@@ -22,6 +22,16 @@
 # R CMD BATCH --no-restore --no-save "--args  3 100  sc" slurm/sample_Upost.R "output/output_sc/console_sample_Upost_100m_3.Rout"  > output/output_sc/sample_Upost_100m_3.out &
 # R CMD BATCH --no-restore --no-save "--args  4 100  sc" slurm/sample_Upost.R "output/output_sc/console_sample_Upost_100m_4.Rout"  > output/output_sc/sample_Upost_100m_4.out &
 
+# R CMD BATCH --no-restore --no-save "--args  1 100  wa" slurm/sample_Upost.R "output/output_wa/console_sample_Upost_100m_1.Rout"  > output/output_wa/sample_Upost_100m_1.out &
+# R CMD BATCH --no-restore --no-save "--args  2 100  wa" slurm/sample_Upost.R "output/output_wa/console_sample_Upost_100m_2.Rout"  > output/output_wa/sample_Upost_100m_2.out &
+# R CMD BATCH --no-restore --no-save "--args  3 100  wa" slurm/sample_Upost.R "output/output_wa/console_sample_Upost_100m_3.Rout"  > output/output_wa/sample_Upost_100m_3.out &
+# R CMD BATCH --no-restore --no-save "--args  4 100  wa" slurm/sample_Upost.R "output/output_wa/console_sample_Upost_100m_4.Rout"  > output/output_wa/sample_Upost_100m_4.out &
+                                                                                                                                                   
+# R CMD BATCH --no-restore --no-save "--args  1 100  ni" slurm/sample_Upost.R "output/output_ni/console_sample_Upost_100m_1.Rout"  > output/output_ni/sample_Upost_100m_1.out &
+# R CMD BATCH --no-restore --no-save "--args  2 100  ni" slurm/sample_Upost.R "output/output_ni/console_sample_Upost_100m_2.Rout"  > output/output_ni/sample_Upost_100m_2.out &
+# R CMD BATCH --no-restore --no-save "--args  3 100  ni" slurm/sample_Upost.R "output/output_ni/console_sample_Upost_100m_3.Rout"  > output/output_ni/sample_Upost_100m_3.out &
+# R CMD BATCH --no-restore --no-save "--args  4 100  ni" slurm/sample_Upost.R "output/output_ni/console_sample_Upost_100m_4.Rout"  > output/output_ni/sample_Upost_100m_4.out &
+
 #### pseudo-code
 # read 4 inputs
 # 1. current u and age dt_u_age.qs
@@ -61,12 +71,12 @@ i_sample
 
 # resolution to use in output raster (m)
 res <- as.numeric(commandArgs(trailingOnly = TRUE))[2]
-if (is.na(res)) res <- 10000
+if (is.na(res)) res <- 1000
 res
 
 # region to restrict sampling to
 region <- commandArgs(trailingOnly = TRUE)[3]
-if (is.na(region)) region <- "uk"
+if (is.na(region)) region <- "en"
 region
 i_region <- match(region, v_region) # 1:4
 if (region == "uk") i_region <- 1:4
@@ -144,7 +154,6 @@ test_matrix_matches <- function(m_B, dt,
   
   return(identical(v_m, as.numeric(v_dt)))
 }
-
 
 # 1. Read in posterior Beta matrix for appropriate region
 # n_iter /nchains - burnin / thin posterior samples
@@ -323,8 +332,8 @@ dim(dt_luv)
 # save output
 fname <- here(dir_output, paste0("dt_luv_", region, "_smp", i_sample, "_", res, "m.qs"))
 qsave(dt_luv, file = fname)
+#dt_luv <- qread(file = fname)
 
-# dt_luv <- qread(file = fname)
 library(stringr)
 # remove the six vectors with no change
 ind_unchanging <- c(
@@ -370,27 +379,39 @@ p <- p + xlab("Year") + ylab("Land use")
 p <- p + scale_x_continuous(breaks=c(1975,2000))
 p_v2 <- p
 
+# choose years for change 
+times_achangin <- c(1990, 2020)
+v_t <- match(times_achangin, v_times)
+dt[, u_t1 := factor(substr(u_ch, v_t[1], v_t[1]), levels = 1:n_u)]
+dt[, u_t2 := factor(substr(u_ch, v_t[2], v_t[2]), levels = 1:n_u)]
+dt[, u_t2 := factor(substr(u_ch, v_t[2], v_t[2]), levels = 1:n_u)]
+dt[, u_t12 :=  as.factor(paste0(u_t1, u_t2))]
+  # table(dt$u_t12)
+  dt[u_t1 == u_t2, u_t12 := NA]
+  dt[is.na(u_ch), u_t12 := NA]
+  
 r <- getRasterTemplate(domain = "UK", res = res, crs = crs_OSGB)
 r_u_t1   <- setValues(r, dt[, u_t1])
 r_u_t2   <- setValues(r, dt[, u_t2])
-r_u_t12   <- setValues(r, dt[, u_t12])
+r_u_t12  <- setValues(r, dt[, u_t12])
 
 dt_plot <- as.data.table(as.data.frame(r_u_t12, xy = TRUE))
 dt_plot <- data.table(dt_plot, dt[, .(u_t1, u_t2)])
 names(dt_plot)[3] <- "u_u"
 dt_plot <- dt_plot[!is.na(u_u)]
+dt_plot <- dt_plot[!is.na(u_t1)]
+dt_plot <- dt_plot[u_t1 != u_t2]
 
 #p <- ggplot(data = dt_plot[sample(1:dim(dt_plot)[1], 2000)], aes(x,y)) + 
-p_u_d <- ggplot(data = dt_plot, aes(x,y)) + 
+p_u_d <- ggplot(data = dt_plot[sample(1:dim(dt_plot)[1], 1500)], aes(x,y)) + 
   geom_point(aes(colour = u_t1), shape = "square", size = 3) +
   geom_point(aes(colour = u_t2), shape = "circle", size = 1.5) +
   scale_colour_manual(name = "Square = previous \n Circle = new", values = colour_u, labels = names_u) #+
   #coord_equal() +  theme_map() +  theme(legend.position = "right")
 
-v_times_toplot <- c(2019, 2020)
 s <- stack(r_u_t1, r_u_t2)
 st_U <- st_as_stars(s)
-st_U <- st_set_dimensions(st_U, "band", values = v_times_toplot, names = "time")
+st_U <- st_set_dimensions(st_U, "band", values = times_achangin, names = "time")
 names(st_U) <- "U"
 st_U$U <- factor(st_U$U)
 levels(st_U) <- names_u

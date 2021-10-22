@@ -1,8 +1,9 @@
 #!/bin/bash
-#SBATCH -p short-serial-4hr
+#SBATCH -p high-mem
 #SBATCH --job-name=sampleU_sc
 #SBATCH -o output/output_sc/sampleU_%A_%a.out
 #SBATCH -e output/output_sc/sampleU_%A_%a.err
-#SBATCH -t 01:30:00
-#SBATCH --array=1-10
-R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 1000 sc" slurm/sample_Upost.R "output/output_sc/console_sample_Upost${SLURM_ARRAY_TASK_ID}.Rout"
+#SBATCH -t 20:00:00
+#SBATCH --mem=120000
+#SBATCH --array=1-4
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 100 sc" slurm/sample_Upost.R "output/output_sc/console_sample_Upost_100m_${SLURM_ARRAY_TASK_ID}.Rout"

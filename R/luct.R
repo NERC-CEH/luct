@@ -1173,6 +1173,35 @@ run_mcmc_beta_job <- function(
 }
 
 
+## ---- sample_Upost_job
+
+#' Function to run SLURM job for sampling posterior U
+#'  from Beta matrix
+#'
+#' @param fname_job File path to SLURM job file for sampling U
+#' @return A path to the output data table qs file
+#' @export
+#' @examples
+#' region <- "uk"
+#' res <- 10000
+#' x <- sample_Upost_job(region, res)
+sample_Upost_job <- function(
+    region = "uk",
+    res = 1000
+  ){
+  dir_output <- paste0("output/output_", region)
+  fname_job  <- paste0("./slurm/run_sample_Upost_", region, ".job")
+  cmd <- paste0("sbatch ", fname_job)
+  # submit the jobs to the SLURM queue
+  #err <- system(cmd) ##* WIP TEMP don't always want to re-run these
+  # and return the paths of the output data.table
+  # sample 1 contains the MAP parameter set, written in sample_Upost.R
+  fname_dt_Umap <- fs::path_rel(here(dir_output, 
+    paste0("dt_u_", region, "_smp1_", res, "m.qs")))
+  return(fname_dt_Umap)
+}
+
+
 ## ---- get_nrmse
 
 #' Function to RMSE normalised by range 
@@ -1983,4 +2012,163 @@ get_post_plots <- function(
     a_B_post_map = a_B_post_map,
     a_B_post_q = a_B_post_q
     ))
+}
+
+# define function to calculate matrix m_B from subsets of the 
+# data in dt, split by soil_type
+# xm <- get_B_for_soil_type(
+  # dt = qread("output/output_ni/dt_u_ni_smp1_1000m.qs"), 
+  # res = 1000,
+  # my_region = "ni", # "en", "sc"
+  # my_soil_type = 0, # 0 = mineral, 1 = peat
+  # v_times = 1950:2020 # unique(blag_pred$df_D$time) 
+  # )
+# xp <- get_B_for_soil_type(
+  # dt = qread("output/output_ni/dt_u_ni_smp1_1000m.qs"), 
+  # res = 1000,
+  # my_region = "ni", # "en", "sc"
+  # my_soil_type = 1, # 0 = mineral, 1 = peat
+  # v_times = 1950:2020 # unique(blag_pred$df_D$time) 
+  # )  ##* WIP - this works - make a target
+get_B_for_soil_type <- function(
+  dt, # = qread("output/output_ni/dt_u_ni_smp1_1000m.qs"), 
+  res = 1000,
+  my_region = "ni", # "en", "sc"
+  my_soil_type = 0, # 0 = mineral, 1 = peat
+  v_times # = 1950:2020, # unique(blag_pred$df_D$time) 
+  ){
+
+  n_t <- length(v_times)
+  # declare array to hold output
+  a_B <- array(NA, c(n_u, n_u, n_t))
+
+  # get all factor levels for 1:n_u x 1:n_u matrix  
+  all_levels <- (expand.grid(1:n_u, 1:n_u))
+  all_levels <- paste0(all_levels[,1], all_levels[,2])
+
+  dt_mask <- qread(here("data/mask", paste0("dt_land_", res, "m.qs")))
+  stopifnot(dim(dt)[1] == dim(dt_mask)[1])
+  dt <- data.table(dt_mask, dt)
+  
+  # subset to region and soil_type of interest
+  i_region <- match(my_region, v_region) # 1:4
+  dt <- dt[country == i_region & soil_type == my_soil_type]
+  #dt[!is.na(u_ch)]
+  
+  for (i_t in 2:n_t){ 
+    i_tm1 <- (i_t - 1) # i_t minus 1, index for previous time
+    dt[, u_t1 := factor(substr(u_ch, i_tm1, i_tm1), levels = 1:n_u)]
+    dt[, u_t2 := factor(substr(u_ch, i_t,   i_t),   levels = 1:n_u)]
+    dt[, u_t12 := factor(paste0(u_t1, u_t2), levels = all_levels)]
+    # table(dt$u_t12)
+    # dt[u_t1 == u_t2, u_t12 := NA] # remove unchanging?
+    dt[is.na(u_ch), u_t12 := NA]
+    # levels(dt$u_t12)
+    #dt$u_t12 <- droplevels(dt$u_t12)
+    v_B <- table(dt$u_t12)
+    length(v_B)
+    a_B[,, i_t] <- as.matrix(v_B)
+  }
+  
+  dir_output <- paste0("output/output_", my_region)
+  fname <- here(dir_output, paste0("a_B_", my_region, "_",
+    c("min", "org")[(my_soil_type+1)], ".rda"))
+  save(a_B, file = fname)
+  
+  return(a_B)
+}
+
+get_B_uncertainty_as_array <- function(
+  df = post_B_en$df_B, 
+  my_region = "en", # "en", "sc"
+  v_times = unique(post_B_en$df_D$time) # = 1950:2020
+  ){
+
+  n_t <- length(v_times)
+  # declare array to hold output
+  a_B_q025 <- array(NA, c(n_u, n_u, n_t), dimnames = list(names_u, names_u, v_times))
+  a_B_q975 <- array(NA, c(n_u, n_u, n_t), dimnames = list(names_u, names_u, v_times))
+  a_B_cicv <- array(NA, c(n_u, n_u, n_t), dimnames = list(names_u, names_u, v_times))
+
+  dir_output <- paste0("output/output_", my_region)
+
+  # read arrays of B matrix on mineral and organic soils
+  fname_min <- here(dir_output, paste0("a_B_", my_region, "_min.rda"))
+  fname_org <- here(dir_output, paste0("a_B_", my_region, "_org.rda"))
+  load(fname_min, verbose = TRUE); a_B_min <- a_B
+  load(fname_org, verbose = TRUE); a_B_org <- a_B
+  # calculate each as a fraction of the total
+  a_B_tot <- a_B_min + a_B_org
+  a_frac_min <- a_B_min / (a_B_min + a_B_org)
+  a_frac_org <- a_B_org / (a_B_min + a_B_org)
+  
+  
+  # get all factor levels for 1:n_u x 1:n_u matrix  
+  all_levels <- (expand.grid(1:n_u, 1:n_u))
+  all_levels <- paste0(all_levels[,1], all_levels[,2])
+
+  dt <- as.data.table(df)
+  dt[, area_cicv := (area_q975 - area_q50) / area_q50 * 100]
+  # convert names to B matrix indices
+  dt[, u_from := match(u_from, names_u)]
+  dt[, u_to   := match(u_to,   names_u)]
+  
+  for (i_t in 2:n_t){
+    i_time <- v_times[i_t]
+    # subset to current year
+    dt_t <- dt[time == i_time]
+    for (i_u in 1:n_u){
+      for (j_u in 1:n_u){
+        if (i_u == j_u) next
+        a_B_q025[i_u, j_u, i_t] <- dt_t[u_from == i_u & u_to == j_u, area_q025]
+        a_B_q975[i_u, j_u, i_t] <- dt_t[u_from == i_u & u_to == j_u, area_q975]
+        a_B_cicv[i_u, j_u, i_t] <- dt_t[u_from == i_u & u_to == j_u, area_cicv]
+      } # j_u
+    }   # i_u
+  }     # i_t 
+  
+  # rename the arrays as totals for clarity
+  a_B_q025_tot <- a_B_q025
+  a_B_q975_tot <- a_B_q975 
+
+  # modify the quantiles by the fraction of area changing on each soil type
+  a_B_q025_min <- a_B_q025_tot * a_frac_min
+  a_B_q975_min <- a_B_q975_tot * a_frac_min 
+  a_B_q025_org <- a_B_q025_tot * a_frac_org
+  a_B_q975_org <- a_B_q975_tot * a_frac_org
+
+  # make the units an explicit attribute
+  a_B_q025_tot <- set_units(a_B_q025_tot, km^2)
+  a_B_q975_tot <- set_units(a_B_q975_tot, km^2)
+  a_B_q025_min <- set_units(a_B_q025_min, km^2)
+  a_B_q975_min <- set_units(a_B_q975_min, km^2)
+  a_B_q025_org <- set_units(a_B_q025_org, km^2)
+  a_B_q975_org <- set_units(a_B_q975_org, km^2)
+  a_B_cicv     <- set_units(a_B_cicv    , km^2)
+
+  fname <- here(dir_output, paste0("a_B_q025_tot_", my_region, ".rda"))
+  save(a_B_q025_tot, file = fname)    
+  fname <- here(dir_output, paste0("a_B_q025_min_", my_region, ".rda"))
+  save(a_B_q025_min, file = fname)  
+  fname <- here(dir_output, paste0("a_B_q025_org_", my_region, ".rda"))
+  save(a_B_q025_org, file = fname)
+    
+  fname <- here(dir_output, paste0("a_B_q975_tot_", my_region, ".rda"))
+  save(a_B_q975_tot, file = fname)    
+  fname <- here(dir_output, paste0("a_B_q975_min_", my_region, ".rda"))
+  save(a_B_q975_min, file = fname)
+  fname <- here(dir_output, paste0("a_B_q975_org_", my_region, ".rda"))
+  save(a_B_q975_org, file = fname)
+
+  fname <- here(dir_output, paste0("a_B_cicv_", my_region, ".rda"))
+  save(a_B_cicv, file = fname)
+  
+  return(list(
+    a_B_q025_tot, 
+    a_B_q975_tot,   
+    a_B_q025_min,
+    a_B_q975_min,
+    a_B_q025_org,
+    a_B_q975_org, 
+    a_B_cicv    ))
 }

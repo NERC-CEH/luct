@@ -666,7 +666,7 @@ list(
       blag_lcm = c_blag_lcm_uk,
       start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   # Plot the results and write summary output
@@ -685,7 +685,7 @@ list(
       blag_lcm = c_blag_lcm_uk,
       start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   # Plot the results and write summary output
@@ -704,7 +704,7 @@ list(
       blag_lcm = c_blag_lcm_uk,
       start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   # Plot the results and write summary output
@@ -723,7 +723,7 @@ list(
       blag_lcm = c_blag_lcm_uk,
       start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
   # Plot the results and write summary output
@@ -742,10 +742,236 @@ list(
       blag_lcm = c_blag_lcm_uk,
       start  = 10000,
       mcmc_diag_plot_year = 2019), 
-    cue = tar_cue(mode = "always")
+    cue = tar_cue(mode = "never")
   ),    
 
+  # Run a SLURM job to sample posterior U from Beta
+  tar_target(
+    c_fname_dt_Umap_en,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("slurm", "sample_Upost.R"))
+
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("slurm", "sample_Upost.R"))
+
+      sample_Upost_job(region = "en", res = 1000)
+    },
+    # Track the files returned by the command
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  ),   
   
+  # Run a SLURM job to sample posterior U from Beta
+  tar_target(
+    c_fname_dt_Umap_sc,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("slurm", "sample_Upost.R"))
+
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("slurm", "sample_Upost.R"))
+
+      sample_Upost_job(region = "sc", res = 1000)
+    },
+    # Track the files returned by the command
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  ),   
+    
+  # Run a SLURM job to sample posterior U from Beta
+  tar_target(
+    c_fname_dt_Umap_wa,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("slurm", "sample_Upost.R"))
+
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("slurm", "sample_Upost.R"))
+
+      sample_Upost_job(region = "wa", res = 1000)
+    },
+    # Track the files returned by the command
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  ),   
+      
+  # Run a SLURM job to sample posterior U from Beta
+  tar_target(
+    c_fname_dt_Umap_ni,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("slurm", "sample_Upost.R"))
+
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("slurm", "sample_Upost.R"))
+
+      sample_Upost_job(region = "ni", res = 1000)
+    },
+    # Track the files returned by the command
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  ),   
+  
+  # Run a SLURM job to sample posterior U from Beta
+  tar_target(
+    c_fname_dt_Umap_uk,
+    command = {
+      # Scan for targets of tar_read() and tar_load()
+      !!tar_knitr_deps_expr(here("slurm", "sample_Upost.R"))
+
+      # Track the input Rmd file (and not the rendered HTML file).
+      # Make the path relative to keep the project portable.
+      fs::path_rel(here("slurm", "sample_Upost.R"))
+
+      sample_Upost_job(region = "uk", res = 1000)
+    },
+    # Track the files returned by the command
+    format = "file",
+    cue = tar_cue(mode = "thorough")
+  ),   
+
+  # Get the en B matrix for mineral soil only
+  tar_target(
+    c_a_B_en_min,
+    get_B_for_soil_type(
+      dt = qread(c_fname_dt_Umap_en), 
+      res = 1000,
+      my_region = "en",
+      my_soil_type = 0,
+      v_times = 1950:2020),
+     cue = tar_cue(mode = "thorough")
+  ),    
+  
+  # Get the en B matrix for organic soil only
+  tar_target(
+    c_a_B_en_org,
+    get_B_for_soil_type(
+      dt = qread(c_fname_dt_Umap_en), 
+      res = 1000,
+      my_region = "en",
+      my_soil_type = 1,
+      v_times = 1950:2020),
+     cue = tar_cue(mode = "thorough")
+  ),    
+  
+  # Get the sc B matrix for mineral soil only
+  tar_target(
+    c_a_B_sc_min,
+    get_B_for_soil_type(
+      dt = qread(c_fname_dt_Umap_sc), 
+      res = 1000,
+      my_region = "sc",
+      my_soil_type = 0,
+      v_times = 1950:2020),
+     cue = tar_cue(mode = "thorough")
+  ),    
+  
+  # Get the sc B matrix for organic soil only
+  tar_target(
+    c_a_B_sc_org,
+    get_B_for_soil_type(
+      dt = qread(c_fname_dt_Umap_sc), 
+      res = 1000,
+      my_region = "sc",
+      my_soil_type = 1,
+      v_times = 1950:2020),
+     cue = tar_cue(mode = "thorough")
+  ),    
+  
+  # Get the wa B matrix for mineral soil only
+  tar_target(
+    c_a_B_wa_min,
+    get_B_for_soil_type(
+      dt = qread(c_fname_dt_Umap_wa), 
+      res = 1000,
+      my_region = "wa",
+      my_soil_type = 0,
+      v_times = 1950:2020),
+     cue = tar_cue(mode = "thorough")
+  ),    
+  
+  # Get the wa B matrix for organic soil only
+  tar_target(
+    c_a_B_wa_org,
+    get_B_for_soil_type(
+      dt = qread(c_fname_dt_Umap_wa), 
+      res = 1000,
+      my_region = "wa",
+      my_soil_type = 1,
+      v_times = 1950:2020),
+     cue = tar_cue(mode = "thorough")
+  ),    
+  
+  # Get the ni B matrix for mineral soil only
+  tar_target(
+    c_a_B_ni_min,
+    get_B_for_soil_type(
+      dt = qread(c_fname_dt_Umap_ni), 
+      res = 1000,
+      my_region = "ni",
+      my_soil_type = 0,
+      v_times = 1950:2020),
+     cue = tar_cue(mode = "thorough")
+  ),    
+  
+  # Get the ni B matrix for organic soil only
+  tar_target(
+    c_a_B_ni_org,
+    get_B_for_soil_type(
+      dt = qread(c_fname_dt_Umap_ni), 
+      res = 1000,
+      my_region = "ni",
+      my_soil_type = 1,
+      v_times = 1950:2020),
+     cue = tar_cue(mode = "thorough")
+  ),    
+  
+  # Get the en uncertainties in B from df to array of matrices format
+  tar_target(
+    c_l_a_B_uncert_en,
+    get_B_uncertainty_as_array(
+      df = c_post_B_en$df_B, 
+      my_region = "en",
+      v_times = unique(c_post_B_en$df_D$time)),
+    cue = tar_cue(mode = "thorough")
+  ),    
+    
+  # Get the sc uncertainties in B from df to array of matrices format
+  tar_target(
+    c_l_a_B_uncert_sc,
+    get_B_uncertainty_as_array(
+      df = c_post_B_sc$df_B, 
+      my_region = "sc",
+      v_times = unique(c_post_B_sc$df_D$time)),
+    cue = tar_cue(mode = "thorough")
+  ),    
+    
+  # Get the wa uncertainties in B from df to array of matrices format
+  tar_target(
+    c_l_a_B_uncert_wa,
+    get_B_uncertainty_as_array(
+      df = c_post_B_wa$df_B, 
+      my_region = "wa",
+      v_times = unique(c_post_B_wa$df_D$time)),
+    cue = tar_cue(mode = "thorough")
+  ),    
+    
+  # Get the ni uncertainties in B from df to array of matrices format
+  tar_target(
+    c_l_a_B_uncert_ni,
+    get_B_uncertainty_as_array(
+      df = c_post_B_ni$df_B, 
+      my_region = "ni",
+      v_times = unique(c_post_B_ni$df_D$time)),
+    cue = tar_cue(mode = "thorough")
+  ),    
+  
+
   # # META pipeline targets ----
 
   # # Any META steps that are straight computation (not Rmd notebooks)
