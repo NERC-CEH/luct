@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Section 3 Methods | Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory</title>
+  <meta name="description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Section 3 Methods | Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  <meta name="github-repo" content="NERC-CEH/luc_track" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Section 3 Methods | Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  
+  <meta name="twitter:description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  
+
+<meta name="author" content="Peter Levy, Sam Tomlinson, Gwen Buys and Amanda Thomson" />
+
+
+<meta name="date" content="2021-11-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction-1.html"/>
+<link rel="next" href="results.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Summary</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#tracking-land-use-change"><i class="fa fa-check"></i><b>1.1</b> Tracking land-use change</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#approach"><i class="fa fa-check"></i><b>1.2</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a></li>
+<li class="chapter" data-level="4" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>4</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>5</b> Conclusions</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="methods" class="section level1">
+<h1><span class="header-section-number">Section 3</span> Methods</h1>
+<p>The accuracy of land-use maps is usually estimated by comparison with some reference data set. We can then calculate confusion matrices and metrics of overall agreement, of which there are several. Common choices are overall accuracy (<span class="math inline">\(\alpha\)</span>, the fraction of locations where estimated land use agrees with the reference data set) and the <span class="math inline">\(\kappa\)</span> statistic, which corrects for the probability of chance agreement. <span class="math inline">\(\kappa\)</span> therefore gives a more robust measure, typically 5-20 % lower than simple percentage agreement. The probability of misclassification can be estimated simply as 1 - <span class="math inline">\(\alpha\)</span> or more stringently as 1 - <span class="math inline">\(\kappa\)</span>. For maps at times <span class="math inline">\(t_1\)</span> and <span class="math inline">\(t_2\)</span>, the probabilities of misclassification are denoted <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span>. Estimating land-use change involves calculating the difference between maps, and the errors are additive in the result. The probability of estimating erroneous land-use change because of misclassification in a pair of maps can be written as</p>
+<p><span class="math display">\[\begin{equation} \label{eq:probmis}
+  p_{1 \cup 2} = p_1 + p_2 - p_{1 \cap 2}.
+\end{equation}\]</span></p>
+<p>That is, the probability of error is the union of two events (misclassification occurring at time 1 or at time 2, minus their intersection <span class="math inline">\(p_{1 \cap 2}\)</span>, which is the probability of misclassification at both time 1 and time 2, which would otherwise be double-counted. <span class="math inline">\(p_{1 \cap 2}\)</span> can be estimated as <span class="math inline">\(p_1 p_2\)</span> assuming that the errors leading to misclassification at times 1 and 2 are independent of each other.
+In practice, our estimates of the probabilities of misclassification at times 1 and 2 are usually the same (<span class="math inline">\(p_1 \simeq p_2\)</span>), so this simplifies to:</p>
+<p><span class="math display">\[\begin{equation} \label{eq:probmis2}
+  p_{1 \cup 2} = 2 p_1 - p_1^2.
+\end{equation}\]</span></p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

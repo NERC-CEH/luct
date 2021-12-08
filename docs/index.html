@@ -1,69 +1,47 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="" xml:lang="">
 <head>
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021</title>
+  <meta name="description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  <meta name="github-repo" content="NERC-CEH/luc_track" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021" />
+  
+  <meta name="twitter:description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  
+
+<meta name="author" content="Peter Levy, Sam Tomlinson, and Beth Raine" />
 
 
+<meta name="date" content="2021-11-10" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
 
-<title>Project Home</title>
-
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-
-<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
-<!-- Add a small amount of space between sections. -->
-<style type="text/css">
-div.section {
-  padding-top: 12px;
-}
-</style>
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
+<link rel="next" href="introduction.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -72,910 +50,222 @@ if (window.hljs) {
 
 
 
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-pre code {
-  padding: 0;
-}
-</style>
 
-
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 
 <style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
 }
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
 }
+div.csl-indent {
+  margin-left: 2em;
 }
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
 </style>
 
-
-
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
 
 
-<div class="container-fluid main-container">
 
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
+    <div class="book-summary">
+      <nav role="navigation">
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<ul class="summary">
+<li><a href="./">Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory</a></li>
 
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Summary</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#tracking-land-use-change"><i class="fa fa-check"></i><b>1.1</b> Tracking land-use change</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#approach"><i class="fa fa-check"></i><b>1.2</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html"><i class="fa fa-check"></i><b>2</b> Quantifying Random Uncertainty in Land-Use Data Sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#introduction-1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#representation-of-random-uncertainty"><i class="fa fa-check"></i><b>2.1.1</b> Representation of random uncertainty</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#methods"><i class="fa fa-check"></i><b>2.2</b> Methods</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#estimating-sigmamathrmobs-from-reference-data"><i class="fa fa-check"></i><b>2.2.1</b> Estimating <span class="math inline">\(\sigma^\mathrm{obs}\)</span> from reference data</a></li>
+<li class="chapter" data-level="2.2.2" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#effects-of-survey-frequency-and-survey-startstop-dates"><i class="fa fa-check"></i><b>2.2.2</b> Effects of survey frequency and survey start/stop dates</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#results"><i class="fa fa-check"></i><b>2.3</b> Results</a></li>
+<li class="chapter" data-level="2.4" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#discussion"><i class="fa fa-check"></i><b>2.4</b> Discussion</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><i class="fa fa-check"></i><b>3</b> Quantifying Systematic Uncertainty in Land-Use Data Sources</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#introduction-2"><i class="fa fa-check"></i><b>3.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#representation-of-systematic-uncertainty"><i class="fa fa-check"></i><b>3.1.1</b> Representation of systematic uncertainty</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#methods-1"><i class="fa fa-check"></i><b>3.2</b> Methods</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#creating-reference-datasets"><i class="fa fa-check"></i><b>3.2.1</b> Creating reference datasets:</a></li>
+<li class="chapter" data-level="3.2.2" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#false-positive-rates"><i class="fa fa-check"></i><b>3.2.2</b> False positive rates</a></li>
+<li class="chapter" data-level="3.2.3" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#false-negative-rates"><i class="fa fa-check"></i><b>3.2.3</b> False negative rates</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#results-1"><i class="fa fa-check"></i><b>3.3</b> Results</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#data-source-specific-false-positive-and-false-negative-rates"><i class="fa fa-check"></i><b>3.3.1</b> Data-source-specific false positive and false negative rates</a></li>
+<li class="chapter" data-level="3.3.2" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#updating-b-d-g-and-l"><i class="fa fa-check"></i><b>3.3.2</b> Updating <span class="math inline">\(B, D, G\)</span> and <span class="math inline">\(L\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#conclusions"><i class="fa fa-check"></i><b>3.4</b> Conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><i class="fa fa-check"></i><b>4</b> Assessing systematic errors in estimates of land-use change: sensitivity to survey-interval length</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#introduction-3"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#methods-2"><i class="fa fa-check"></i><b>4.2</b> Methods</a></li>
+<li class="chapter" data-level="4.3" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#results-2"><i class="fa fa-check"></i><b>4.3</b> Results</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#iacs"><i class="fa fa-check"></i><b>4.3.1</b> IACS:</a></li>
+<li class="chapter" data-level="4.3.2" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#lcm"><i class="fa fa-check"></i><b>4.3.2</b> LCM</a></li>
+<li class="chapter" data-level="4.3.3" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#lcc"><i class="fa fa-check"></i><b>4.3.3</b> LCC:</a></li>
+<li class="chapter" data-level="4.3.4" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#crome"><i class="fa fa-check"></i><b>4.3.4</b> CROME:</a></li>
+<li class="chapter" data-level="4.3.5" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#corine"><i class="fa fa-check"></i><b>4.3.5</b> CORINE:</a></li>
+<li class="chapter" data-level="4.3.6" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#summary-table"><i class="fa fa-check"></i><b>4.3.6</b> Summary Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#discussion-and-conclusions"><i class="fa fa-check"></i><b>4.4</b> Discussion and Conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><i class="fa fa-check"></i><b>5</b> Estimating false-positive rates in detection of land-use change based on classification accuracy</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html#introduction-4"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html#methods-3"><i class="fa fa-check"></i><b>5.2</b> Methods</a></li>
+<li class="chapter" data-level="5.3" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html#results-3"><i class="fa fa-check"></i><b>5.3</b> Results</a></li>
+<li class="chapter" data-level="5.4" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html#conclusions-1"><i class="fa fa-check"></i><b>5.4</b> Conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html"><i class="fa fa-check"></i><b>6</b> Using life tables in modelling land-use change</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html#introduction-5"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html#methods-4"><i class="fa fa-check"></i><b>6.2</b> Methods</a></li>
+<li class="chapter" data-level="6.3" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html#results-4"><i class="fa fa-check"></i><b>6.3</b> Results</a></li>
+<li class="chapter" data-level="6.4" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html#discussion-1"><i class="fa fa-check"></i><b>6.4</b> Discussion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="results-england.html"><a href="results-england.html"><i class="fa fa-check"></i><b>7</b> Results: England</a></li>
+<li class="chapter" data-level="8" data-path="results-scotland.html"><a href="results-scotland.html"><i class="fa fa-check"></i><b>8</b> Results: Scotland</a></li>
+<li class="chapter" data-level="9" data-path="results-wales.html"><a href="results-wales.html"><i class="fa fa-check"></i><b>9</b> Results: Wales</a></li>
+<li class="chapter" data-level="10" data-path="results-northern-ireland.html"><a href="results-northern-ireland.html"><i class="fa fa-check"></i><b>10</b> Results: Northern Ireland</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Tracking Land-Use Change</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="about.html">About</a>
-</li>
-<li>
-  <a href="license.html">License</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/NERC-CEH/luct">
-    <span class="fa fa-github"></span>
-     
-    Source code
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
-
-
-
-<h1 class="title toc-ignore">Project Home</h1>
-
-</div>
-
-
-<p>
-<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-</button>
-</p>
-<div id="workflowr-report" class="collapse">
-<ul class="nav nav-tabs">
-<li class="active">
-<a data-toggle="tab" href="#summary">Summary</a>
-</li>
-<li>
-<a data-toggle="tab" href="#checks">
-Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-</a>
-</li>
-<li>
-<a data-toggle="tab" href="#versions">Past versions</a>
-</li>
 </ul>
-<div class="tab-content">
-<div id="summary" class="tab-pane fade in active">
-<p>
-<strong>Last updated:</strong> 2021-09-15
-</p>
-<p>
-<strong>Checks:</strong>
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-1
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-1
-</p>
-<p>
-<strong>Knit directory:</strong>
-<code>luct/</code>
-<span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed.">
-</span>
-</p>
-<p>
-This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
-analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
-1.6.2). The <em>Checks</em> tab describes the
-reproducibility checks that were applied when the results were created.
-The <em>Past versions</em> tab lists the development history.
-</p>
-<hr>
-</div>
-<div id="checks" class="tab-pane fade">
-<div id="workflowr-checks" class="panel-group">
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
-<strong>R Markdown file:</strong> uncommitted changes
-</a>
-</p>
-</div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
-<div class="panel-body">
-<p>The R Markdown file has staged changes.
-To know which version of the R Markdown file created these
-results, you’ll want to first commit it to the Git repo. If
-you’re still working on the analysis, you can ignore this
-warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and
-build the HTML.</p>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
-<div class="panel-heading">
-<p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree296733838b05c96710e03f2c27390446dbb56bf2targetblank2967338a">
-<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/296733838b05c96710e03f2c27390446dbb56bf2" target="_blank">2967338</a>
-</a>
-</p>
-</div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree296733838b05c96710e03f2c27390446dbb56bf2targetblank2967338a" class="panel-collapse collapse">
-<div class="panel-body">
-<p>
-Great! You are using Git for version control. Tracking code development and
-connecting the code version to the results is critical for reproducibility.
-</p>
-<p>
-The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/296733838b05c96710e03f2c27390446dbb56bf2" target="_blank">2967338</a>.
-See the <em>Past versions</em> tab to see a history of the changes made to the
-R Markdown and HTML files.
-</p>
-<p>
-Note that you need to be careful to ensure that all relevant files for the
-analysis have been committed to Git prior to generating the results (you can
-use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only
-checks the R Markdown file, but you know if there are other scripts or data
-files that it depends on. Below is the status of the Git repository when the
-results were generated:
-</p>
-<pre><code>
-Ignored files:
-    Ignored:    .Rhistory
-    Ignored:    .Rproj.user/
-    Ignored:    _targets/
-    Ignored:    analysis/life_tables.xlsx
-    Ignored:    analysis/m_lifetables.pdf
-    Ignored:    analysis/m_uqdata.pdf
-    Ignored:    data-raw
-    Ignored:    data/
-    Ignored:    renv/library/
-    Ignored:    renv/local/
-    Ignored:    renv/staging/
 
-Untracked files:
-    Untracked:  R/luct_Fp_Fn.R
-    Untracked:  slurm/runLikU.job
-    Untracked:  slurm/runMCMC_Beta.job
-    Untracked:  slurm/runSampleU.job
-    Untracked:  slurm/runVectors.job
+      </nav>
+    </div>
 
-Staged changes:
-    Modified:   R/luct.R
-    Modified:   _targets.R
-    Modified:   analysis/index.Rmd
-    Modified:   analysis/m_data_comparison.Rmd
-    Modified:   run.R
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021</a>
+          </h1>
+        </div>
 
-</code></pre>
-<p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in
-this status report because it is ok for generated content to have uncommitted
-changes.
-</p>
-</div>
-</div>
-</div>
-</div>
-<hr>
-</div>
-<div id="versions" class="tab-pane fade">
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
 
-<p>
-These are the previous versions of the repository in which changes were made
-to the R Markdown (<code>analysis/index.Rmd</code>) and HTML (<code>docs/index.html</code>)
-files. If you’ve configured a remote Git repository (see
-<code>?wflow_git_remote</code>), click on the hyperlinks in the table below to
-view the files as they were in that past version.
-</p>
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-File
-</th>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-<th>
-Message
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/3da15993f4d54bd7db48b00007920a6d205c1e4a/docs/index.html" target="_blank">3da1599</a>
-</td>
-<td>
-plevy
-</td>
-<td>
-2021-09-09
-</td>
-<td>
-Targets added for blag objects
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/e98cc46b990483233f91e059e87f71e2f7c3cf6c/docs/index.html" target="_blank">e98cc46</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-23
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/NERC-CEH/luct/blob/d209f1e41449f695cec97db37554bcc2ead3e05f/analysis/index.Rmd" target="_blank">d209f1e</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-23
-</td>
-<td>
-Adding AgCensus plots
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/d209f1e41449f695cec97db37554bcc2ead3e05f/docs/index.html" target="_blank">d209f1e</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-23
-</td>
-<td>
-Adding AgCensus plots
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/1e640e318b014bb0a482b63146f11a4f83ea7292/docs/index.html" target="_blank">1e640e3</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/NERC-CEH/luct/blob/1233f070eeb35c200691f68239856b167964876d/analysis/index.Rmd" target="_blank">1233f07</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Adding CS plots
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/1233f070eeb35c200691f68239856b167964876d/docs/index.html" target="_blank">1233f07</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Adding CS plots
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/58c5bc7e083e5b7d8abad073b9d691da3ff26f2c/docs/index.html" target="_blank">58c5bc7</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/NERC-CEH/luct/blob/80d2610ee04ae8680b8f522bbc4ebacd2ac39c0c/analysis/index.Rmd" target="_blank">80d2610</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Updating index
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/80d2610ee04ae8680b8f522bbc4ebacd2ac39c0c/docs/index.html" target="_blank">80d2610</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Updating index
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/72919f23ccdf6b13af5c5699de00637ab03e01cc/docs/index.html" target="_blank">72919f2</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/NERC-CEH/luct/blob/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/analysis/index.Rmd" target="_blank">1ea3ad7</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Updating index
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/1ea3ad7e11cb8afbc6375303b769c71395be3cfd/docs/index.html" target="_blank">1ea3ad7</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-20
-</td>
-<td>
-Updating index
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/1d208e14cee870915a75c23bab0ef2ba36682f1a/docs/index.html" target="_blank">1d208e1</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-13
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/NERC-CEH/luct/blob/29587c398396839877ce69bf140dcaac85505a15/analysis/index.Rmd" target="_blank">29587c3</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-13
-</td>
-<td>
-Initial commission
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/NERC-CEH/luct/29587c398396839877ce69bf140dcaac85505a15/docs/index.html" target="_blank">29587c3</a>
-</td>
-<td>
-ADCEH
-</td>
-<td>
-2021-08-13
-</td>
-<td>
-Initial commission
-</td>
-</tr>
-</tbody>
-</table>
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021</h1>
+<p class="author"><em>Peter Levy, Sam Tomlinson, and Beth Raine</em></p>
+<p class="date"><em>2021-11-10</em></p>
 </div>
-<hr>
-</div>
-</div>
-</div>
-<p>This is the website for the research project “Tracking Land-Use Change”.</p>
-<p>If you have cloned the project to a local computer this website is
-rendered in the <code>docs</code> subdirectory of the project directory.</p>
-<p>If you are using <code>workflowr</code> to publish the research website it will
-also be rendered online to GitHub Pages.</p>
-<p>This page acts as a table of contents for the website. There are links
-to the web pages generated from the analysis notebooks and to the
-rendered versions of manuscripts/documents/presentations.</p>
-<hr />
-<div id="project-workflow-status" class="section level2 unnumbered">
-<h2><a href="m_00_status.html">Project Workflow Status</a></h2>
-<p>This notebook displays the computational status of the project, that is,
-whether everything is up to date. Ironically, this is currently the only
-notebook that must be run manually, so this notebook only displays the
-status <strong>when the notebook was last executed</strong> and there is no
-indication whether the project status has changed since then.</p>
-<hr />
-</div>
-<div id="overview-documents" class="section level1 unnumbered">
-<h1>Overview documents</h1>
-<div id="proposal" class="section level2 unnumbered">
-<h2><a href="proposal.html">Proposal</a></h2>
-<p>This notebook explains the central ideas behind the project.</p>
-</div>
-<div id="notes" class="section level2 unnumbered">
-<h2><a href="notes.html">Notes</a></h2>
-<p>This notebook is for keeping notes of any points that may be useful for
-later project or manuscript development and which are not covered in the
-analysis notebooks or at risk of getting lost in the notebooks.</p>
-</div>
-<div id="workflow-management" class="section level2 unnumbered">
-<h2><a href="workflow.html">Workflow management</a></h2>
-<p>This project uses the <a href="https://wlandau.github.io/targets/"><code>targets</code></a>
-and <a href="https://github.com/jdblischak/workflowr"><code>workflowr</code></a> packages for
-managing the workflow of the project (making sure that the dependencies
-between computational steps are satisfied). When this work was started
-there were no easily found examples of using <code>targets</code> and <code>workflowr</code>
-together. This notebook contains notes on the proposed workflow for
-using <code>targets</code> and <code>workflowr</code>.</p>
-<hr />
-</div>
-</div>
-<div id="publications" class="section level1 unnumbered">
-<h1>Publications</h1>
-<p>Links to rendered manuscripts and presentations will go here.</p>
-<hr />
-</div>
-<div id="meta-notebooks" class="section level1 unnumbered">
-<h1>META Notebooks</h1>
-<p>These notebooks capture the analyses that were carried out to develop
-the code of the core processing pipeline. They are organised as
-side-chains to the core processing pipeline.</p>
-<p>Typically, a meta notebook will analyse the data available at one stage
-of the core pipeline, to guide the writing of the functions required to
-get to the next stage of the core pipeline. These meta notebooks
-generally conclude with the definition of a function that will be used
-in the core pipeline.</p>
-<p>There may be multiple notebooks all relating to different aspects of the
-same stage of the core pipeline.</p>
-<p>Sometimes the analyses are more diffuse - characterising the data in a
-way that may be helpful for guiding the development of future core
-stages, but not immediately resulting in the development of functions
-for the core pipeline.</p>
-<div id="ideas-for-developments" class="section level2 unnumbered">
-<h2>01 Ideas for Developments</h2>
-<p>Examines ideas for developing work, beyond what was dome in WP-A.</p>
-<div id="m_uqdata" class="section level3 unnumbered">
-<h3><a href="m_uqdata.html">m_uqdata</a></h3>
-<p>Examines options for quantifying the uncertainty in the different input data sources.</p>
-</div>
-<div id="m_lifetables" class="section level3 unnumbered">
-<h3><a href="m_lifetables.html">m_lifetables</a></h3>
-<p>Explains the idea of using life tables from population modelling in the land-use change context.</p>
-</div>
-</div>
-<div id="plots-of-data-sets" class="section level2 unnumbered">
-<h2>02 Plots of Data Sets</h2>
-<p>Plots each data to sense-check the contents</p>
-<div id="m_agcensus_plot" class="section level3 unnumbered">
-<h3><a href="m_AgCensus_plot.html">m_AgCensus_plot</a></h3>
-<p>AgCensus data plotted</p>
-</div>
-<div id="m_cs_plot" class="section level3 unnumbered">
-<h3><a href="m_CS_plot.html">m_CS_plot</a></h3>
-<p>CS data plotted</p>
-</div>
-<div id="m_data_comparison" class="section level3 unnumbered">
-<h3><a href="m_data_comparison.html">m_data_comparison</a></h3>
-<p>Plots comparing the different data sources.</p>
-</div>
-</div>
-</div>
-
-
-<!-- Adjust MathJax settings so that all math formulae are shown using
-TeX fonts only; see
-http://docs.mathjax.org/en/latest/configuration.html.  This will make
-the presentation more consistent at the cost of the webpage sometimes
-taking slightly longer to load. Note that this only works because the
-footer is added to webpages before the MathJax javascript. -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    "HTML-CSS": { availableFonts: ["TeX"] }
-  });
-</script>
-
+<div id="summary" class="section level1 unnumbered">
+<h1>Summary</h1>
+<p>This report describes work on the project “Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory” for the Department for Business, Energy &amp; Industrial Strategy (reference TRN 2384/05/2020). The aim of the project was to make improved estimates of land-use change in the UK, using multiple sources of data. We applied a method for estimating land-use change using a Bayesian data assimilation approach. This allows us to constrain estimates of gross land-use change with national-scale census data, whilst retaining the detailed information available from several other sources. Previous reports covered work with existing data sets (WP-A) and on developing new data sets (WP-B). This report describes subsequent work, focussed on quantifying uncertainties and improving the representation of crop-grass rotation.</p>
+<p>The random uncertainty term <span class="math inline">\(\sigma\)</span> for each data source has been estimated, based on agreement with the net change observed in a reference data set, comprising those data sets we believe to be most reliable for net change. The random uncertainty is now represented with both absolute and relative components, as a linear function with intercept and slope terms.</p>
+<p>Systematic uncertainties represent biases in the data, and can be charaterised as the false positive and false negative rates (i.e. detecting apparent change where none really occurs, and failing to detect actual change, respectively). We compared three different methods for estimating these rates, which gave similar results. These showed very high false positive rates, which mean that large corrections have to be applied to the data. The data assimilation algorithm now includes terms to account for: data-source-specific random uncertainty (sigma); data-source-specific systematic uncertainty (false positive and false negative rates); sampling error due to low survey frequency (e.g. decadal cf. annual); and uncertainty in extrapolation outwith (pre/post) survey time period.</p>
+<p>Additional data sets, which were not previously available have also been included in the analysis. All the holdings-level agricultural census data available in the UK from 1990 to 2019 have now been included. The CROME data set, covering crops in England, has been added.</p>
+<p>We have improved the accuracy of how we represent crop-grass rotations, using the idea of “life tables” or age-specific transition probabilities, from population modelling. The life table probabilities are based on an analysis of the data available data from IACS, CROME, LCM, and LCC, and these all show consistent patterns. Of these, IACS has much the longest time span of data, and is the dominant source of information. Using this method, the observed frequencies of transitions from crop to grassland as a function of cropland age (and v.v. for grassland) are now reproduced in the land-use vectors, and thereby approximate the observed frequency of crop-grass rotations.</p>
+<p>Since land-use change is now represented spatially, we can separately identify that occurring on mineral soils and organic soils. In summary form, land-use vectors and the matrices of land-use change are now provided separately for mineral and organic soils for each DA.</p>
+<p>The land-use change output data are provided as space-time data cubes at 100-m and 1000-m resolution for the period 1950-2020. These are also provided in summary (non-spatial) form as the set of unique land-use vectors, and the matrices of land-use change. In principle, many thousand samples of the posterior distribution are available (currently 20000 samples of the matrices are stored per DA). Many samples of the mapped and vector data can be provided from these, given practical computing and storage constraints, but the optimal way to produce these depends on how they are used in the LULUCF inventory work, and this is open to discussion. Storing land use as a 71-digit character string at 91 million locations (for the time period 1950-2020 at 100-m resolution) requires ~50 MB, or ~5MB in vector summary form, and much less at 1-km resolution.</p>
+<p>The workflow for the project uses a “Make”-like paradigm to maintain a reproducible workflow, implemented in the R “targets” package (<a href="https://books.ropensci.org/targets/" class="uri">https://books.ropensci.org/targets/</a>). This means that the dependencies among functions and input data are analysed dynamically and stored in a hash table. Any changes to source code functions or input data are detected automatically, and only the invalidated components re-run as necessary. This has several advantages: forcing the workflow to be declared at a higher level of abstraction; only running the necessary computation, so saving run-time for tasks that are already up to date; and most importantly, providing tangible evidence that the results match the underlying code and data, and confirm the computation is reproducible. All the code is under version control on GitHub.</p>
+<p>MCMC algorithms typically have to run for many iterations to produce an acceptable sample of the posterior, so that parameter estimates (the Beta matrices) are robust. For each year and each DA, the algorithm was run with nine MCMC chains for 200,000 iterations. Convergence was assessed by a standard method - comparing within-chain variance with among-chain variance via the Gelman-Rubin statistic. As chains move towards convergence, the value of this tends towards 1, and the standard test requires that this value is less than 1.1. This criterion is well met with this number of iterations. It is standard to discard “burn-in” samples prior to convergence, and to thin chains by a factor of ten to remove any autocorrelation. This yields around 16000 posterior Beta samples, which gives potentially the same number of posterior samples of the land-use vectors. However, it may be more practical to combine the calculation of fluxes into this code, without storing all the underlying data.</p>
+<p>We produced a time series of maps describing our best estimate of land-use change given the available data, as well as the full posterior distribution of this space-time data cube. This quantifies the joint probability distribution of the parameters, and properly propagates the uncertainty from input data to final output. The output data has been summarised in the form of land-use vectors. The results show that we can provide improved estimates of past land-use change using this method. The main advantage of the approach is that it provides a coherent, generalised framework for combining multiple disparate sources of data, and adding additional sources of data is straightforward.</p>
+<!--- { rendering -->
+<!--- } -->
 
 </div>
-</div>
+            </section>
 
-</div>
+          </div>
+        </div>
+      </div>
 
+<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["luct_reportNov2021.pdf"],
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
 }
-$(document).ready(function () {
-  bootstrapStylePandocTables();
 });
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
-
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3,h4,h5",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
 });
 </script>
 
@@ -984,10 +274,15 @@ $(document).ready(function ()  {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
-
 </body>
+
 </html>

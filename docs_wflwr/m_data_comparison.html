@@ -1,0 +1,2690 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Peter Levy" />
+
+<meta name="date" content="2021-09-13" />
+
+<title>[meta] Plot data_comparison</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Tracking Land-Use Change</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/NERC-CEH/luct">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">[meta] Plot data_comparison</h1>
+<h3 class="subtitle">m_data_comparison</h3>
+<h4 class="author">Peter Levy</h4>
+<h4 class="date">2021-09-13</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks">
+Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-10-08
+</p>
+<p>
+<strong>Checks:</strong>
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+7
+<span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+0
+</p>
+<p>
+<strong>Knit directory:</strong>
+<code>luct/</code>
+<span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
+1.6.2). The <em>Checks</em> tab describes the
+reproducibility checks that were applied when the results were created.
+The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you
+know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Environment:</strong> empty
+</a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global
+environment can affect the analysis in your R Markdown file in unknown ways.
+For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201104code">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Seed:</strong> <code>set.seed(20201104)</code>
+</a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20201104code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20201104)</code> was run prior to running the code in the R Markdown file.
+Setting a seed ensures that any results that rely on randomness, e.g.
+subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Session information:</strong> recorded
+</a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is
+critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Cache:</strong> none
+</a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident
+that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>File paths:</strong> relative
+</a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project
+makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree06fba5ba0350d2f8f571440db25ea0a7e24dbe82targetblank06fba5ba">
+<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<strong>Repository version:</strong> <a href="https://github.com/NERC-CEH/luct/tree/06fba5ba0350d2f8f571440db25ea0a7e24dbe82" target="_blank">06fba5b</a>
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomNERCCEHlucttree06fba5ba0350d2f8f571440db25ea0a7e24dbe82targetblank06fba5ba" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and
+connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/NERC-CEH/luct/tree/06fba5ba0350d2f8f571440db25ea0a7e24dbe82" target="_blank">06fba5b</a>.
+See the <em>Past versions</em> tab to see a history of the changes made to the
+R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the
+analysis have been committed to Git prior to generating the results (you can
+use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only
+checks the R Markdown file, but you know if there are other scripts or data
+files that it depends on. Below is the status of the Git repository when the
+results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    _targets/meta/process
+    Ignored:    _targets/meta/progress
+    Ignored:    _targets/objects/c_post_B
+    Ignored:    _targets/scratch/
+    Ignored:    data-raw
+    Ignored:    data/
+    Ignored:    output/
+    Ignored:    output_runX/
+    Ignored:    renv/library/
+    Ignored:    renv/staging/
+
+Untracked files:
+    Untracked:  _targets/objects/c_B_post
+    Untracked:  _targets/objects/c_GL_FC
+    Untracked:  _targets/objects/c_cor_job
+    Untracked:  _targets/objects/c_dA_AgCensus
+    Untracked:  _targets/objects/c_df_A_AgCensus_Eng
+    Untracked:  _targets/objects/c_df_A_AgCensus_NIr
+    Untracked:  _targets/objects/c_df_A_AgCensus_Sco
+    Untracked:  _targets/objects/c_df_A_AgCensus_Wal
+    Untracked:  _targets/objects/c_df_uncert
+    Untracked:  _targets/objects/pred_ls
+    Untracked:  df_tar_meta.csv
+    Untracked:  slurm/run_mcmc_beta.sh
+    Untracked:  slurm/run_mcmc_beta_en.job
+    Untracked:  slurm/run_mcmc_beta_en.sh
+    Untracked:  slurm/run_mcmc_beta_run12.job
+    Untracked:  slurm/run_mcmc_beta_serial.R
+
+Unstaged changes:
+    Modified:   _targets/meta/.gitignore
+    Modified:   _targets/meta/meta
+    Modified:   _targets/objects/c_agc_en
+    Modified:   _targets/objects/c_agc_hist
+    Modified:   _targets/objects/c_agc_ni
+    Modified:   _targets/objects/c_agc_sc
+    Modified:   _targets/objects/c_agc_wa
+    Modified:   _targets/objects/c_blag_AgCensus
+    Modified:   _targets/objects/c_blag_CS
+    Modified:   _targets/objects/c_obs
+    Modified:   _targets/objects/c_obs_all
+    Modified:   _targets/objects/c_obs_filled
+    Modified:   _targets/objects/c_obs_km2
+    Modified:   _targets/objects/c_obs_unc
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in
+this status report because it is ok for generated content to have uncommitted
+changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made
+to the R Markdown (<code>analysis/m_data_comparison.Rmd</code>) and HTML (<code>docs/m_data_comparison.html</code>)
+files. If you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table below to
+view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/analysis/m_data_comparison.Rmd" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+<td>
+WIP - Added region as a grouping variable throughout
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/m_data_comparison.html" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+<td>
+WIP - Added region as a grouping variable throughout
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/f8c4aec3e5163706f1fe37e0a18debe8b59579de/docs/m_data_comparison.html" target="_blank">f8c4aec</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-25
+</td>
+<td>
+On polar: Moved unit conversion to separate function; Added interval length effect to sigma; Changed RMSE to NRMSE
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/analysis/m_data_comparison.Rmd" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+Historical AgCensus data added and new processing targets in R/luct_AgCensus.R
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/de9785fdfcd96e18028b52718974246f6afb142d/docs/m_data_comparison.html" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+Historical AgCensus data added and new processing targets in R/luct_AgCensus.R
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/m_data_comparison.html" target="_blank">e0c2903</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+<td>
+Land mask applied to LCM data
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/analysis/m_data_comparison.Rmd" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+<td>
+Graphics option set to PNG; SVG file deleted
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/cf74775859144f9aa5ded62924700331d8dd55af/docs/m_data_comparison.html" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+<td>
+Graphics option set to PNG; SVG file deleted
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/962af3f130fee1b36b5ef3629cef60f617ff8696/docs/m_data_comparison.html" target="_blank">962af3f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+<td>
+Added target for sigma calculation and included in Beta MCMC
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/0fa064e60bcc45a10042fdc311124a05e626b180/docs/m_data_comparison.html" target="_blank">0fa064e</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-16
+</td>
+<td>
+dA changed to D throughout
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/3636b48be940d97f82e12103431e734c44c69cd0/analysis/m_data_comparison.Rmd" target="_blank">3636b48</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-15
+</td>
+<td>
+Target for DA by least squares added; dA changed to D in combine_blags
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/3636b48be940d97f82e12103431e734c44c69cd0/docs/m_data_comparison.html" target="_blank">3636b48</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-15
+</td>
+<td>
+Target for DA by least squares added; dA changed to D in combine_blags
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/296733838b05c96710e03f2c27390446dbb56bf2/docs/m_data_comparison.html" target="_blank">2967338</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/b3d846cf92cb43c1c8c68d508f6608d827e433ae/analysis/m_data_comparison.Rmd" target="_blank">b3d846c</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+<td>
+Data source exclusions target added
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/b3d846cf92cb43c1c8c68d508f6608d827e433ae/docs/m_data_comparison.html" target="_blank">b3d846c</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+<td>
+Data source exclusions target added
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/c6752cc04cc382414a3903e44ad73bd89d0f4b0e/analysis/m_data_comparison.Rmd" target="_blank">c6752cc</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+<td>
+Data comparison notebook added
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/NERC-CEH/luct/c6752cc04cc382414a3903e44ad73bd89d0f4b0e/docs/m_data_comparison.html" target="_blank">c6752cc</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+<td>
+Data comparison notebook added
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code># NOTE this notebook can be run manually or automatically by {targets}
+# So load the packages required by this notebook here
+# rather than relying on _targets.R to load them.
+
+# Set up the project environment, because {workflowr} knits each Rmd file 
+# in a new R session, and doesn&#39;t execute the project .Rprofile
+
+library(targets) # access data from the targets cache
+library(tictoc) # capture execution time
+library(here) # construct file paths relative to project root</code></pre>
+<pre><code>here() starts at /gws/nopw/j04/ceh_generic/plevy/luct</code></pre>
+<pre class="r"><code>library(ggplot2) # data wrangling
+library(units) # data wrangling</code></pre>
+<pre><code>Warning: multiple udunits databases present:
+ - /apps/jasmin/jaspy/miniconda_envs/jaspy3.7/m3-4.6.14/envs/jaspy3.7-m3-4.6.14-r20200606/share/udunits/udunits2.xml
+ - /usr/share/udunits/udunits2.xml</code></pre>
+<pre><code>udunits database from /apps/jasmin/jaspy/miniconda_envs/jaspy3.7/m3-4.6.14/envs/jaspy3.7-m3-4.6.14-r20200606/share/udunits/udunits2.xml</code></pre>
+<pre class="r"><code>knitr::opts_chunk$set(dev = &quot;png&quot;,
+                      dev.args = list(png = list(type = &quot;cairo-png&quot;)),
+                      optipng = &quot;-o1 -quiet&quot;)
+                      
+# start the execution time clock
+tictoc::tic(&quot;Computation time (excl. render)&quot;)
+
+# Get the path to the raw entity data file
+# This is a target managed by {targets}
+obs &lt;- tar_read(c_obs)</code></pre>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>Having assembled all the available data sources, we can now plot them on a common series of axes to compare their absolute magnitudes and relative trends in time.</p>
+<!--- { DCplotA -->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotA-1"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotA-1.png" alt="Time series of land-use areas $\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only." width="672" />
+<p class="caption">
+Figure 1.1: Time series of land-use areas <span class="math inline">\(\mathbf{A}\)</span> observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotA-1">
+Past versions of DCplotA-1.png
+</button>
+</p>
+<div id="fig-DCplotA-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_data_comparison.Rmd/DCplotA-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/f8c4aec3e5163706f1fe37e0a18debe8b59579de/docs/figure/m_data_comparison.Rmd/DCplotA-1.png" target="_blank">f8c4aec</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-25
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_data_comparison.Rmd/DCplotA-1.png" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/figure/m_data_comparison.Rmd/DCplotA-1.png" target="_blank">e0c2903</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_data_comparison.Rmd/DCplotA-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/c6752cc04cc382414a3903e44ad73bd89d0f4b0e/docs/figure/m_data_comparison.Rmd/DCplotA-1.png" target="_blank">c6752cc</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotA-2"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotA-2.png" alt="Time series of land-use areas $\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only." width="672" />
+<p class="caption">
+Figure 1.2: Time series of land-use areas <span class="math inline">\(\mathbf{A}\)</span> observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotA-2">
+Past versions of DCplotA-2.png
+</button>
+</p>
+<div id="fig-DCplotA-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotA-2.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotA-3"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotA-3.png" alt="Time series of land-use areas $\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only." width="672" />
+<p class="caption">
+Figure 1.3: Time series of land-use areas <span class="math inline">\(\mathbf{A}\)</span> observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotA-3">
+Past versions of DCplotA-3.png
+</button>
+</p>
+<div id="fig-DCplotA-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotA-3.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotA-4"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotA-4.png" alt="Time series of land-use areas $\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only." width="672" />
+<p class="caption">
+Figure 1.4: Time series of land-use areas <span class="math inline">\(\mathbf{A}\)</span> observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotA-4">
+Past versions of DCplotA-4.png
+</button>
+</p>
+<div id="fig-DCplotA-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotA-4.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotA-5"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotA-5.png" alt="Time series of land-use areas $\mathbf{A}$ observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only." width="672" />
+<p class="caption">
+Figure 1.5: Time series of land-use areas <span class="math inline">\(\mathbf{A}\)</span> observed by different data sources. Note that IACS data only cover England, so are included for comparison of trends only.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotA-5">
+Past versions of DCplotA-5.png
+</button>
+</p>
+<div id="fig-DCplotA-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotA-5.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Figure <a href="#fig:DCplotA"><strong>??</strong></a> shows the total areas of each land-use class estimated by the available data sources. For the total area of woodland, Agricultural Census and IACS only record the woodland area occurring on agricultural land, so these should not be expected to match the actual totals; they are only included to compare the rate of increase. However, between the remaining sources, there is a wide range in estimates, varying by 16000 km<sup>2</sup>, with FC &gt; LCM &gt; CORINE. CORINE shows an apparent decline in woodland area, which has to be considered suspect. LCM and FC show similar trends, but LCM estimates the woodland area to be ~ 6000 km<sup>2</sup> lower. Because the FC data is largely based on ground-based survey and aerial photography rather than satellite, we assume this to be more reliable.</p>
+<p>The Agricultural Census shows the total crop area to be relatively stable at ~50000 km<sup>2</sup>. The latter part of the IACS data appear in close agreement with this, but they account only for England. Adding in the crop area of Scotland, Wales and NI suggests that the IACS estimates exceed the Agricultural Census by around 10000 km<sup>2</sup>. The IACS crop data show a step change after the first three year, which is probably an artefact of changes in the methodology of IACS reporting. The LCC data start in close agreement with Agricultural Census, but show a strongly rising trend of ~5000 km<sup>2</sup> not seen in other data sources. Both CORINE and LCM show higher crop areas, with a declining trend not seen in the ground-based data.</p>
+<p>For grassland, the outlying line of IACS data can be discounted as it covers only England, and is included only for comparison of trends. Otherwise, estimates seem in closer agreement in absolute terms, although trends are not very consistent across data sources. The total area of rough grazing and semi-natural land shows a similar decline in both Agricultural Census and LCM, although their initial starting points differ by 10000 km<sup>2</sup>. CORINE shows the reverse, which appears implausible. For urban and built-up land however, LCM and CORINE show very close agreement on the absolute area and trend. Estimates of the total area of other land uses are only provided by LCM and CORINE, and neither appears plausible as genuine land-use change. This other land is mostly coastal zone, and it is more likely that this apparent change is due to differences in satellite imagery and the algorithms used to classify them.
+<!--- } --></p>
+<!--- { DCplotB -->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotB-1"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotB-1.png" alt="Time series of area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.6: Time series of area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotB-1">
+Past versions of DCplotB-1.png
+</button>
+</p>
+<div id="fig-DCplotB-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_data_comparison.Rmd/DCplotB-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/figure/m_data_comparison.Rmd/DCplotB-1.png" target="_blank">e0c2903</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_data_comparison.Rmd/DCplotB-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/3636b48be940d97f82e12103431e734c44c69cd0/docs/figure/m_data_comparison.Rmd/DCplotB-1.png" target="_blank">3636b48</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-15
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/c6752cc04cc382414a3903e44ad73bd89d0f4b0e/docs/figure/m_data_comparison.Rmd/DCplotB-1.png" target="_blank">c6752cc</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotB-2"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotB-2.png" alt="Time series of area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.7: Time series of area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotB-2">
+Past versions of DCplotB-2.png
+</button>
+</p>
+<div id="fig-DCplotB-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotB-2.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotB-3"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotB-3.png" alt="Time series of area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.8: Time series of area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotB-3">
+Past versions of DCplotB-3.png
+</button>
+</p>
+<div id="fig-DCplotB-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotB-3.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotB-4"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotB-4.png" alt="Time series of area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.9: Time series of area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotB-4">
+Past versions of DCplotB-4.png
+</button>
+</p>
+<div id="fig-DCplotB-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotB-4.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotB-5"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotB-5.png" alt="Time series of area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.10: Time series of area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotB-5">
+Past versions of DCplotB-5.png
+</button>
+</p>
+<div id="fig-DCplotB-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotB-5.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Figure <a href="#fig:DCplotB"><strong>??</strong></a> shows the <span class="math inline">\(\mathbf{B}\)</span> matrix over time.
+The y axis scales are somewhat skewed by a number of outlying high values. The plots on the top row, representing deforestation, are dominated by the high values from post-2015 LCM. Given the abrupt change with the previous LCM estimate, these would seem implausible. For the conversions from crop to grass and vice versa, the LCC and post-2015 LCM data give very high values (4000 to 6000 km<sup>2</sup>) compared with CS and pre-2015 LCM (&lt; 500 km<sup>2</sup>). IACS also shows similarily high values when we account for the fact that this only cover England and also with a step-change in the time series that appears implausible. Similar patterns are seen in other panels e.g. other to rough, where a single CORINE value dominates. Because of these order-of-magnitude differences, it is hard to discern subtler features here. As an alternative presentation, we can show the matrix numerically, with the colour scale indicating the magnitude of the area (Figure <a href="#fig:DCplotBtext"><strong>??</strong></a>).
+<!--- } --></p>
+<!--- { DCplotBtext -->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotBtext-1"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotBtext-1.png" alt="Area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources between 2017 and 2018." width="672" />
+<p class="caption">
+Figure 1.11: Area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources between 2017 and 2018.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotBtext-1">
+Past versions of DCplotBtext-1.png
+</button>
+</p>
+<div id="fig-DCplotBtext-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_data_comparison.Rmd/DCplotBtext-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/figure/m_data_comparison.Rmd/DCplotBtext-1.png" target="_blank">e0c2903</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_data_comparison.Rmd/DCplotBtext-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/c6752cc04cc382414a3903e44ad73bd89d0f4b0e/docs/figure/m_data_comparison.Rmd/DCplotBtext-1.png" target="_blank">c6752cc</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotBtext-2"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotBtext-2.png" alt="Area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources between 2017 and 2018." width="672" />
+<p class="caption">
+Figure 1.12: Area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources between 2017 and 2018.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotBtext-2">
+Past versions of DCplotBtext-2.png
+</button>
+</p>
+<div id="fig-DCplotBtext-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotBtext-2.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotBtext-3"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotBtext-3.png" alt="Area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources between 2017 and 2018." width="672" />
+<p class="caption">
+Figure 1.13: Area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources between 2017 and 2018.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotBtext-3">
+Past versions of DCplotBtext-3.png
+</button>
+</p>
+<div id="fig-DCplotBtext-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotBtext-3.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotBtext-4"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotBtext-4.png" alt="Area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources between 2017 and 2018." width="672" />
+<p class="caption">
+Figure 1.14: Area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources between 2017 and 2018.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotBtext-4">
+Past versions of DCplotBtext-4.png
+</button>
+</p>
+<div id="fig-DCplotBtext-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotBtext-4.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotBtext-5"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotBtext-5.png" alt="Area changing from each land use to every other land use (the matrix $\mathbf{B}$) observed by different data sources between 2017 and 2018." width="672" />
+<p class="caption">
+Figure 1.15: Area changing from each land use to every other land use (the matrix <span class="math inline">\(\mathbf{B}\)</span>) observed by different data sources between 2017 and 2018.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotBtext-5">
+Past versions of DCplotBtext-5.png
+</button>
+</p>
+<div id="fig-DCplotBtext-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotBtext-5.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Figure <a href="#fig:DCplotBtext"><strong>??</strong></a> indicates that LCC and LCM give <span class="math inline">\(B\)</span> values that are approximately an order of magnitude higher than CS and CORINE in 2017-2018. The former give crop-grass transitions close to 4000 km<sup>2</sup>; CS averages 583 km<sup>2</sup>. For grass-rough transitions, LCM gives values close to 2000 km<sup>2</sup>; CS estimates 570 km<sup>2</sup>. To examine the general patterns over time more clearly, we can plot the gross changes of each land-use class i.e. the sums of the rows and columns in Figures <a href="#fig:DCplotG"><strong>??</strong></a> and <a href="#fig:DCplotL"><strong>??</strong></a>.
+<!--- } --></p>
+<!--- { DCplotG -->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotG-1"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotG-1.png" alt="Time series of gross gain of area  $\mathbf{G}$ to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.16: Time series of gross gain of area <span class="math inline">\(\mathbf{G}\)</span> to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotG-1">
+Past versions of DCplotG-1.png
+</button>
+</p>
+<div id="fig-DCplotG-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_data_comparison.Rmd/DCplotG-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/figure/m_data_comparison.Rmd/DCplotG-1.png" target="_blank">e0c2903</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_data_comparison.Rmd/DCplotG-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/c6752cc04cc382414a3903e44ad73bd89d0f4b0e/docs/figure/m_data_comparison.Rmd/DCplotG-1.png" target="_blank">c6752cc</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotG-2"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotG-2.png" alt="Time series of gross gain of area  $\mathbf{G}$ to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.17: Time series of gross gain of area <span class="math inline">\(\mathbf{G}\)</span> to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotG-2">
+Past versions of DCplotG-2.png
+</button>
+</p>
+<div id="fig-DCplotG-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotG-2.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotG-3"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotG-3.png" alt="Time series of gross gain of area  $\mathbf{G}$ to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.18: Time series of gross gain of area <span class="math inline">\(\mathbf{G}\)</span> to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotG-3">
+Past versions of DCplotG-3.png
+</button>
+</p>
+<div id="fig-DCplotG-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotG-3.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotG-4"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotG-4.png" alt="Time series of gross gain of area  $\mathbf{G}$ to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.19: Time series of gross gain of area <span class="math inline">\(\mathbf{G}\)</span> to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotG-4">
+Past versions of DCplotG-4.png
+</button>
+</p>
+<div id="fig-DCplotG-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotG-4.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotG-5"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotG-5.png" alt="Time series of gross gain of area  $\mathbf{G}$ to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.20: Time series of gross gain of area <span class="math inline">\(\mathbf{G}\)</span> to each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotG-5">
+Past versions of DCplotG-5.png
+</button>
+</p>
+<div id="fig-DCplotG-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotG-5.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Figure <a href="#fig:DCplotG"><strong>??</strong></a> shows the gross gain in area of each land use.
+For woodlands, we would place highest confidence in the FC data (green symbols), which shows the gross gain to have declined from 250 km<sup>2</sup> to near zero in 2016. The 1990-2015 LCM data gives a slightly higher mean compared to this, and the CS data are not truly independent of the FC data as they share some data in common. The post-2015 LCM data show much higher rates, over 2000 km<sup>2</sup>, which are not believable. CORINE also shows high afforestation in 2006, but sharply declining; again this is not believable, assuming the FC data are resonably reliable.</p>
+<p>A similar lack of agreement is generally apparent in the data for the other five land uses. The 1990-2015 LCM and CS data show reasonable agreement The post-2015 LCM, LCC and IACS data show much higher gross gains. In the case of crops, if we factor in that the IACS data only account for England, then these three data sets are in some agreement that the gross gain in crop is in the range 3000-7000 km<sup>2</sup>. However, their patterns over time make us suspicious of their validity. The large year-to-year variability seems unlikely, and the patterns in LCC and LCM are not consistent.
+<!--- } --></p>
+<!--- { DC1plotL -->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotL-1"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotL-1.png" alt="Time series of gross loss of area $\mathbf{L}$ from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.21: Time series of gross loss of area <span class="math inline">\(\mathbf{L}\)</span> from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotL-1">
+Past versions of DCplotL-1.png
+</button>
+</p>
+<div id="fig-DCplotL-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_data_comparison.Rmd/DCplotL-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/figure/m_data_comparison.Rmd/DCplotL-1.png" target="_blank">e0c2903</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_data_comparison.Rmd/DCplotL-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/c6752cc04cc382414a3903e44ad73bd89d0f4b0e/docs/figure/m_data_comparison.Rmd/DCplotL-1.png" target="_blank">c6752cc</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotL-2"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotL-2.png" alt="Time series of gross loss of area $\mathbf{L}$ from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.22: Time series of gross loss of area <span class="math inline">\(\mathbf{L}\)</span> from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotL-2">
+Past versions of DCplotL-2.png
+</button>
+</p>
+<div id="fig-DCplotL-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotL-2.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotL-3"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotL-3.png" alt="Time series of gross loss of area $\mathbf{L}$ from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.23: Time series of gross loss of area <span class="math inline">\(\mathbf{L}\)</span> from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotL-3">
+Past versions of DCplotL-3.png
+</button>
+</p>
+<div id="fig-DCplotL-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotL-3.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotL-4"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotL-4.png" alt="Time series of gross loss of area $\mathbf{L}$ from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.24: Time series of gross loss of area <span class="math inline">\(\mathbf{L}\)</span> from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotL-4">
+Past versions of DCplotL-4.png
+</button>
+</p>
+<div id="fig-DCplotL-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotL-4.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotL-5"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotL-5.png" alt="Time series of gross loss of area $\mathbf{L}$ from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates." width="672" />
+<p class="caption">
+Figure 1.25: Time series of gross loss of area <span class="math inline">\(\mathbf{L}\)</span> from each land use observed by different data sources. LCM and CS values between surveys were interpolated values as constant annual rates.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotL-5">
+Past versions of DCplotL-5.png
+</button>
+</p>
+<div id="fig-DCplotL-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotL-5.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Examining the gross losses shows a similar picture(Figure <a href="#fig:DCplotL"><strong>??</strong></a>). According to FC data (green symbols), deforestation rates have remained very low, less than 50 km<sup>2</sup>. The 1990-2015 LCM data gives a close but slightly higher mean compared to this. The post-2015 LCM data show much higher rates, over 2000 km<sup>2</sup>, which again seem implausible. CORINE also shows high deforestation in 2006, which then decreses. Over all land uses, there is essentially the same overall pattern as in the gross gains. with the 1990-2015 LCM and CS data showing small losses, whilst the post-2015 LCM, LCC and IACS data show much larger losses.
+<!--- } --></p>
+<!--- { DCplotD -->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotD-1"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotD-1.png" alt="Time series of net change in area of each land use $\Delta \mathbf{A}$ observed by different data sources." width="672" />
+<p class="caption">
+Figure 1.26: Time series of net change in area of each land use <span class="math inline">\(\Delta \mathbf{A}\)</span> observed by different data sources.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotD-1">
+Past versions of DCplotD-1.png
+</button>
+</p>
+<div id="fig-DCplotD-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/709919bc0bce8f6e0b1ed81122cd380de4aae648/docs/figure/m_data_comparison.Rmd/DCplotD-1.png" target="_blank">709919b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/de9785fdfcd96e18028b52718974246f6afb142d/docs/figure/m_data_comparison.Rmd/DCplotD-1.png" target="_blank">de9785f</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/e0c2903f1db0e0a912157e83a115702e7bbd3269/docs/figure/m_data_comparison.Rmd/DCplotD-1.png" target="_blank">e0c2903</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-24
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/cf74775859144f9aa5ded62924700331d8dd55af/docs/figure/m_data_comparison.Rmd/DCplotD-1.png" target="_blank">cf74775</a>
+</td>
+<td>
+plevy
+</td>
+<td>
+2021-09-20
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/0fa064e60bcc45a10042fdc311124a05e626b180/docs/figure/m_data_comparison.Rmd/DCplotD-1.png" target="_blank">0fa064e</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-16
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/3636b48be940d97f82e12103431e734c44c69cd0/docs/figure/m_data_comparison.Rmd/DCplotD-1.png" target="_blank">3636b48</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-09-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotD-2"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotD-2.png" alt="Time series of net change in area of each land use $\Delta \mathbf{A}$ observed by different data sources." width="672" />
+<p class="caption">
+Figure 1.27: Time series of net change in area of each land use <span class="math inline">\(\Delta \mathbf{A}\)</span> observed by different data sources.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotD-2">
+Past versions of DCplotD-2.png
+</button>
+</p>
+<div id="fig-DCplotD-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotD-2.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotD-3"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotD-3.png" alt="Time series of net change in area of each land use $\Delta \mathbf{A}$ observed by different data sources." width="672" />
+<p class="caption">
+Figure 1.28: Time series of net change in area of each land use <span class="math inline">\(\Delta \mathbf{A}\)</span> observed by different data sources.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotD-3">
+Past versions of DCplotD-3.png
+</button>
+</p>
+<div id="fig-DCplotD-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotD-3.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotD-4"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotD-4.png" alt="Time series of net change in area of each land use $\Delta \mathbf{A}$ observed by different data sources." width="672" />
+<p class="caption">
+Figure 1.29: Time series of net change in area of each land use <span class="math inline">\(\Delta \mathbf{A}\)</span> observed by different data sources.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotD-4">
+Past versions of DCplotD-4.png
+</button>
+</p>
+<div id="fig-DCplotD-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotD-4.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:DCplotD-5"></span>
+<img src="figure/m_data_comparison.Rmd/DCplotD-5.png" alt="Time series of net change in area of each land use $\Delta \mathbf{A}$ observed by different data sources." width="672" />
+<p class="caption">
+Figure 1.30: Time series of net change in area of each land use <span class="math inline">\(\Delta \mathbf{A}\)</span> observed by different data sources.
+</p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-DCplotD-5">
+Past versions of DCplotD-5.png
+</button>
+</p>
+<div id="fig-DCplotD-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/NERC-CEH/luct/blob/06fba5ba0350d2f8f571440db25ea0a7e24dbe82/docs/figure/m_data_comparison.Rmd/DCplotD-5.png" target="_blank">06fba5b</a>
+</td>
+<td>
+ADCEH
+</td>
+<td>
+2021-10-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The net effect of these gains and losses is shown in Figure <a href="#fig:DCplotD"><strong>??</strong></a>. The same broad pattern is apparent The 1990-2015 LCM and CS data give lower estimates, with little temporal resolution because of the frequency of the surveys. The Agricultural Census shows annual variability, oscillating from positive to negative, but at a lower level. LCC, post-2015 LCM data, and IACS data show higher net rates of change, with rates of net change 3-4 times higher and a more noisy pattern.
+<!--- } --></p>
+<div id="discussion" class="section level2">
+<h2><span class="header-section-number">1.1</span> Discussion</h2>
+<p>From the above results, it appears that more work remains to be done on the EO-based data sets before they are suitable for use as direct measures of land-use change. Whilst the larger gross changes that they observe may be correct, their patterns over time make them appear less plausible. Particularly, the temporal patterns are not consistent (i.e. they do not increase and decrease at the same times), and the large year-to-year variability seems unlikely, given the way land management works. It appears that their sensitivity for detecting change alters over time. In the CORINE time series, both the gains and losses are initially large, and both decline at a similar rate over time. not useful. With LCM, there is a clear difference between the magnitude of gross change detected in recent years compared with pre-2015. The IACS data are also not consistent in time, and the magnitude and variability of changes appears questionable.</p>
+<p>None of the data sources here represent absolute truth. We cannot rule out the possibility that the much higher gross change rates are indeed correct, and that the Agricultural Census and CS underestimate these. However, we should consider other factors as well as the patterns in the data themselves. Firstly is the parsimony principle: if small gross changes can reproduce the observed net change, this is fundamentally more more probable than the occurence of large gross changes, all else being equal. In the Bayesian methodology, we can specify this as a prior probability distribution, and the the extent to whether “all else” really is “equal” is quantified by the observed data. We use this approach later. Secondly, the errors produced by EO-based and ground-based estimates are quite different. If we estimate land-use change by differencing maps, errors in the maps appear as spurious land-use change. So this method will necessarily over-estimate land-use change, to an extent that can be predicted from the predictive accuracy of the individual maps. The error variance in the land-use change estimate will be the sum of the variance in the two maps used. Future work may provide a quantification of this. The systematic errors present in ground-based estimates are less clear-cut, as it depends on the methodology used. However, because it requires sampling effort to detect change, it is commonly assumed that it is easier to under-estimate change. Again, future work may clarify this.</p>
+<p>Given the uncertainties in the EO data that may be tackled at a later stage, we focus on using ground-based observations for the data assimilation in WP-A, as originally proposed.
+We elect to use CS, FC and Agricultural Census data to estimate the <span class="math inline">\(B\)</span> matrix.
+We use the spatial pattern in the other data sources (LCM, LCC, IACS, CORINE) to estimate the likelihood of where change occurs,
+but not in the estimation of the <span class="math inline">\(B\)</span> matrix itself.
+This is a conservative approach, as the emphasis is on the same input data sets as used in the current inventory method, but constrains them with the net change measured by the national-scale Agricultural Census data, and the spatial pattern contained in LCM, LCC, IACS, and CORINE data. In this way we can try to minimise confounding changes to the methodology for estimating land-use change, and the data sources used in its estimation.</p>
+<p>The issues with the time trends and the plausibility of much higher gross rates of change in these data sets are issues which may be resolved in future work, which will focus on EO data.
+There are various approaches to further examining this.
+For example, if the IACS data are reliable, they should match the spatial pattern in the Agricultural Holdings data. If the two data sets are at odds, we cannot have great confidence in both of them.
+The Agricultural Census contains some data which would act as a constraint on our estimates of the gross changes to/from grass. The area of grassland less than five years old is specified. Assuming a uniform distribution, one fifth of this would be converted each year on average, which would give a ball-park estimate of the gross gain and loss. The complications arise in the age distribution of grassland (what area is &gt; 5 years old?) and whether the distribution is really uniform.
+Lastly, some other data sets exist for comparison, but have not become available within the time frame of this project (further IACS data, CROME, and LUCAS).</p>
+</div>
+</div>
+<div id="timing" class="section level1 unnumbered">
+<h1>Timing</h1>
+<pre><code>Computation time (excl. render): 64.573 sec elapsed</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.3 (2020-02-29)
+Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /apps/jasmin/jaspy/miniconda_envs/jaspy3.7/m3-4.6.14/envs/jaspy3.7-m3-4.6.14-r20200606/lib/libopenblasp-r0.3.9.so
+
+locale:
+ [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8    
+ [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
+ [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] units_0.7-2   ggplot2_3.3.5 here_1.0.1    tictoc_1.0.1  targets_0.6.0
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.1.1    xfun_0.25           bslib_0.2.5.1      
+ [4] purrr_0.3.4         colorspace_2.0-2    vctrs_0.3.8        
+ [7] generics_0.1.0      htmltools_0.5.1.1   yaml_2.2.1         
+[10] scico_1.2.0         utf8_1.2.2          rlang_0.4.11       
+[13] jquerylib_0.1.4     later_1.2.0         pillar_1.6.2       
+[16] glue_1.4.2          withr_2.4.2         lifecycle_1.0.0    
+[19] stringr_1.4.0       munsell_0.5.0       gtable_0.3.0       
+[22] workflowr_1.6.2     stringfish_0.15.2   codetools_0.2-18   
+[25] evaluate_0.14       labeling_0.4.2      RApiSerialize_0.1.0
+[28] knitr_1.33          callr_3.7.0         httpuv_1.6.1       
+[31] ps_1.6.0            fansi_0.5.0         highr_0.9          
+[34] Rcpp_1.0.7          renv_0.14.0         promises_1.2.0.1   
+[37] scales_1.1.1        RcppParallel_5.1.4  jsonlite_1.7.2     
+[40] farver_2.1.0        fs_1.5.0            digest_0.6.27      
+[43] stringi_1.7.3       qs_0.25.1           bookdown_0.23      
+[46] processx_3.5.2      dplyr_1.0.7         rprojroot_2.0.2    
+[49] grid_3.6.3          cli_3.0.1           tools_3.6.3        
+[52] magrittr_2.0.1      sass_0.4.0          tibble_3.1.3       
+[55] crayon_1.4.1        whisker_0.4         pkgconfig_2.0.3    
+[58] ellipsis_0.3.2      data.table_1.14.0   rmarkdown_2.10     
+[61] R6_2.5.0            igraph_1.2.6        git2r_0.28.0       
+[64] compiler_3.6.3     </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
