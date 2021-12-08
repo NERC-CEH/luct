@@ -1,0 +1,446 @@
+
+```{r render, eval = FALSE, echo = FALSE}
+library(rmarkdown)
+render("analysis/m_uqdata.Rmd", html_document())
+render("analysis/m_uqdata.Rmd", word_document())
+render("analysis/m_uqdata.Rmd", pdf_document())
+```
+
+```{r setup, echo = FALSE, include = FALSE}
+# NOTE this notebook can be run manually or automatically by {targets}
+# So load the packages required by this notebook here
+# rather than relying on _targets.R to load them.
+
+# Set up the project environment, because {workflowr} knits each Rmd file 
+# in a new R session, and doesn't execute the project .Rprofile
+
+library(targets) # access data from the targets cache
+here::i_am("analysis/m_uqdata.Rmd")
+library(tictoc) # capture execution time
+library(here) # construct file paths relative to project root
+library(fs) # file system operations
+library(qs)
+library(dplyr) # data wrangling
+# install.packages("sn") # skewed normal distribution
+#library(sn) # skewed normal distribution
+library(tidyr)
+library(data.table) # data wrangling
+library(units)
+library(ggplot2)
+library(rmarkdown)
+library(raster)
+library(rgdal)
+library(spCEH)
+library(stars)
+library(ggplot2)
+library(scales)
+library(RColorBrewer)
+library(data.table)
+theme_set(theme_classic())
+
+lu_names <- c("woods", "crops", "grass", "rough", "urban", "other")
+
+### Beth's Fpn function: I use this for doing the 0618 corine but use Pete's output for the rest of them just because
+source("P:\\07643_Tracking_Land_Use\\LUC uncertainties\\luc_uncert_funct_27Sept.R")
+
+# Load false positives and negatives from Pete's code
+load("P:/07643_Tracking_Land_Use/LUC uncertainties/m_fp_fn.rda", verbose = TRUE)
+
+#Code for BLAGs
+source("P:/07643_Tracking_Land_Use/luct/R/luc_track.R")
+source("P:/07643_Tracking_Land_Use/luct/R/luct.R")
+
+# start the execution time clock
+tictoc::tic("Computation time (excl. render)")
+
+# dt_D <- tar_read(c_obs)$dt_D
+# qsave(dt_D, "dt_D.qs")
+dt_D <- qread(here("data", "dt_D.qs"))
+
+```
+
+# Quantifying Uncertainty in Land-Use Data Sources
+
+## Introduction
+
+Several different data sources provide observations of the transition matrix $B$and the net and gross changes in area of each land use ($D, G, L$). The method used in WP-A treated all data sources as equally uncertain, and assumed the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these.  We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but there are several considerations when doing this in practice:
+
+1. We can consider increasing levels of detail:
+
+    -   variable-specific uncertainties (i.e. different for $B, G, L$ & $D$)
+
+    -   data source type-specific uncertainties (i.e. different for ground-based vs EO data)
+
+    -   data set-specific uncertainties (i.e. different for CS, IACS, LCM etc.)
+
+    -   land-use type-specific uncertainties (i.e. different for woods, crops, grass etc.)
+
+    -   time-specific uncertainties (i.e. different for 1990, 2000 ... 2019)
+
+2. Rather than continuous data with a simple $\sigma$ error term, the $B$ observations are count data in a 6 x 6-way classification. When considering land-use *change*, we need to compare the 36 elements of this classification from one data source with another (or the truth), so we have a 36 x 36 error matrix (or "confusion" matrix). This matrix has two distinct types of errors that we ideally want to distinguish: false positives and false negatives, or "user"/"commission" and "producer"/"omission" error/accuracy, in the terminology commonly used in remote sensing.
+
+3. We can specify uncertainty greater or lesser rigour: there are several possibilities for how we represent "uncertainty" in the mathematical model. 
+4. We can estimate uncertainty subjectively, or base it more closely on data. There are also several possibilities for how we translate measures of uncertainty in the data in to the mathematical model.
+
+A limitation is that none of the data sources represents absolute truth, and we have no definitive data set against which to calibrate.
+
+## Representation of uncertainty
+The data sources are assimilated in the Bayesian method via the likelihood function, which includes a term $\sigma^{obs}$, representing the standard deviation in the probability density function for the observation. The observation is thus not assumed to be the true value, but subject to errors which make it deviate from this. Random uncertainty is represented by the magnitude of $\sigma^{obs}$ - large values of $\sigma^{obs}$ represent high uncertainty.
+For each observation, a likelihood is calculated, assuming that measurement errors show a Gaussian distribution and are independent of each other.
+In mathematical notation, the likelihood of observing the area changing from land use $i$ to land use $j$, $\beta_{ij}^{\mathrm{obs}}$, is
+
+\begin{equation} \label{eq:likBeta}
+ \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\beta_{ij}^{\mathrm{obs}} - \beta_{ij}^{\mathrm{pred}})^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
+\end{equation}
+
+where $\beta_{ij}^{\mathrm{pred}}$ is the corresponding prediction, and $\sigma_{ij}^\mathrm{obs}$ is the uncertainty in the observation. There are analagous terms for $G, L$ and $D$ which can all be multiplied. For example, the term for the likelihood of observing the net change in land use $u$, $D_{u}^{\mathrm{obs}}$, is
+ 
+\begin{equation} \label{eq:likNet}
+ \mathcal{L} = \frac{1}{\sigma_{u}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(D_{u}^{\mathrm{obs}} - D_{u}^{\mathrm{pred}})^2/2 {\sigma_{u}^\mathrm{obs}}^2)
+\end{equation}
+ 
+
+We previously assumed that *relative* measurement uncertainty was the same for all observations, i.e. a constant proportion of the observed value. Thus, observations of large areas come with larger absolute uncertainty. The question is how to estimate more specific uncertainties $\sigma^\mathrm{obs}$ for the different data sources, if not specific for each individual observation.
+We thus need to examine the basis for specifing these uncertainties, based on a proper quantitative analysis.
+
+## Defining reference data
+A pre-cursor step is to define a reference data set with which we compare each data source, in the absence of ideal ground-truth data. To do this, we need to decide on a reference data set which we believe to be the most plausible or closest to the truth, based on judgement and prior knowledge. Some subjectivity is inevitable here, and this needs to be justified and explicit. An alternative would be a version of "leave-one-out" cross-validation: each data source is tested against all the other remaining data sources. Our method used here combines elements of both.
+
+## Options for improvement
+We consider here some options for improving the representation of data set-specific uncertainty in the methodology. These are in increasing order of complexity, and are not mutually exclusive.
+
+1. Most simply, we could base all $\sigma^\mathrm{obs}$ on the "lowest common denominator" data set, the time series of net area change $D$.
+Irrespective of higher levels of detail, all data sources produce estimates of $D$.
+If we define a reference data set, we can calculate a metric of agreement with this for all other data sets. Suitable metrics would be root-mean-square error (RMSE), mean-absolute error (MAE) and/or the correlation coefficient.
+We can use this metric as a scaling factor in estimating $\sigma^\mathrm{obs}$, such that data sources with poor agreement receive high $\sigma^\mathrm{obs}$ (high uncertainty). 
+Some subjectivity would come into deciding on the reference data set, which metrics to use, and the absolute values of $\sigma^\mathrm{obs}$, but the relative uncertainties (and therefore weighting) would be based quantitatively on data.
+Extending this approach to $G$ and $L$ data would be straightforward.
+
+2. Similarily, but focussing on the $B$ data, if we define a reference data set, we can calculate confusion matrices. We can then calculate metrics of overall agreement, and there are many such metrics - accuracy, precision, prevalence, misclassification rate, etc. There is much debate about these metrics, but a reasonable choice in our case would be the $\kappa$ statistic:
+\begin{equation} \label{eq:kappa}
+\kappa = 1-{\frac {1-p_{o}}{1-p_{e}}}
+\end{equation}
+where $p_{o}$ is the relative observed agreement with the reference data (the number of grid cells correctly classified), and $p_{e}$ is the hypothetical probability of chance agreement (calculated from the products of the confusion matrix row sums and columns sums). With perfect agreement,$\kappa = 1$; with no agreement beyond what would be expected by chance, $\kappa = 0$. This gives a more robust measure than simple percentage agreement, with a convenient scaling.
+$\kappa$ does not translate into an exact value for $\sigma^\mathrm{obs}$, but is clearly related. We can therefore use $\kappa$ as a scaling factor in estimating $\sigma^\mathrm{obs}$, such that data sources with low $\kappa$ values (poor agreement) receive high $\sigma^\mathrm{obs}$ (high uncertainty).
+The same elements of subjectivity come into this approach, but the quantity of data and level of detail used is greater.
+If we have the predictive probabilities associated with each prediction, we can plot the "receiver operating characteristics" graph or ROC, and also the Area Under the Curve (AUC).  This metric has several theoretical advantages, but is more complex to calculate.
+
+3. A fundamentally different approach is to explicitly represent the false positive and false negative error terms in the likelihood function. False positives cause observations to over-estimate change, whilst false negatives produce an under-estimate. The estimated bias in the observation is a simple function of the false positive and false negative error rates ($F_P$ and $F_N$) and the area (and number of grid cells) in which the false negative errors can occur, $A_N$. The likelihood equation becomes:
+\begin{equation} \label{eq:likBetaDelta}
+ \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-((1-F_P) \beta_{ij}^{\mathrm{obs}} + A_N F_N - \beta_{ij}^{\mathrm{pred}})^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
+\end{equation}
+This then calculates the likelihood of the observed change from land use $i$ to land use $j$, given that the true value is $\beta_{ij}^{\mathrm{pred}}$, and with given false positive and false negative rates $F_P$ and $F_N$, and uncertainty $\sigma_{ij}^\mathrm{obs}$ in the observation. This approach can be implemented in increasingly complex ways:
+
+    - estimating the false positive and false negative error rates based on some set of confusion matrices, and thereafter assuming them to be fixed and constant for a given data source;
+
+    - as above, but calculating false positive and false negative error rates specific to each type of land-use change (i.e. $F_{Pij}$ and $F_{Nij}$), and potentially vaying in time;
+
+    - including the false positive and false negative error rates as unknown parameters to be calibrated, along with the $B$ and $\sigma^{\mathrm{obs}}$ values. This is the most sophisticated solution, as it properly represents the fact that these are not truly known, and allows the values to be an emergent property of the data, given prior information, rather than imposing our guesses.  The exact number of these parameters to estimate could vary as above, whether specific to each data source, type of land-use change, and point in time.
+    
+
+```{r, eval = FALSE, echo = FALSE}
+x <- seq(0, 100, by=1)
+bias <- -10
+d_norm <- dsn(x, xi = 50, omega = 25, alpha=0)
+d_bias <- dsn(x, xi = 50 + bias, omega = 25, alpha=0)
+d_skew <- dsn(x, xi = 50, omega = 25, alpha=-3)
+plot(d_skew, type = "l", col = 2)
+lines(d_norm, col = 1)
+lines(d_bias, col = 3)
+```
+
+## Producing uncertainty estimates
+We have explored the use of sigma scaling and using false positive and false negative rates in the datasets at the land-use, data-source and time levels to identify the most appropriate way to account for uncertainty in the data assimilation. The reference raster creation, calculation of false positives and negatives and application of these values into the likelihood function is presented below.
+
+### Sigma scaling approach:
+We can apply option 1 in its simplest form by basing the scaling factor for $\sigma^\mathrm{obs}$ on the net area change $D$.
+We define the reference data set as the June Agricultural Census data for crops, grass and rough, and the FC data for forests.
+The table below shows two metrics, the RMSE and the correlation coefficient.
+We combine these in a multiplicative way (using $1/(r^2+1)$) to give a single scaling factor for $\sigma^\mathrm{obs}$ ("sigma_scaling" in the table). 
+The ranking shows that IACS has the lowest uncertainty and the Land Cover Crop Maps has the highest (bearing in mind all the imperfections in the reference data). This produces a quantitative means of accounting for the different relative uncertainties in these data sources. 
+
+```{r, functions, eval = TRUE, echo = FALSE}
+getRMSE <- function(df = df, v, v_ref = "Ref"){
+  v     <- df[[v]]
+  v_ref <- df[[v_ref]]
+  resid <- v - v_ref
+  RMSE <- sqrt(mean(resid^2, na.rm = TRUE))
+  # if no data, these will be NaN, which need to be NA
+  RMSE[is.nan(RMSE)] <- NA
+  return(RMSE)
+}
+
+get_cor <- function(df = df, v = "CORINE", v_ref = "Ref"){
+  v     <- df[[v]]
+  v_ref <- df[[v_ref]]
+  r2 <- cor(v, v_ref, use = "pairwise.complete.obs")
+  r2
+  # if no data, these will be NaN, which need to be NA
+  r2[is.nan(r2)] <- NA
+  return(r2)
+}
+```
+
+```{r, loading, eval = FALSE, echo = FALSE}
+# load(file = here::here("data-raw", "blags_100m.RData"), verbose = TRUE)
+# dt_D <- dt_dA_obs
+```
+
+```{r, plot_ts, eval = TRUE, echo = FALSE}
+# D time series
+#dt_D$area <- drop_units(dt_D$area)
+p <- ggplot(dt_D[time > 1990 & time < 2020 & area != 0], 
+  aes(time, area, colour = data_source))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ggtitle("Net Change in Area in UK")
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + geom_hline(yintercept = 0)
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+```
+
+```{r, metrics, eval = TRUE, echo = FALSE}
+df <- pivot_wider(dt_D, names_from = data_source, values_from = area)
+df <- subset(df, time >= 1990 & time <= 2020)
+df$Ref <- df$AgCensus
+df$Ref[df$u == "woods"] <- df$FC[df$u == "woods"]
+
+v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME")
+v_rmse <- sapply(v_names_sources, getRMSE, df = df, v_ref = "Ref")
+v_r2   <- sapply(v_names_sources, get_cor, df = df, v_ref = "Ref")
+
+df_scaling_uncert <- data.frame(RMSE = v_rmse, r2 = v_r2, 
+  # reduce RMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
+  sigma = v_rmse * abs(1 - v_r2))
+
+df_scaling_uncert <- df_scaling_uncert[order(df_scaling_uncert$sigma),]
+# AgCensus and FC form the reference, so are rows 1:2 when ordered
+# guess sigma for these as half the lowest value, which will be row 3 
+# very arbitrary assumption, to be improved upon
+df_scaling_uncert["AgCensus",]$sigma <- df_scaling_uncert[3,]$sigma * 0.5
+df_scaling_uncert["FC",]$sigma       <- df_scaling_uncert[3,]$sigma * 0.5
+
+# add dummy values for false positive and neg rates
+df_scaling_uncert$Fp <- 0
+df_scaling_uncert$Fn <- 0
+
+knitr::kable(df_scaling_uncert)
+qsave(df_scaling_uncert, file = here("data", "df_scaling_uncert.qs"))
+```
+
+An example is shown below.
+
+```{r, plot_correspondence, eval = TRUE, echo = FALSE, warning=FALSE}
+# Plot correspondence
+p <- ggplot(df, aes(LCC, CROME, colour = u))
+#p <- ggplot(df, aes(AgCensus, IACS, colour = u))
+p <- p + geom_point()
+p <- p + stat_smooth(method = "lm")
+p <- p + geom_abline()
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+```
+
+
+### False positive and negative approach:
+
+### Creating reference datasets:
+We created the reference data by combining several spatially explicit data sources that are thought to have the highest accuracy and reliability for certain land use types, namely FC, IACS and LCM. These data-sources were added to the reference dataset in order meaning land use defined in FC data took precedent over IACS, followed by LCM. This was considered the most sensible approach to build the dataset based on reliability of land use classes in each dataset meant the overall reference raster would be as reliable as possible and also limit the number of undefined cells. This resulted in a reference dataset that includes the majority of forest cells from FC, the majority of crop, grass and rough grazing from IACS and the majority of urban and other cells from LCM. 
+This reference data was used to compare the other data-sources against (LCC, CORINE, CROME). In order to test FC, IACS and LCM themselves, we removed the respective dataset from the reference data, and tested land use change classifications against those present in the remaining reference data(e.g. testing the forest, crop, grassland or rough grazing land use change in IACS against that defined in FC and LCM).
+
+This method enabled us to build reference rasters for England for 2006, 2010, 2015, 2017, 2018 and 2019, the 2010 reference raster for LCC, CORINE and CROME (including FC, IACS and LCM) is shown below, as well as the 2010 reference raster for testing IACS (including FC and LCM). In the IACS reference dataset, land use from LCM is used in place of IACS.
+
+```{r, echo=FALSE, warning= FALSE, fig.align="default", fig.show="hold", out.width="50%"} 
+
+ref_2010_all <- raster("P:/07643_Tracking_Land_Use/LUC uncertainties/reference rasters/r_ref_100m_all_2010.tif")
+
+plot(ref_2010_all, main = "2010 reference (LCC, CORINE, CROME)")
+
+
+ref_2010_iacs <- raster("P:/07643_Tracking_Land_Use/LUC uncertainties/reference rasters/r_ref_100m_IACS_2010.tif")
+
+plot(ref_2010_iacs, main = "2010 reference (IACS)")
+```
+The table below shows the reference data contents for each data source:
+
+```{r reference data table, echo=FALSE}
+Dataset <- c("FC", "IACS", "LCM", "LCC", "CORINE", "CROME")
+Reference <- c("IACS, LCM", "FC, LCM", "FC, IACS", rep("FC, IACS, LCM", 3))
+ref_table <- data.frame(cbind(Dataset, Reference))
+knitr::kable(ref_table)
+```
+
+### Confusion matrices
+The reference data is then used to compare land use change between two years in the test data source to what we have assumed as the correct land use change between these years. The 36*36 confusion matrix produced gives the total change from one land use to another identified in the reference raster as column sums, and the total change from one land use to another identified in the test data as the row sums. The diagonal identifies the area of land use change that was identified to occur in both the reference and test data sets. This is used to calculate the false positive and false negative rates for each land use type.
+
+#### False positive rates
+The false positive rate, the rate of incorrectly observing the area changing from land use $i$ to land use $j$ in the test dataset compared to the reference dataset, is calculated as: 
+
+$F_{Pij}$ = ($B_{test,ij}$ - $B_{ref,ij}$)/ $B_{test,ij}$
+
+Where $B_{test,ij}$ is the total observed area of land changing in the test dataset and $B_{ref,ij}$ the total area in the reference dataset.
+
+#### False negative rates
+The false negative rate, the rate of failing to observe land use change from $i$ to $j$ in the test dataset compared to the reference dataset, is calculated as:
+
+$F_{Nij}$ = ($B_{ref,ij}$ - $B_{ref,test,ij}$)/ $c$ - $B_{test,ij}$
+
+Where $B_{ref,test,ij}$ is the total area of land changing from $i$ to $j$ identified in both the reference and test dataset and $c$ is the total area of England, making the denominator the total available land area that could have changed from $i$ to $j$ in the test dataset but did not.
+
+Here we use CORINE as an example showing the false positive and negative rates calculated between the data source and the reference dataset between 2006 and 2018 (most recent years available for comparison). The data shows the trend across all of the data-sources: low false negative rates and high false positive rates, with slightly lower false positive rates for the land use change between crop and grassland. The matrices below show the false positive/negative rate for each land use change between the first year (row) and the second year (column).
+
+False positive rates for CORINE between 2006 and 2018:
+
+```{r confusion matrices fp, echo=FALSE, warning=FALSE}
+
+corine_1km_BR <- luc_false_pn("CORINE", 2006, 2018, "1000m")
+corine_fp <- round(corine_1km_BR$m_output_posrate[-7,-7], digits=3)
+colnames(corine_fp) <- lu_names
+rownames(corine_fp) <- lu_names
+diag(corine_fp) <- ""
+knitr::kable(corine_fp)
+```
+
+False negative rates for CORINE between 2006 and 2018:
+
+```{r confusion matrices fn, echo=FALSE, warning=FALSE}
+
+corine_fn <- round(corine_1km_BR$m_output_negrate[-7,-7], digits=3)
+colnames(corine_fn) <- lu_names
+rownames(corine_fn) <- lu_names
+diag(corine_fn) <- ""
+knitr::kable(corine_fn)
+```
+
+The following graphs show the false positive and false negative rates for each data source, with the grid of graphs showing the land use type in the first year and colour showing the land use in the second year.
+
+False positive rates:
+```{r graphing false positives, echo= FALSE, warning=FALSE}
+
+df_iacs <- as.data.frame(iacs_1km_PL$m_fp)
+df_lcc <- as.data.frame(lcc_1km_PL$m_fp)
+df_lcm <- as.data.frame(lcm_1km_PL$m_fp)
+df_corine <- as.data.frame(corine_1km_PL$m_fp)
+df_crome <- as.data.frame(crome_1km_PL$m_fp)
+df_iacs$model <- "IACS"
+df_lcc$model <- "LCC"
+df_lcm$model <- "LCM"
+df_corine$model <- "CORINE"
+df_crome$model <- "CROME"
+
+df_all_fp <- rbind(df_iacs, df_lcc, df_lcm, df_corine, df_crome)
+df_all_fp <- df_all_fp[!is.na(df_all_fp$Freq),]
+df_all_fp <- df_all_fp[df_all_fp$Freq>0,]
+
+ggplot(df_all_fp, aes(x=model, y= Freq, colour= Var2)) +
+  geom_jitter(width=0.1) +
+  facet_wrap(.~ Var1) +
+  scale_y_continuous(limits=c(0,1)) +
+  ylab("False positive rate") +
+  xlab("Model") +
+  scale_color_brewer(palette="Dark2", name="Land use\n2nd yr") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+```
+
+False negative rates:
+```{r graphing false negatives, echo=FALSE}
+
+df_iacs <- as.data.frame(iacs_1km_PL$m_fn)
+df_lcc <- as.data.frame(lcc_1km_PL$m_fn)
+df_lcm <- as.data.frame(lcm_1km_PL$m_fn)
+df_corine <- as.data.frame(corine_1km_PL$m_fn)
+df_crome <- as.data.frame(crome_1km_PL$m_fn)
+df_iacs$model <- "IACS"
+df_lcc$model <- "LCC"
+df_lcm$model <- "LCM"
+df_corine$model <- "CORINE"
+df_crome$model <- "CROME"
+
+df_all <- rbind(df_iacs, df_lcc, df_lcm, df_corine, df_crome)
+df_all <- df_all[!is.na(df_all$Freq),]
+df_all <- df_all[df_all$Freq>0,]
+
+ggplot(df_all, aes(x=model, y= Freq, colour= Var2)) +
+  geom_jitter(width=0.1) +
+  facet_wrap(.~ Var1) +
+  scale_y_continuous(limits=c(0,0.06)) +
+  ylab("False negative rate") +
+  xlab("Model") +
+  scale_color_brewer(palette="Dark2", name="Land use\n2nd yr") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+
+### Data-set level false positive and false negative rates
+
+Based on the very high false positive rates identified for many of the land use change classes, we have chosen to implement false positive rates at the data-set level rather than land-use level.We are not integrating the false negative rate to the likelihood function at this point as they are strongly influenced by the form of the reference dataset and as a result are highly subjective. Data-set level false positive rates were calculated as an average of the land-use level false positive rate, weighted by area of each land-use change. 
+
+This gave the following outputs which could be incorporated into the data assimilation method:
+```{r dataset level fpn, echo=FALSE}
+# table where I have calculated the average false positives and negatives, haven't included code here:
+df_fpn <- read.csv("P:\\07643_Tracking_Land_Use\\LUC uncertainties\\df_fpn.csv", row.names = 1)
+colnames(df_fpn)[1] <- "Data source"
+knitr::kable(df_fpn)
+
+```
+
+### Updating $B, D, G$ and $L$
+
+To incorporate the false positives into the Tracking Land-Use Change data assimilation approach to account for uncertainty in the data-sets, we can apply the false positive rates to the $B$ transition matrix: $B$ * (1-$Fp$).  
+
+The revised $B$ matrix can then be used to recalculate $D, G$ and $L$ for each data source. An example is provided below for IACS from 2005 to 2019:
+
+```{r updating BLAG, echo=FALSE, warning= FALSE}
+
+# doing this manually here because I cant get get_uncert, add_uncert to work on my computer
+
+iacs_files <- list.files("P:/07643_Tracking_Land_Use/luct/data/IACS/Level1/")
+iacs_1km <- iacs_files[16:30]
+BLAG_iacs <- getBLAG_fromU(v_times= c(2005:2019),
+                    v_fnames=c(paste0("P:/07643_Tracking_Land_Use/luct/data/IACS/Level1/", iacs_1km)),
+                    name_data_source="IACS",
+                    names_u =names_u)
+
+
+# multiply beta matrix by false positive rate for IACS
+BLAG_iacs$a_B <- BLAG_iacs$a_B * (1 - df_fpn[5,3])
+
+BLAG_iacs2 <- getBLAG(BLAG_iacs$a_B, names_u = names_u, name_data_source="IACS")
+
+dt_D <- BLAG_iacs$dt_D
+dt_D2 <- BLAG_iacs2$dt_D
+dt_D$when <- "before"
+dt_D2$when <- "after"
+dt_D2$time <- dt_D2$time + 2003
+
+dt_D_all <- rbind(dt_D, dt_D2)
+dt_D_all$time <- as.numeric(as.character(dt_D_all$time))
+dt_D_all <- dt_D_all[-c(62:70, 77:85, 152:160, 166:175)]
+ggplot(dt_D_all, aes(x=time, y=area/1000000, colour=when)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(labels=comma) +
+  xlab("Land use") +
+  ylab("Net change in area (km2)") +
+  facet_wrap(.~u) +
+  scale_x_continuous(limits=c(2005,2019), breaks=c(2006, 2010, 2014, 2018)) +
+  scale_colour_brewer(palette="Dark2", name="Fp correction", labels=c("Y", "N"))
+
+```
+
+
+## Conclusions
+
+* Representing data source-specific random uncertainty is relatively straightforward in principle. We need to estimate appropriate $\sigma$ values for each data source and use these in the likelihood function.
+* The most fundamental problem is accurately estimating $\sigma$ in the absence of any data which we regard as "true", particularly for the $B$ matrices which are key. There is no immediate solution to this, and a pragmatic approach is to define a reference data set, with more or less subjectivity/expert judgement, and principles from cross-validation.
+* A starting point would be to implement a simple method, whereby $\sigma$ for each data set is scaled according to metrics measuring its correspondence with reference data. This could be based on any or all of $D, G, L$ and $B$.
+* A better method is to estimate the biases and uncertainties as part of the data assimilation.  With confusion matrices, we have a clear method for doing this, by explicitly representing the false positive and false negative error rates.  The downside of this approach is that it is more complicated, involves estimating more parameters, and will have greater computation time.
+* Here we have demonstrated the generation of both $sigma$ to use as scaling and also the generation of false positive and negative error rates. In both cases, the sticking point remains defining a suitable reference data-set where all of the available data sources, including ground-truthed data, are flawed in some way.
+* With this in mind we have calculated data-set level $sigma$, $Fp$ and $Fn$ rather than land-use level values. 
+
+```{r echo=FALSE}
+tictoc::toc()
+```

@@ -1,0 +1,251 @@
+
+```{r render, eval = FALSE, echo = FALSE}
+library(rmarkdown)
+render("analysis/m_uqdata.Rmd", html_document())
+render("analysis/m_uqdata.Rmd", word_document())
+render("analysis/m_uqdata.Rmd", pdf_document())
+system.time(bookdown::render_book("index.Rmd"))
+bookdown::preview_chapter("uqdata.Rmd")
+```
+
+```{r setup, echo = FALSE, include = FALSE}
+# NOTE this notebook can be run manually or automatically by {targets}
+# So load the packages required by this notebook here
+# rather than relying on _targets.R to load them.
+
+# Set up the project environment, because {workflowr} knits each Rmd file 
+# in a new R session, and doesn't execute the project .Rprofile
+
+library(targets) # access data from the targets cache
+here::i_am("analysis/m_uqdata.Rmd")
+library(tictoc) # capture execution time
+library(here) # construct file paths relative to project root
+library(fs) # file system operations
+library(qs)
+library(dplyr) # data wrangling
+# install.packages("sn") # skewed normal distribution
+#library(sn) # skewed normal distribution
+library(tidyr)
+library(data.table) # data wrangling
+library(units)
+library(ggplot2)
+library(rmarkdown)
+library(raster)
+library(rgdal)
+library(spCEH)
+library(stars)
+library(ggplot2)
+library(scales)
+library(RColorBrewer)
+library(data.table)
+theme_set(theme_classic())
+
+lu_names <- c("woods", "crops", "grass", "rough", "urban", "other")
+
+### Beth's Fpn function: I use this for doing the 0618 corine but use Pete's output for the rest of them just because
+source("P:\\07643_Tracking_Land_Use\\LUC uncertainties\\luc_uncert_funct_27Sept.R")
+
+# Load false positives and negatives from Pete's code
+load("P:/07643_Tracking_Land_Use/LUC uncertainties/m_fp_fn.rda", verbose = TRUE)
+
+#Code for BLAGs
+source("P:/07643_Tracking_Land_Use/luct/R/luc_track.R")
+source("P:/07643_Tracking_Land_Use/luct/R/luct.R")
+
+# start the execution time clock
+tictoc::tic("Computation time (excl. render)")
+
+# dt_D <- tar_read(c_obs)$dt_D
+# qsave(dt_D, "dt_D.qs")
+dt_D <- qread(here("data", "dt_D.qs"))
+
+```
+
+# Quantifying Random Uncertainty in Land-Use Data Sources
+
+## Introduction
+
+Several different data sources provide observations of the transition matrix $B$ and the net and gross changes in area of each land use ($D, G, L$). The method used in WP-A treated all these data sources as equally uncertain, and assumed the same relative error for all observations. However, in reality, we know that these data sets have different levels of uncertainty: some data sets are closer to direct observations, are more plausible, and we have greater faith in these. We want to reflect this in the methodology by quantitatively associating different uncertainties with each data set. This is straightforward in principle, but there are several considerations when doing this in practice:
+
+1. We can consider increasing levels of detail:
+
+    -   variable-specific uncertainties (i.e. different for $B, G, L$ & $D$)
+
+    -   data source type-specific uncertainties (i.e. different for ground-based vs EO data)
+
+    -   data set-specific uncertainties (i.e. different for CS, IACS, LCM etc.)
+
+    -   land-use type-specific uncertainties (i.e. different for woods, crops, grass etc.)
+
+    -   time-specific uncertainties (i.e. different for 1990, 2000 ... 2019)
+
+2. Rather than continuous data with a simple $\sigma$ error term, the $B$ observations are count data in a 6 x 6-way classification. When considering land-use *change*, we can compare the 36 elements of this classification from one data source with another (or the truth), so we have a 36 x 36 error matrix (or "confusion" matrix). Various metrics can be calculated which summarise the agreement measured by this matrix. 
+3. We can specify uncertainty with greater or lesser rigour: there are several possibilities for how we represent "uncertainty" in the mathematical model. 
+4. We can estimate uncertainty subjectively, or base it more closely on data. There are also several possibilities for how we translate measures of uncertainty in the data in to the mathematical model.
+
+A limitation is that none of the data sources represents absolute truth, and we have no definitive data set against which to calibrate.
+
+### Representation of random uncertainty
+The data sources are assimilated in the Bayesian method via the likelihood function, which includes a term $\sigma^{obs}$, representing the standard deviation in the probability density function for the observation. The observation is thus not assumed to be the true value, but subject to errors which make it deviate from this. Random uncertainty is represented by the magnitude of $\sigma^{obs}$ - large values of $\sigma^{obs}$ represent high uncertainty (systematic uncertainty is considered in later Sections).
+For each observation, a likelihood is calculated, assuming that measurement errors show a Gaussian distribution and are independent of each other.
+In mathematical notation, the likelihood of observing the area changing from land use $i$ to land use $j$, $\beta_{ij}^{\mathrm{obs}}$, is
+
+\begin{equation} \label{eq:likBeta}
+ \mathcal{L} = \frac{1}{\sigma_{ij}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(\beta_{ij}^{\mathrm{obs}} - \beta_{ij}^{\mathrm{pred}})^2/2 {\sigma_{ij}^\mathrm{obs}}^2)
+\end{equation}
+
+where $\beta_{ij}^{\mathrm{pred}}$ is the corresponding prediction, and $\sigma_{ij}^\mathrm{obs}$ is the uncertainty in the observation. There are analagous terms for $G, L$ and $D$ which can all be multiplied. For example, the term for the likelihood of observing the net change in land use $u$, $D_{u}^{\mathrm{obs}}$, is
+ 
+\begin{equation} \label{eq:likNet}
+ \mathcal{L} = \frac{1}{\sigma_{u}^\mathrm{obs} \sqrt{2\pi}} \mathrm{exp}(-(D_{u}^{\mathrm{obs}} - D_{u}^{\mathrm{pred}})^2/2 {\sigma_{u}^\mathrm{obs}}^2)
+\end{equation}
+ 
+
+We previously assumed that *relative* measurement uncertainty was the same for all observations, i.e. a constant proportion of the observed value. Thus, observations of large areas come with larger absolute uncertainty. Here, we estimate more specific uncertainties $\sigma^\mathrm{obs}$ for the different data sources, and potentially this can be extended to be specific for each individual observation.
+
+Two additional issues concern the specification of the random uncertainty when accounting for the effects of the frequency of surveys, and avoiding step changes when data sets begin and end. For example, Countryside Survey data come from approximately decadal surveys, but are interpolated and used as if they were constant annual values within each decade. We incorporated some simple methods to include these effects appropriately.
+
+## Methods
+### Estimating $\sigma^\mathrm{obs}$ from reference data
+A pre-cursor step is to define a reference data set with which we compare each data source. In the absence of ideal ground-truth data, some subjectivity is inevitable here, and we use the data sets which we believe to be the most plausible or closest to the truth, based on judgement and prior knowledge. For agricultural land, we defined the reference data set as the June Agricultural Census data for crops, grass and rough grazing, as this is has a very long record and is submitted annually as part of reporting to FAO.
+For forests, the pre-existing record of afforestation and deforestation based on FC statistics was used, as this is also long-running and has been submitted as official national data.
+
+We applied a simple method, basing all the $\sigma^\mathrm{obs}$ terms on the "lowest common denominator" data set, the time series of net area change $D$. Although they vary in the higher levels of detail, all data sources produce estimates of $D$, so we can calculate a comparable metric of agreement across all data sets. Suitable metrics are the root-mean-square error (RMSE), mean-absolute error (MAE) and the correlation coefficient.
+We used the RMSE and the correlation coefficient, as measures of absolute and relative agreement, respectively.
+We multiplied these (rescaling the correlation coefficient as $1/(r^2+1)$) to give a single scaling factor for $\sigma^\mathrm{obs}$ ("CV" in the table). 
+This metric is used as a scaling factor in estimating $\sigma^\mathrm{obs}$, such that data sources with poor agreement receive high $\sigma^\mathrm{obs}$ (high uncertainty). Some subjectivity comes into which metrics to use, and the absolute values of $\sigma^\mathrm{obs}$, but the relative uncertainties (and therefore weighting) are based quantitatively on data.
+
+### Effects of survey frequency and survey start/stop dates
+Each pair of surveys gives an estimate of land-use change over some time interval.
+When survey observations are not available annually, we are effectively trying to estimate the change in a population (all years) from a sample (the years when surveys were carried out).
+Using the analogy with conventional sampling theory, the standard error in our estimate should be lower in more frequent surveys, because more samples are included.
+We can apply the same logic to infer the appropriate correction to apply to $\sigma^\mathrm{obs}$, such that it reflects the uncertainty about the rate of land-use change in any given year within the inter-survey interval:
+
+\begin{equation} \label{eq:sigma_ann}
+  \sigma_\mathrm{ann}^\mathrm{obs} = \sigma^\mathrm{obs} \sqrt{n}
+\end{equation}
+
+where $n$ is the survey interval length in years. This scaling means that the correction evaluates to 1 for annual data (no effect).
+
+All data sources have a limited period over which they were collected, and this would introduce an artefact at the boundaries.
+When a data set which tends to provide lower estimates begins, this would tend to pull the mean estimate down at this point, and introduce a step change purely as an effect of data availability.
+To counter this effect, we apply a similar logic to that above - the available data is an imperfect sample of the surrounding time interval, and the uncertainty increases with fewer samples and extended distance in time. 
+We therefore extend each data set to the limits of the time period considered here (1950-2020), assuming a constant rate, but we force the uncertainty to increase with the square of distance in time ($\Delta_t^2$) beyond the boundaries where data was actually available. The random uncertainty in any given year is
+
+\begin{equation} \label{eq:sigma_t}
+  \sigma_{t}^\mathrm{obs} = \sigma^\mathrm{obs} \Delta_t^2
+\end{equation}
+
+again scaled so that there is no effect within the time bounds of the observed data.
+
+
+## Results
+The table below shows the RMSE, the correlation coefficient and the scaling factor for $\sigma^\mathrm{obs}$ (expressed as a coefficient of variation (CV), $\sigma^\mathrm{obs}$ as a fraction of the observed value. 
+The ranking shows that CS has the lowest uncertainty and the CROME has the highest (bearing in mind all the imperfections in the reference data). This produces a quantitative means of accounting for the different relative uncertainties in these data sources. 
+
+```{r, functions, eval = FALSE, echo = FALSE}
+getRMSE <- function(df = df, v, v_ref = "Ref"){
+  v     <- df[[v]]
+  v_ref <- df[[v_ref]]
+  resid <- v - v_ref
+  RMSE <- sqrt(mean(resid^2, na.rm = TRUE))
+  # if no data, these will be NaN, which need to be NA
+  RMSE[is.nan(RMSE)] <- NA
+  return(RMSE)
+}
+
+get_cor <- function(df = df, v = "CORINE", v_ref = "Ref"){
+  v     <- df[[v]]
+  v_ref <- df[[v_ref]]
+  r2 <- cor(v, v_ref, use = "pairwise.complete.obs")
+  r2
+  # if no data, these will be NaN, which need to be NA
+  r2[is.nan(r2)] <- NA
+  return(r2)
+}
+```
+
+```{r, loading, eval = FALSE, echo = FALSE}
+# load(file = here::here("data-raw", "blags_100m.RData"), verbose = TRUE)
+# dt_D <- dt_dA_obs
+```
+
+```{r, plot_ts, eval = FALSE, echo = FALSE}
+# D time series
+#dt_D$area <- drop_units(dt_D$area)
+p <- ggplot(dt_D[time > 1990 & time < 2020 & area != 0], 
+  aes(time, area, colour = data_source))
+p <- p + geom_line()
+p <- p + geom_point()
+p <- p + ggtitle("Net Change in Area in UK")
+p <- p + ylab(expression(paste(Area*", "*~km^2/y)))
+p <- p + geom_hline(yintercept = 0)
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+```
+
+```{r, metrics, eval = FALSE, echo = FALSE}
+df <- pivot_wider(dt_D, names_from = data_source, values_from = area)
+df <- subset(df, time >= 1990 & time <= 2020)
+df$Ref <- df$AgCensus
+df$Ref[df$u == "woods"] <- df$FC[df$u == "woods"]
+
+v_names_sources = c("AgCensus", "CS", "FC", "LCM", "CORINE", "LCC", "IACS", "CROME")
+v_rmse <- sapply(v_names_sources, getRMSE, df = df, v_ref = "Ref")
+v_r2   <- sapply(v_names_sources, get_cor, df = df, v_ref = "Ref")
+
+df_scaling_uncert <- data.frame(RMSE = v_rmse, r2 = v_r2, 
+  # reduce RMSE proportional to r2, so that abs and prop measures contribute to sigma weighting
+  sigma = v_rmse * abs(1 - v_r2))
+
+df_scaling_uncert <- df_scaling_uncert[order(df_scaling_uncert$sigma),]
+# AgCensus and FC form the reference, so are rows 1:2 when ordered
+# guess sigma for these as half the lowest value, which will be row 3 
+# very arbitrary assumption, to be improved upon
+df_scaling_uncert["AgCensus",]$sigma <- df_scaling_uncert[3,]$sigma * 0.5
+df_scaling_uncert["FC",]$sigma       <- df_scaling_uncert[3,]$sigma * 0.5
+
+# add dummy values for false positive and neg rates
+df_scaling_uncert$Fp <- 0
+df_scaling_uncert$Fn <- 0
+
+knitr::kable(df_scaling_uncert)
+qsave(df_scaling_uncert, file = here("data", "df_scaling_uncert.qs"))
+```
+
+```{r, plot_correspondence, eval = FALSE, echo = FALSE, warning=FALSE}
+# Plot correspondence
+p <- ggplot(df, aes(LCC, CROME, colour = u))
+#p <- ggplot(df, aes(AgCensus, IACS, colour = u))
+p <- p + geom_point()
+p <- p + stat_smooth(method = "lm")
+p <- p + geom_abline()
+p <- p + facet_wrap(~ u, scales = "free_y")
+p
+```
+
+```{r, tabUncert, eval = TRUE, echo = FALSE, warning=FALSE}
+fname <- here("data", "df_scaling_uncert.qs")
+df_scaling_uncert <- qread(file = fname)
+df_scaling_uncert$CV <- 
+  df_scaling_uncert$sigma / df_scaling_uncert$sigma[1] /10
+# remove extra cols
+df_scaling_uncert$Fp    <- NULL
+df_scaling_uncert$Fn    <- NULL
+df_scaling_uncert$sigma <- NULL
+df_scaling_uncert <- df_scaling_uncert[-1:-2, ]
+knitr::kable(df_scaling_uncert)
+```
+
+## Discussion
+
+Representing data source-specific random uncertainty is relatively straightforward in principle. We need to estimate appropriate $\sigma$ values for each data source and use these in the likelihood function.
+The most fundamental problem is accurately estimating $\sigma$ in the absence of any data which we regard as "true", particularly for the $B$ matrices which are key. There is no immediate solution to this, and a pragmatic approach is to define a reference data set, with more or less subjectivity/expert judgement, and potentially with some cross-validation.
+Here we implemented a simple method, whereby $\sigma$ for each data set is scaled according to metrics measuring its correspondence with reference data. Currently, this is based only on the net change data, as this makes cross-comparison simplest, but this could be extended to include the gross changes $G, L$ and $B$.
+
+An alternative approach would be to estimate the uncertainties as part of the data assimilation. This avoids the sticking point of subjectively defining a suitable reference data-set, when all of the available data sources, including ground-truthed data, are flawed in some way. The downside of this approach is that it is more complicated, involves estimating more parameters, and will have greater computation time, but merits some exploration.
+
+
+```{r echo=FALSE}
+tictoc::toc()
+```

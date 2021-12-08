@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.0.0",
+    "Version": "4.1.0",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -429,12 +429,26 @@
       "Repository": "CRAN",
       "Hash": "07a91f99e56951818ab911366db77700"
     },
+    "ggforce": {
+      "Package": "ggforce",
+      "Version": "0.3.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4c64a588b497f8c088e1d308ddd40bc6"
+    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.3.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "d7566c471c7b17e095dd023b9ef155ad"
+    },
+    "ggthemes": {
+      "Package": "ggthemes",
+      "Version": "4.2.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "617fb2c300f68e8b1ba21043fba88fd7"
     },
     "git2r": {
       "Package": "git2r",
@@ -477,6 +491,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "24b224366f9c2e7534d2344d10d59211"
+    },
+    "hexbin": {
+      "Package": "hexbin",
+      "Version": "1.28.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "76314b69dc54f8c14204063a2fd6d74a"
     },
     "highr": {
       "Package": "highr",
@@ -541,6 +562,13 @@
       "Repository": "CRAN",
       "Hash": "64778782a89480e9a644f69aad9a2877"
     },
+    "jpeg": {
+      "Package": "jpeg",
+      "Version": "0.1-9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "441ee36360a57b363f4fa3df0c364630"
+    },
     "jquerylib": {
       "Package": "jquerylib",
       "Version": "0.1.4",
@@ -583,6 +611,13 @@
       "Repository": "CRAN",
       "Hash": "fbd9285028b0263d76d18c95ae51a53d"
     },
+    "latticeExtra": {
+      "Package": "latticeExtra",
+      "Version": "0.6-29",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "590829599d6182cf7461787af34666ee"
+    },
     "lifecycle": {
       "Package": "lifecycle",
       "Version": "1.0.0",
@@ -603,6 +638,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "b0edacc02f7a3dad41a1afc385e929f4"
+    },
+    "logging": {
+      "Package": "logging",
+      "Version": "0.10-108",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fbef2ca79e23f11e033e89317b4c4770"
     },
     "lwgeom": {
       "Package": "lwgeom",
@@ -723,6 +765,20 @@
       "Repository": "CRAN",
       "Hash": "ec0e5ab4e5f851f6ef32cd1d1984957f"
     },
+    "png": {
+      "Package": "png",
+      "Version": "0.1-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "03b7076c234cb3331288919983326c55"
+    },
+    "polyclip": {
+      "Package": "polyclip",
+      "Version": "1.10-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "cb167f328b3ada4ec5cf67a7df4c900a"
+    },
     "prettyunits": {
       "Package": "prettyunits",
       "Version": "1.1.1",
@@ -799,6 +855,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "4543b272b756a4ff0f80370c886ef90a"
+    },
+    "rasterVis": {
+      "Package": "rasterVis",
+      "Version": "0.51.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1d5d9d12e67c5007a40ee8661c2a3a9b"
     },
     "readxl": {
       "Package": "readxl",
@@ -1008,6 +1071,13 @@
       "Repository": "CRAN",
       "Hash": "0249d89393821026c36e640b08c761ce"
     },
+    "terra": {
+      "Package": "terra",
+      "Version": "1.4-20",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2fd9b6a814d577e2e4a7d04d4e067bc0"
+    },
     "tibble": {
       "Package": "tibble",
       "Version": "3.1.3",
@@ -1049,6 +1119,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "90446ccc3fe26f17fad784dab2aa7bf2"
+    },
+    "tweenr": {
+      "Package": "tweenr",
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6cc663f970a529dbf776f11d5bcd1a2e"
     },
     "units": {
       "Package": "units",
@@ -1119,6 +1196,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "8d14d7ca1a1ac543614002af0b95c49e"
+    },
+    "wrswoR": {
+      "Package": "wrswoR",
+      "Version": "1.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6ca197cad70c3f847b283d364336250d"
     },
     "xfun": {
       "Package": "xfun",

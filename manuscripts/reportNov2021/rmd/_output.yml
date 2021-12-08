@@ -1,0 +1,29 @@
+bookdown::gitbook:
+  css: style.css
+  split_by: chapter
+  fig_caption: yes
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li><a href="./">Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory</a></li>
+      after: |
+        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+bookdown::pdf_book:
+  fig_caption: yes
+  keep_tex: yes    
+  includes:
+    in_header: preamble.tex
+  latex_engine: xelatex
+  header-includes:
+  - \AtBeginDocument{\renewcommand{\chaptername}{Section}}
+bookdown::pdf_document2:
+  fig_caption: yes
+  toc: true
+  keep_tex: yes
+bookdown::word_document2:
+  fig_caption: yes
+  toc: true
+bookdown::epub_book:
+  stylesheet: style.css
+  

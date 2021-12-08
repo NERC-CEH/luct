@@ -1,0 +1,303 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{book}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021},
+  pdfauthor={Peter Levy, Sam Tomlinson, and Beth Raine},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\renewcommand\chaptername{Section}
+\titleformat{\chapter}
+  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021}
+\author{Peter Levy, Sam Tomlinson, and Beth Raine}
+\date{2021-11-10}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\hypertarget{summary}{%
+\chapter*{Summary}\label{summary}}
+\addcontentsline{toc}{chapter}{Summary}
+
+Placeholder
+
+\hypertarget{introduction}{%
+\chapter{Introduction}\label{introduction}}
+
+Placeholder
+
+\hypertarget{tracking-land-use-change}{%
+\section{Tracking land-use change}\label{tracking-land-use-change}}
+
+\hypertarget{approach}{%
+\section{Approach}\label{approach}}
+
+\hypertarget{quantifying-random-uncertainty-in-land-use-data-sources}{%
+\chapter{Quantifying Random Uncertainty in Land-Use Data Sources}\label{quantifying-random-uncertainty-in-land-use-data-sources}}
+
+Placeholder
+
+\hypertarget{introduction-1}{%
+\section{Introduction}\label{introduction-1}}
+
+\hypertarget{representation-of-random-uncertainty}{%
+\subsection{Representation of random uncertainty}\label{representation-of-random-uncertainty}}
+
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
+
+\hypertarget{estimating-sigmamathrmobs-from-reference-data}{%
+\subsection{\texorpdfstring{Estimating \(\sigma^\mathrm{obs}\) from reference data}{Estimating \textbackslash sigma\^{}\textbackslash mathrm\{obs\} from reference data}}\label{estimating-sigmamathrmobs-from-reference-data}}
+
+\hypertarget{effects-of-survey-frequency-and-survey-startstop-dates}{%
+\subsection{Effects of survey frequency and survey start/stop dates}\label{effects-of-survey-frequency-and-survey-startstop-dates}}
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+\hypertarget{quantifying-systematic-uncertainty-in-land-use-data-sources}{%
+\chapter{Quantifying Systematic Uncertainty in Land-Use Data Sources}\label{quantifying-systematic-uncertainty-in-land-use-data-sources}}
+
+Placeholder
+
+\hypertarget{introduction-2}{%
+\section{Introduction}\label{introduction-2}}
+
+\hypertarget{representation-of-systematic-uncertainty}{%
+\subsection{Representation of systematic uncertainty}\label{representation-of-systematic-uncertainty}}
+
+\hypertarget{methods-1}{%
+\section{Methods}\label{methods-1}}
+
+\hypertarget{creating-reference-datasets}{%
+\subsection{Creating reference datasets:}\label{creating-reference-datasets}}
+
+\hypertarget{false-positive-rates}{%
+\subsection{False positive rates}\label{false-positive-rates}}
+
+\hypertarget{false-negative-rates}{%
+\subsection{False negative rates}\label{false-negative-rates}}
+
+\hypertarget{results-1}{%
+\section{Results}\label{results-1}}
+
+\hypertarget{data-source-specific-false-positive-and-false-negative-rates}{%
+\subsection{Data-source-specific false positive and false negative rates}\label{data-source-specific-false-positive-and-false-negative-rates}}
+
+\hypertarget{updating-b-d-g-and-l}{%
+\subsection{\texorpdfstring{Updating \(B, D, G\) and \(L\)}{Updating B, D, G and L}}\label{updating-b-d-g-and-l}}
+
+\hypertarget{conclusions}{%
+\section{Conclusions}\label{conclusions}}
+
+\hypertarget{assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length}{%
+\chapter{Assessing systematic errors in estimates of land-use change: sensitivity to survey-interval length}\label{assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length}}
+
+Placeholder
+
+\hypertarget{introduction-3}{%
+\section{Introduction}\label{introduction-3}}
+
+\hypertarget{methods-2}{%
+\section{Methods}\label{methods-2}}
+
+\hypertarget{results-2}{%
+\section{Results}\label{results-2}}
+
+\hypertarget{iacs}{%
+\subsection{IACS:}\label{iacs}}
+
+\hypertarget{lcm}{%
+\subsection{LCM}\label{lcm}}
+
+\hypertarget{lcc}{%
+\subsection{LCC:}\label{lcc}}
+
+\hypertarget{crome}{%
+\subsection{CROME:}\label{crome}}
+
+\hypertarget{corine}{%
+\subsection{CORINE:}\label{corine}}
+
+\hypertarget{summary-table}{%
+\subsection{Summary Table}\label{summary-table}}
+
+\hypertarget{discussion-and-conclusions}{%
+\section{Discussion and Conclusions}\label{discussion-and-conclusions}}
+
+\hypertarget{estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy}{%
+\chapter{Estimating false-positive rates in detection of land-use change based on classification accuracy}\label{estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy}}
+
+Placeholder
+
+\hypertarget{introduction-4}{%
+\section{Introduction}\label{introduction-4}}
+
+\hypertarget{methods-3}{%
+\section{Methods}\label{methods-3}}
+
+\hypertarget{results-3}{%
+\section{Results}\label{results-3}}
+
+\hypertarget{conclusions-1}{%
+\section{Conclusions}\label{conclusions-1}}
+
+\hypertarget{using-life-tables-in-modelling-land-use-change}{%
+\chapter{Using life tables in modelling land-use change}\label{using-life-tables-in-modelling-land-use-change}}
+
+Placeholder
+
+\hypertarget{introduction-5}{%
+\section{Introduction}\label{introduction-5}}
+
+\hypertarget{methods-4}{%
+\section{Methods}\label{methods-4}}
+
+\hypertarget{results-4}{%
+\section{Results}\label{results-4}}
+
+\hypertarget{discussion-1}{%
+\section{Discussion}\label{discussion-1}}
+
+\hypertarget{results-england}{%
+\chapter{Results: England}\label{results-england}}
+
+Placeholder
+
+\hypertarget{results-scotland}{%
+\chapter{Results: Scotland}\label{results-scotland}}
+
+Placeholder
+
+\hypertarget{results-wales}{%
+\chapter{Results: Wales}\label{results-wales}}
+
+The figures below show the results of the data assimilation procedure. All the data sets shown were used in the algorithm, but their relative random uncertainties (\(\sigma\)) determined how much influence they have on the estimates. The spatial data sets were corrected for systematic uncertainties, using the estimated net false positive rate (\(F_P\)). Having estimated the posterior distribution of the \(\beta\) matrix, we used this to simulate multiple maps of land use going back in time to 1950. The maps of the likelihood of transition to each land use established in WP-A were updated dynamically, using the life tables described in Section 5.
+
+\begin{figure}
+\includegraphics[width=1.3\linewidth]{Results_wa_files/figure-latex/plotB-1} \caption{ Observations and posterior distribution of the transition matrix $\mathbf{B}$, representing the gross area changing from the land use in each row to the land use in each column each year from 1950 to 2020. The grey shaded band shows the 2.5 and 97.5 percentiles of the posterior distribution. The maximum *a posteriori* estimate is shown as the solid black line within this. Observations from the different data sources are shown as coloured circles. The coloured solid lines show the corrected observations after accounting for systematic uncertainties, and interpolating. The coloured bands around these lines show the random uncertainty, rescaled as $\sigma /5$ to keep with the axis scale. Because the random uncertainties and the corrections to the observations are generally very large in comparison to the actual change, scaling the axes is difficult. Note that a consistent colour scheme for the data sources is shown, but not all contribute to every figure.}\label{fig:plotB}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=1.3\linewidth]{Results_wa_files/figure-latex/plotG-1} \caption{ Observations and posterior distribution of the gross gain in area of each land use $\mathbf{G}$ from 1950 to 2020.  The grey shaded band shows the 2.5 and 97.5 percentiles of the posterior distribution. The maximum *a posteriori* estimate is shown as the solid black line within this. Observations from the different data sources are shown as coloured circles. The coloured solid lines show the corrected observations after accounting for systematic uncertainties, and interpolating. The coloured bands around these lines show the random uncertainty, rescaled as $\sigma /5$ to keep with the axis scale. Because the random uncertainties and the corrections to the observations are generally very large in comparison to the actual change, scaling the axes is difficult. Note that a consistent colour scheme for the data sources is shown, but not all contribute to every figure.}\label{fig:plotG}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=1.3\linewidth]{Results_wa_files/figure-latex/plotL-1} \caption{ Observations and posterior distribution of the gross loss of area from each land use $\mathbf{L}$ from 1950 to 2020.  The grey shaded band shows the 2.5 and 97.5 percentiles of the posterior distribution. The maximum *a posteriori* estimate is shown as the solid black line within this. Observations from the different data sources are shown as coloured circles. The coloured solid lines show the corrected observations after accounting for systematic uncertainties, and interpolating. The coloured bands around these lines show the random uncertainty, rescaled as $\sigma /5$ to keep with the axis scale. Because the random uncertainties and the corrections to the observations are generally very large in comparison to the actual change, scaling the axes is difficult. Note that a consistent colour scheme for the data sources is shown, but not all contribute to every figure.}\label{fig:plotL}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=1.3\linewidth]{Results_wa_files/figure-latex/plotD-1} \caption{ Time series of the net change in area occupied by each land use ($D$) from 1950 to 2020, showing the observations and posterior distribution of estimates. The grey shaded band shows the 2.5 and 97.5 percentiles of the posterior distribution. The maximum *a posteriori* estimate is shown as the solid black line within this. Observations from the different data sources are shown as coloured circles. The coloured solid lines show the corrected observations after accounting for systematic uncertainties, and interpolating. The coloured bands around these lines show the random uncertainty, rescaled as $\sigma /5$ to keep with the axis scale. Because the random uncertainties and the corrections to the observations are generally very large in comparison to the actual change, scaling the axes is difficult. Note that a consistent colour scheme for the data sources is shown, but not all contribute to every figure.}\label{fig:plotD}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=1.3\linewidth]{Results_wa_files/figure-latex/plotUt-1} \caption{Estimated state of land-use in 2010 and 2020 in one realisation of $U$ from the maximum *a posteriori* estimate of $B$.}\label{fig:plotUt}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{Results_wa_files/figure-latex/plotUd-1.pdf}
+\caption{\label{fig:plotUd}The spatial distribution of land-use change between 2010 and 2020 in one realisation of \(U\) from the maximum \emph{a posteriori} estimate of \(B\). At each location where land use has changed, the use in 2010 is shown as a coloured square, and the use in 2020 is shown as a coloured circle within this}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{Results_wa_files/figure-latex/plotv1-1.pdf}
+\caption{\label{fig:plotv1}Trajectories of the 100 land-use vectors in the posterior \(U\) with the largest areas (excluding the six vectors which show no change). Each vector of land use is shown in a different colour, varied arbitrarily to differentiate different vectors. Line thickness and opacity are proportional to the total area occupied by each vector, so that the dominant vectors are the most visually obvious.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{Results_wa_files/figure-latex/plotv2-1.pdf}
+\caption{\label{fig:plotv2}Trajectories of the 42 land-use vectors in the posterior \(U\) with the largest areas (excluding the six vectors which show no change). Line thickness is proportional to the total area occupied by each vector.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{Results_wa_files/figure-latex/plotcgr-1.pdf}
+\caption{\label{fig:plotcgr}Trajectories of the land-use vectors in the posterior \(U\) which involve rotational change between crop and grassland (i.e.~those which include either (i) transitions from crop to grass and then subsequently from grass to crop, \emph{or} (ii) transitions from grass to crop and then subsequently from crop to grass). Each vector of land use is shown in a different colour, varied arbitrarily to differentiate different vectors. Line thickness and opacity are proportional to the total area occupied by each vector, so that the dominant vectors are the most visually obvious.}
+\end{figure}
+
+\hypertarget{results-northern-ireland}{%
+\chapter{Results: Northern Ireland}\label{results-northern-ireland}}
+
+Placeholder
+
+\end{document}

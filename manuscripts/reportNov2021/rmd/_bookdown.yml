@@ -1,0 +1,11 @@
+book_filename: "luct_reportNov2021"
+chapter_name: "Section "
+repo: https://github.com/NERC-CEH/luc_track
+output_dir: "../docs"
+rmd_files: ["index.Rmd", "Introduction.Rmd", 
+  "uqdata.Rmd", "bias1.Rmd", "time_interval_analysis.Rmd", 
+  "fp_from_accuracy.Rmd", "lifetables.Rmd", 
+  "Results_en.Rmd", "Results_sc.Rmd",
+  "Results_wa.Rmd", "Results_ni.Rmd"]
+clean: [packages.bib, bookdown.bbl]
+new_session: yes

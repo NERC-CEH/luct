@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Section 5 Estimating false-positive rates in detection of land-use change based on classification accuracy | Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021</title>
+  <meta name="description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Section 5 Estimating false-positive rates in detection of land-use change based on classification accuracy | Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  <meta name="github-repo" content="NERC-CEH/luc_track" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Section 5 Estimating false-positive rates in detection of land-use change based on classification accuracy | Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021" />
+  
+  <meta name="twitter:description" content="Code and documentation for the BEIS project Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory" />
+  
+
+<meta name="author" content="Peter Levy, Sam Tomlinson, and Beth Raine" />
+
+
+<meta name="date" content="2021-11-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"/>
+<link rel="next" href="using-life-tables-in-modelling-land-use-change.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Summary</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#tracking-land-use-change"><i class="fa fa-check"></i><b>1.1</b> Tracking land-use change</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#approach"><i class="fa fa-check"></i><b>1.2</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html"><i class="fa fa-check"></i><b>2</b> Quantifying Random Uncertainty in Land-Use Data Sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#introduction-1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#representation-of-random-uncertainty"><i class="fa fa-check"></i><b>2.1.1</b> Representation of random uncertainty</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#methods"><i class="fa fa-check"></i><b>2.2</b> Methods</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#estimating-sigmamathrmobs-from-reference-data"><i class="fa fa-check"></i><b>2.2.1</b> Estimating <span class="math inline">\(\sigma^\mathrm{obs}\)</span> from reference data</a></li>
+<li class="chapter" data-level="2.2.2" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#effects-of-survey-frequency-and-survey-startstop-dates"><i class="fa fa-check"></i><b>2.2.2</b> Effects of survey frequency and survey start/stop dates</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#results"><i class="fa fa-check"></i><b>2.3</b> Results</a></li>
+<li class="chapter" data-level="2.4" data-path="quantifying-random-uncertainty-in-land-use-data-sources.html"><a href="quantifying-random-uncertainty-in-land-use-data-sources.html#discussion"><i class="fa fa-check"></i><b>2.4</b> Discussion</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><i class="fa fa-check"></i><b>3</b> Quantifying Systematic Uncertainty in Land-Use Data Sources</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#introduction-2"><i class="fa fa-check"></i><b>3.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#representation-of-systematic-uncertainty"><i class="fa fa-check"></i><b>3.1.1</b> Representation of systematic uncertainty</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#methods-1"><i class="fa fa-check"></i><b>3.2</b> Methods</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#creating-reference-datasets"><i class="fa fa-check"></i><b>3.2.1</b> Creating reference datasets:</a></li>
+<li class="chapter" data-level="3.2.2" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#false-positive-rates"><i class="fa fa-check"></i><b>3.2.2</b> False positive rates</a></li>
+<li class="chapter" data-level="3.2.3" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#false-negative-rates"><i class="fa fa-check"></i><b>3.2.3</b> False negative rates</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#results-1"><i class="fa fa-check"></i><b>3.3</b> Results</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#data-source-specific-false-positive-and-false-negative-rates"><i class="fa fa-check"></i><b>3.3.1</b> Data-source-specific false positive and false negative rates</a></li>
+<li class="chapter" data-level="3.3.2" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#updating-b-d-g-and-l"><i class="fa fa-check"></i><b>3.3.2</b> Updating <span class="math inline">\(B, D, G\)</span> and <span class="math inline">\(L\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="quantifying-systematic-uncertainty-in-land-use-data-sources.html"><a href="quantifying-systematic-uncertainty-in-land-use-data-sources.html#conclusions"><i class="fa fa-check"></i><b>3.4</b> Conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><i class="fa fa-check"></i><b>4</b> Assessing systematic errors in estimates of land-use change: sensitivity to survey-interval length</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#introduction-3"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#methods-2"><i class="fa fa-check"></i><b>4.2</b> Methods</a></li>
+<li class="chapter" data-level="4.3" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#results-2"><i class="fa fa-check"></i><b>4.3</b> Results</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#iacs"><i class="fa fa-check"></i><b>4.3.1</b> IACS:</a></li>
+<li class="chapter" data-level="4.3.2" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#lcm"><i class="fa fa-check"></i><b>4.3.2</b> LCM</a></li>
+<li class="chapter" data-level="4.3.3" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#lcc"><i class="fa fa-check"></i><b>4.3.3</b> LCC:</a></li>
+<li class="chapter" data-level="4.3.4" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#crome"><i class="fa fa-check"></i><b>4.3.4</b> CROME:</a></li>
+<li class="chapter" data-level="4.3.5" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#corine"><i class="fa fa-check"></i><b>4.3.5</b> CORINE:</a></li>
+<li class="chapter" data-level="4.3.6" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#summary-table"><i class="fa fa-check"></i><b>4.3.6</b> Summary Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html"><a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html#discussion-and-conclusions"><i class="fa fa-check"></i><b>4.4</b> Discussion and Conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><i class="fa fa-check"></i><b>5</b> Estimating false-positive rates in detection of land-use change based on classification accuracy</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html#introduction-4"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html#methods-3"><i class="fa fa-check"></i><b>5.2</b> Methods</a></li>
+<li class="chapter" data-level="5.3" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html#results-3"><i class="fa fa-check"></i><b>5.3</b> Results</a></li>
+<li class="chapter" data-level="5.4" data-path="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html"><a href="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy.html#conclusions-1"><i class="fa fa-check"></i><b>5.4</b> Conclusions</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html"><i class="fa fa-check"></i><b>6</b> Using life tables in modelling land-use change</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html#introduction-5"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html#methods-4"><i class="fa fa-check"></i><b>6.2</b> Methods</a></li>
+<li class="chapter" data-level="6.3" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html#results-4"><i class="fa fa-check"></i><b>6.3</b> Results</a></li>
+<li class="chapter" data-level="6.4" data-path="using-life-tables-in-modelling-land-use-change.html"><a href="using-life-tables-in-modelling-land-use-change.html#discussion-1"><i class="fa fa-check"></i><b>6.4</b> Discussion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="results-england.html"><a href="results-england.html"><i class="fa fa-check"></i><b>7</b> Results: England</a></li>
+<li class="chapter" data-level="8" data-path="results-scotland.html"><a href="results-scotland.html"><i class="fa fa-check"></i><b>8</b> Results: Scotland</a></li>
+<li class="chapter" data-level="9" data-path="results-wales.html"><a href="results-wales.html"><i class="fa fa-check"></i><b>9</b> Results: Wales</a></li>
+<li class="chapter" data-level="10" data-path="results-northern-ireland.html"><a href="results-northern-ireland.html"><i class="fa fa-check"></i><b>10</b> Results: Northern Ireland</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Improving Land Use Change Tracking in the UK Greenhouse Gas Inventory. Report on final outputs November 2021</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="estimating-false-positive-rates-in-detection-of-land-use-change-based-on-classification-accuracy" class="section level1" number="5">
+<h1><span class="header-section-number">Section 5</span> Estimating false-positive rates in detection of land-use change based on classification accuracy</h1>
+<div id="introduction-4" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Introduction</h2>
+<p>In the “Tracking Land-Use Change” project, several data sources provide a time series of maps of land use. An obvious approach is to estimate land-use change as the difference between these maps over time. However, any error in land classification will also be included in the estimate of land-use change, so it is important to quantify these errors properly and note how they propagate.
+Here, we show the calculations which propagate the error in classification through to its resulting effect on the estimate of land-use change.</p>
+</div>
+<div id="methods-3" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Methods</h2>
+<p>The accuracy of land-use maps is usually estimated by comparison with some reference data set. We can then calculate confusion matrices and metrics of overall agreement, of which there are several. Common choices are overall accuracy (<span class="math inline">\(\alpha\)</span>, the fraction of locations where estimated land use agrees with the reference data set) and the <span class="math inline">\(\kappa\)</span> statistic, which corrects for the probability of chance agreement. <span class="math inline">\(\kappa\)</span> therefore gives a more robust measure, typically 5-20 % lower than simple percentage agreement. The probability of misclassification can be estimated simply as 1 - <span class="math inline">\(\alpha\)</span> or more stringently as 1 - <span class="math inline">\(\kappa\)</span>. For maps at times <span class="math inline">\(t_1\)</span> and <span class="math inline">\(t_2\)</span>, the probabilities of misclassification are denoted <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span>. Estimating land-use change involves calculating the difference between maps, and the errors are additive in the result. The probability of estimating erroneous land-use change because of misclassification in a pair of maps can be written as</p>
+<p><span class="math display">\[\begin{equation} \label{eq:probmis}
+  p_{1 \cup 2} = p_1 + p_2 - p_{1 \cap 2}.
+\end{equation}\]</span></p>
+<p>That is, the probability of error is the union of two events (misclassification occurring at time 1 or at time 2, minus their intersection <span class="math inline">\(p_{1 \cap 2}\)</span>, which is the probability of misclassification at both time 1 and time 2, which would otherwise be double-counted. <span class="math inline">\(p_{1 \cap 2}\)</span> can be estimated as <span class="math inline">\(p_1 p_2\)</span> assuming that the errors leading to misclassification at times 1 and 2 are independent of each other.
+In practice, our estimates of the probabilities of misclassification at times 1 and 2 are usually the same (<span class="math inline">\(p_1 \simeq p_2\)</span>), so this simplifies to:</p>
+<p><span class="math display">\[\begin{equation} \label{eq:probmis2}
+  p_{1 \cup 2} = 2 p_1 - p_1^2.
+\end{equation}\]</span></p>
+</div>
+<div id="results-3" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Results</h2>
+<p>Estimates of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\kappa\)</span> from some of the data sets used in the LUC Tracking project are shown in the table below.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Data source</th>
+<th align="right"><span class="math inline">\(\alpha\)</span></th>
+<th align="right"><span class="math inline">\(\kappa\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Corine</td>
+<td align="right">0.80</td>
+<td align="right">0.64</td>
+</tr>
+<tr class="even">
+<td align="left">LCC</td>
+<td align="right">0.91</td>
+<td align="right">0.82</td>
+</tr>
+<tr class="odd">
+<td align="left">LCM</td>
+<td align="right">0.88</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<p>For the purposes of the examples below, we use the value of 0.88, the overall accuracy of the LCM, as a relatively optimistic metric.
+The value of <span class="math inline">\(p_1 \simeq p_2\)</span> is 1 - <span class="math inline">\(\alpha\)</span>, and therefore = 0.12.</p>
+<p>Using this value in Equation  yields a probability of estimating erroneous land-use change because of misclassification of 0.226.
+Because this probability applies at every location on the map, multiplying by the total area yields the expected area of erroneous land-use change.
+So, when comparing two UK maps which each have a classification accuracy of 88 %, 22.6 % of the area, around 55000 km<span class="math inline">\(^2\)</span>, will show land-use change where none actually occurs. This provides a huge amount of measurement noise when we are attempting to detect a very small signal: the expected magnitude of actual land use change in the UK is of the order of a few hundred km<span class="math inline">\(^2\)</span>, and at most a few thousand km<span class="math inline">\(^2\)</span>, based on Forestry Commission planting rates, Agricultural Census, and urban expansion data. The area of land changing use is thus less than 1 % of the total area, and we would therefore need the probability of misclassification error to be less than this in order to accurately detect true change (meaning the accuracy needs to be &gt; 99 %).</p>
+<p>We can extend this to calculate the false positive rates for terms in the <span class="math inline">\(\beta\)</span> matrix and gross gains and losses, given the appropriate denominators and estimates of the true extent of land-use change. For example, the area of cropland in England is approximately 45000 km<span class="math inline">\(^2\)</span>, and the area of gross gains and losses are estimated to be in the range 300-800 km<span class="math inline">\(^2\)</span> y<span class="math inline">\(^{-1}\)</span> based on CS. Based on the June Agricultural Census, we might estimate these rates to be higher, perhaps reaching 1000-3000 km<span class="math inline">\(^2\)</span> y<span class="math inline">\(^{-1}\)</span>.</p>
+<p>Expressing the estimated true land-use change <span class="math inline">\(A_{true}\)</span> as a fraction of the total recorded land-use change (i.e. true + erroneous), we can calculate the relevant false positive rate, <span class="math inline">\(F_P\)</span>.</p>
+<p><span class="math display">\[\begin{equation} \label{eq:falsepos}
+  F_P = 1 - \frac{A_{true}}{A_{true} + A_{false}}
+\end{equation}\]</span></p>
+<p>If CS rates of land-use change are correct (300-800 km<span class="math inline">\(^2\)</span> y<span class="math inline">\(^{-1}\)</span>), the false positive rate is in the range 92.7 to 97.1 %.</p>
+<p>If the Agricultural Census rates of land-use change are correct (1000-3000 km<span class="math inline">\(^2\)</span> y<span class="math inline">\(^{-1}\)</span>), the false positive rate is in the range 77.2 to 91 %.</p>
+<p>Given this relationship between the classification accuracy of individual maps and the resulting false positive rates in detecting land-use change, we can examine the improvement needed to obtain false positive rates below a given level. The figure below shows the change in false positive rate with classification error (1- <span class="math inline">\(\alpha\)</span>), using the example of cropland gains in England as above, assuming a true rate of change of 1000 km<span class="math inline">\(^2\)</span> y<span class="math inline">\(^{-1}\)</span>.</p>
+<p><img src="fp_from_accuracy_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The figure shows asymptotic behaviour because of the form of Equation , with a constant true area expressed with an increasing <span class="math inline">\(A_{false}\)</span> term in the denominator. The result is that it takes a substatial decrease in misclassification (or increase in accuracy) from present values to achieve a marked increase in the false positive rate. For example, to reduce the false positive rate to 0.5 requires an accuracy of 0.988. The basic problem is that the true areas of change are very small compared to current error rates, and it would require an order of magnitude improvement in accuracy to reduce the measurement noise to a similar level to the signal we want to detect.</p>
+</div>
+<div id="conclusions-1" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Conclusions</h2>
+<ul>
+<li>Accuracy of land-use classification is in the range 0.8-0.9 in the available data sets. The corresponding probability of misclassification is 10-20 %.</li>
+<li>The errors in individual maps can be propagated to calculate the error in their differences i.e. estimates of land-use change.</li>
+<li>Error rates for land-use change propagating from misclassification will typically be greater than 20 %. This is 1-2 orders of magnitude larger than the expected land-use change.</li>
+<li>The probability of misclassification can be used to calculate the false positive rate of land-use change detection, and values are typically around 90 %.</li>
+<li>Whilst these errors are predictable and can be accounted for, directly detecting the expected land-use change rates &lt;1 % is not currently practicable.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="assessing-systematic-errors-in-estimates-of-land-use-change-sensitivity-to-survey-interval-length.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="using-life-tables-in-modelling-land-use-change.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["luct_reportNov2021.pdf"],
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
