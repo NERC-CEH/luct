@@ -3,6 +3,7 @@
 ```{r, render_book, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
 bookdown::render_book("index.Rmd")
 bookdown::preview_chapter("Results_wa.Rmd")
+setwd("manuscripts/reportNov2021/rmd")
 ```
 <!--- } -->
 

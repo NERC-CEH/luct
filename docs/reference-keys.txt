@@ -56,3 +56,16 @@ results-england
 results-scotland
 results-wales
 results-northern-ireland
+discussion-2
+tracking-land-use-change-1
+approach-1
+conclusions-2
+summary-of-results
+dealing-with-earth-observation-data
+crop-grass-rotation
+other-datasets
+results-wales-1
+results-wp-a
+fig:unnamed-chunk-1
+assessment-of-wpa-versus-wpb-results
+assessment-of-wpa-versus-wpb-analyses

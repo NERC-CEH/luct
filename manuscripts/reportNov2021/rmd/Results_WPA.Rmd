@@ -1,0 +1,38 @@
+# Results: WP-A
+<!--- { rendering -->
+```{r, render_book, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
+bookdown::render_book("index.Rmd")
+bookdown::preview_chapter("Results_WPA.Rmd")
+setwd("manuscripts/reportNov2021/rmd")
+```
+<!--- } -->
+
+The original results from work package A are shown in the [report](https://nerc-ceh.github.io/luc_track/) from November 2020. 
+However, since that time there have been some updates to the methodology described in the previous sections, affecting how the uncertainty of different data sources is specified and the prior distributions. 
+So as to make things as consistent as possible with work package B results, these were redone. 
+As before, this used Agricultural Census, Countryside Survey And Forestry Commission data.
+One additional change was that MODIS data were used for urban land, as this provided an off-the-shelf time series that was relatively long and consistent, without some of the problems of LCM.
+For reasons of space, an example plot for England is shown below, and links to the plots for [England](https://gws-access.jasmin.ac.uk/public/dare_uk/plevy/luct/WPA/output_en/post_plots_en.pdf), [Scotland](https://gws-access.jasmin.ac.uk/public/dare_uk/plevy/luct/WPA/output_sc/post_plots_sc.pdf), [Wales](https://gws-access.jasmin.ac.uk/public/dare_uk/plevy/luct/WPA/output_wa/post_plots_wa.pdf) and [Northern Ireland](https://gws-access.jasmin.ac.uk/public/dare_uk/plevy/luct/WPA/output_ni/post_plots_ni.pdf) are provided.
+
+
+
+The figures below show the results of the data assimilation procedure. 
+Observations and posterior distribution of the transition matrix $\mathbf{B}$, gross gains and losses, and net change.  In all plots, the grey shaded band shows the 2.5 and 97.5 percentiles of the posterior distribution. The maximum *a posteriori* estimate is shown as the solid black line within this. Observations from the different data sources are shown as coloured circles. The coloured solid lines show the corrected observations after accounting for systematic uncertainties, and interpolating. The coloured bands around these lines show the random uncertainty, rescaled as $\sigma /5$ to keep within the axis scale. Because the random uncertainties and the corrections to the observations are generally very large in comparison to the actual change, scaling the axes is difficult. Note that a consistent colour scheme for the data sources is shown, but not all contribute to every figure.
+
+```{r, setup, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+library(here)
+library(knitr)
+here::i_am("manuscripts/reportNov2021/rmd/Results_WPA.Rmd")
+
+```
+
+
+```{r, out.width = "100%", echo=FALSE}
+fpath <- here("docs/Results_WPA", "post_plots_en.pdf")
+include_graphics(fpath)
+```
+
+```{r, plotB, out.width = "130%", eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap=" Observations and posterior distribution of the transition matrix $\\mathbf{B}$, representing the gross area changing from the land use in each row to the land use in each column each year from 1950 to 2020. The grey shaded band shows the 2.5 and 97.5 percentiles of the posterior distribution. The maximum *a posteriori* estimate is shown as the solid black line within this. Observations from the different data sources are shown as coloured circles. The coloured solid lines show the corrected observations after accounting for systematic uncertainties, and interpolating. The coloured bands around these lines show the random uncertainty, rescaled as $\\sigma /5$ to keep with the axis scale. Because the random uncertainties and the corrections to the observations are generally very large in comparison to the actual change, scaling the axes is difficult. Note that a consistent colour scheme for the data sources is shown, but not all contribute to every figure."}
+c_post_B_wa$p_B + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks=c(1960,2000))
+```
+
