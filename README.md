@@ -32,7 +32,7 @@ project.
     <https://github.com/NERC-CEH/luct>
 
 -   The main report is produced using [`bookdown`](https://bookdown.org/) 
-    and shared publicly on GitHub at <https://github.com/NERC-CEH/luct>
+    and shared publicly on GitHub at <https://nerc-ceh.github.io/luct/>
 
 -   We are exploring the
     [`workflowr`](https://github.com/jdblischak/workflowr) package to
@@ -55,8 +55,34 @@ of land-use change, and produce the maps of past land use.
 Potentially there can be multiple pipelines, which produce other analyses, 
 reports, or publications, in addition to the core process. 
 These are used to generate documentation in
-the form of web pages with the `workflowr` package, but not discussed further 
+the form of web pages with the `workflowr` package, but are not discussed further 
 here.
+
+The core pipeline is defined in the file `_targets.R` as a list of "targets".  
+The targets represent the steps in the series of computations which make up the 
+pipeline.
+A target is defined with the syntax `tar_target(target_name, function_name(inputs))`.
+The target is thus a named R data object which is the outcome of a named function
+with specified inputs. The one exception to this is that the target may simply be 
+a file for input or output.
+In the current project, the core pipeline is a list of 87 targets which specify the 
+input files, the reformatting and transformation of these data, and subsequent
+calculations which make up the data assimilation algorithm.
+
+The pipeline is managed using a ["Make"-like](https://en.wikipedia.org/wiki/Make_(software)) 
+procedure, which analyses the dependencies between the different steps in the pipeline.
+If there have been no changes to the code in the target functions or input data since 
+the last time it was run, it identifies that everything is up-to-date, and no further 
+computation is needed. If any the source code of target function or the content of any 
+data file has changed, it identifies which parts of the pipeline are affected by this,
+and all the dependencies are recomputed. This has several advantages: forcing the workflow 
+to be declared at a higher level of abstraction; only running the necessary computation, 
+so saving run-time for tasks that are already up to date; and most importantly, 
+providing tangible evidence that the results match the underlying code and data, 
+and confirm the computation is reproducible. So as to identify changes, each target is 
+represented by its 
+[hash value](https://en.wikipedia.org/wiki/Hash_function), stored in the 
+`_targets` directory. 
 
 ## Project directory structure
 
@@ -64,52 +90,52 @@ here.
 
 This directory is managed by the `targets` package. It contains the
 metadata describing the status of the computational pipelines and the
-cached results of those computations. You will normally only manipulate
-these via functions from `targets`.
+cached results of those computations.
 
-### `workflowr` directories
+### `analysis` directory
 
 [`workflowr`](https://github.com/jdblischak/workflowr) creates a set of
 standard directories. See the package documentation for details on how
-these directories are used. The brief purposes are:
+these directories are used. The `analysis` contains 
+[`rmarkdown`](https://rmarkdown.rstudio.com/) notebooks which document
+the workflow. These are still in development.
 
--   `analysis` - [`rmarkdown`](https://rmarkdown.rstudio.com/) analysis
-    notebooks
--   `R` - R code not in analysis notebooks (changed from the `workflowr`
-    default of `code`)
--   `data` - raw data and associated metadata
--   `docs` - automatically generated website
--   `output` - generated data and other objects
+### `R` directory
+This contains the bulk of the R source code for the functions used in the project.
 
-[`workflowr`](https://github.com/jdblischak/workflowr) only manages the
-subset of files that it knows about, so you will need to manually stage
-and commit any other files that need to be mirrored on GitHub.
+### `data-raw` directory
+This contains the raw data files for the project, in their original form 
+as far as possible.
+To avoid duplication, this is a symbolic link to an 
+[earlier iteration](https://github.com/NERC-CEH/luc_track/tree/master/data-raw)
+However, many of these are too large to share via GitHub, and would need to be 
+shared by another mechanism (e.g. as binary assets). 
 
-If any files in `data` and `output` are more than trivially small, they
-are not shared via Git and GitHub.
+### `data` directory
+This contains the processed data files resulting from transformations of the raw 
+data. This typically involves reprojection, reclassification, filtering and 
+unit conversions. Again, many of these are too large to share via GitHub.
 
--   `.gitignore` is used to keep them out of Git.
--   There will be a separate mechanism (e.g.
-    [Zenodo](https://about.zenodo.org/)) for sharing those large files.
+### `docs` directory
+This contains the html web pages generated by the Rmarkdown files in 
+with `workflowr` or `bookdown`.
+
+### `output` directory
+This contains output files from the project, the results of the data assimlation.
+
+### `slurm` directory
+This contains files for the steps which require high-performance computing,
+run via [slurm](https://en.wikipedia.org/wiki/Slurm_Workload_Manager), the 
+widely used job scheduling system on HPC systems. These are generic enough 
+to run on any HPC machine with slurm, and have been run on both JASMIN and 
+POLAR, althouh the queue names, number of processors and memory limits
+will be system-specific.
 
 ### `manuscripts` directory
 
-The `analysis` notebooks are for capturing all the analytical work that
-was done, including exploratory work and abandoned directions. They
-contain both the code and enough interpretation/explanation to make
-sense of the results.
-
-The notebooks will be too verbose, and inappropriately
-structured/formatted for publication. Publishable documents are written
-separately and kept in the `manuscripts` directory.
-
-`manuscripts` contains a subdirectory for each
-manuscript/document/presentation.
-
-Each manuscript/document/presentation is prepared and formatted using a
-package like [`rticles`](https://github.com/rstudio/rticles) or
-[`bookdown`](https://github.com/rstudio/bookdown). Each document is
-prepared in a separate subdirectory of `manuscripts` that contains all
+The report is prepared and formatted using 
+[`bookdown`](https://github.com/rstudio/bookdown) in a subdirectory of 
+`manuscripts` that contains all
 the necessary infrastructure files (templates, bibliographies, etc.).
 
 ### `renv` directory
@@ -129,12 +155,6 @@ entries so that all the manual rules are in one place. Packages, such as
 `renv`, may create their own `.gitignore` files in subdirectories that
 they manage.
 
-## How to do things
-
--   All detailed setup instructions and notes go in this project-level
-    `READ.md` file.
--   The `README.md` files in the subdirectories only state the purpose
-    of each subdirectory and the files in that directory.
 
 ### Installation
 
@@ -171,6 +191,12 @@ guide](https://rstudio.github.io/renv/articles/collaborating.html) or
 the workflow for synchronising package environments between
 collaborators.
 
+## Still to do
+
+-   More detailed setup instructions and notes should go in this project-level
+    `READ.md` file.
+-   The `README.md` files in the subdirectories are currently generic, but should
+    describe the purpose of each subdirectory and the files in that directory.
  
 ## Acknowledgements
 The website is based on a template by [Ross W. Gayler][]
