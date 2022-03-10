@@ -16,7 +16,6 @@ _targets/objects/c_post*
 
 # Keep data off GitHub here
 data-raw
-data
 
 ### ./analysis
 
@@ -36,7 +35,8 @@ analysis/life_tables.xlsx
 output*
 log
 
-# Keep large data files off GitHub
-# This assumes all large R objects are in QS format
-*qs
+# Keep data folder off GitHub except land mask
+!data/
+data/*
+!data/mask/
 
