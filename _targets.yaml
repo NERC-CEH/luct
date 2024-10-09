@@ -1,0 +1,9 @@
+wrangler:
+  script: _targets_wrangler.R
+  store: _targets_wrangler
+postB:
+  script: _targets_postB.R
+  store: _targets_postB
+postU:
+  script: _targets_postU.R
+  store: _targets_postU

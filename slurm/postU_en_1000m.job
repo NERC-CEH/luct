@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH -p high-mem
+#SBATCH -t 02:00:00
+#SBATCH -o output/output_en/postU_%A_%a.out
+#SBATCH -o output/output_en/postU_%A_%a.err
+#SBATCH --job-name=postU_en_1000m
+#SBATCH --array=1-4
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 1000 en " slurm/postU.R "output/output_en/console_postU_100m_${SLURM_ARRAY_TASK_ID}.Rout"
