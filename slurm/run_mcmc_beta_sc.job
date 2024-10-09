@@ -3,6 +3,6 @@
 #SBATCH --job-name=mcmcb_sc
 #SBATCH -o output/output_sc/mcmcb_%A_%a.out
 #SBATCH -e output/output_sc/mcmcb_%A_%a.err
-#SBATCH -t 01:30:00
-#SBATCH --array=1-70
-R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} output/output_sc" slurm/run_mcmc_beta_sc.R "output/output_sc/console${SLURM_ARRAY_TASK_ID}.Rout"
+#SBATCH -t 02:00:00
+#SBATCH --array=1-120
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 600000 output/output_sc" slurm/run_mcmc_beta_sc.R "output/output_sc/console${SLURM_ARRAY_TASK_ID}.Rout"

@@ -6,4 +6,4 @@
 #SBATCH -t 20:00:00
 #SBATCH --mem=120000
 #SBATCH --array=1-4
-R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 100 en" slurm/sample_Upost.R "output/output_en/console_sample_Upost_100m_${SLURM_ARRAY_TASK_ID}.Rout"
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 10000 en" slurm/sample_Upost.R "output/output_en/console_sample_Upost_10000m_${SLURM_ARRAY_TASK_ID}.Rout"
