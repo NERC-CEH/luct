@@ -731,6 +731,17 @@ set_exclusions <- function(
   return(obs)
 }
 
+write_obs_data <- function(
+      region = "en",
+      obs = c_obs_en) {
+
+  fwrite(obs$dt_G, file = paste0("data/dt_G_", region, "_obs.csv"))
+  fwrite(obs$dt_L, file = paste0("data/dt_L_", region, "_obs.csv"))
+  fwrite(obs$dt_D, file = paste0("data/dt_D_", region, "_obs.csv"))
+  fwrite(obs$dt_B, file = paste0("data/dt_B_", region, "_obs.csv"))
+  return(obs)
+}
+
 
 ## ---- get_loglik
 

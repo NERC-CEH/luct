@@ -26,7 +26,7 @@ library(raster)
 library(ggthemes)
 source("R/luc_track.R")
 source("R/luct.R")
-rasterOptions(tmpdir = "/work/scratch-nopw/bkruijt/raster")
+rasterOptions(tmpdir = "/work/scratch-nopw2/bkruijt/raster")
 
 set.seed(586)
 

@@ -597,5 +597,37 @@ list(
       fig_end_year   = end_year,
       obs_unc = c_obs_ni,
       obs_exc = c_obs_ni)
+  ),
+
+  # Write the observations to file
+  tar_target(
+    l_dt_obs_en,
+    write_obs_data(
+      region = "en",
+      obs = c_obs_en)
+  ),
+
+  # Write the observations to file
+  tar_target(
+    l_dt_obs_sc,
+    write_obs_data(
+      region = "sc",
+      obs = c_obs_sc)
+  ),
+
+  # Write the observations to file
+  tar_target(
+    l_dt_obs_wa,
+    write_obs_data(
+      region = "wa",
+      obs = c_obs_wa)
+  ),
+
+  # Write the observations to file
+  tar_target(
+    l_dt_obs_ni,
+    write_obs_data(
+      region = "ni",
+      obs = c_obs_ni)
   )
 )     # end target list

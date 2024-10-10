@@ -29,7 +29,7 @@ tar_option_set(
 )
 
 v_times <- 1900:2020
-rerun <- FALSE
+rerun <- TRUE
 if (rerun) {
   cue_mode <- "always"
 } else {
