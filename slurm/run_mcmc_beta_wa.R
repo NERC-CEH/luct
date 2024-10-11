@@ -115,11 +115,11 @@ dt_D_obs <- obs$dt_D[time == i_time]
 # x <- try(v_B_ini <- pred_ls$dt_B[time == i_time, area])
 # if they have not been calculated, use random values
 # if (length(x) != n_u^2)
-v_B_ini <- runif(n_u^2, 0, 100) # random
+v_B_ini <- runif(n_u^2, 0, sd_prior) # random up to sd
 v_B_ini[is.na(v_B_ini)] <- 0
 m_starter <- matrix(rep(v_B_ini, n_cores), nrow = n_cores, byrow = TRUE)
 m_starter[2,] <- rep(0, n_u^2)               # all zeroes
-m_starter[n_cores,] <- runif(n_u^2, 0, 1000) # random
+m_starter[n_cores,] <- runif(n_u^2, 0, sd_prior / 2) # random up to sd/2
 
 settings <- list(iterations = n_iter, thin = thin,
   nrChains = n_chains, startValue = m_starter,

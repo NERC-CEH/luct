@@ -652,3 +652,55 @@ wrangle_MODIS_urban <- function(fpath =
   dim(dt_D)
   return(list(dt_G = dt_G, dt_L = dt_L, dt_A = dt_A, dt_D = dt_D))
 }
+
+wrangle_popcen <- function(fname = fs::path_rel(here("data-raw/pre1950/POPCEN",
+      "dt_A_DevA_km2.qs"))) {
+
+  dt <- qread(fname)
+
+  setnames(dt, "country", "region")
+  setnames(dt, "Year", "time")
+  dt <- dt[, .(time, region, urban)]
+  setnames(dt, "urban", "area")
+  dt[, u := "urban"]
+  dt[, data_source := "popcen"]
+  dt <- dt[, .(region, u, time, area, data_source)]
+
+  dt[region == "E", region := "en"]
+  dt[region == "S", region := "sc"]
+  dt[region == "W", region := "wa"]
+  dt[region == "NI", region := "ni"]
+
+  # set units
+  units(dt$area)
+  dt$area <- drop_units(dt$area)
+  dt$area <- set_units(dt$area, km^2)
+  dt$area <- set_units(dt$area, m^2)
+  dt$area <- drop_units(dt$area)
+
+  # fit a smooth curve to join popcen and lcm data without losses
+  dt[, region := factor(region)]
+  levels(dt$region)
+  m <- gam(area ~ region + s(time, by = region, k = 4), data = dt)
+  dt[, area_pred := predict(m)]
+  # p <- ggplot(dt_G, aes(time, area, colour = region))
+  # p <- p + geom_point()
+  # p <- p + geom_line(aes(y= area_pred))
+  # p <- p + facet_wrap(~ region, scale = "free_y")
+  # p
+  dt[, area := area_pred]
+  dt[, area_pred := NULL]
+
+  dt_A <- dt
+# calculate net change  by difference
+  dt_D <- dt_A[, .(time, area = c(NA, diff(area)), data_source), by = .(region, u)]
+  # infer that change is all gain, no losses
+  dt_G <- copy(dt_D)
+  dt_L <- copy(dt_D)
+  dt_L[, area := 0]
+  dt_D[area < 0, area := 0]
+  dt_G[area < 0, area := 0]
+  return(list(dt_G = dt_G, dt_L = dt_L, dt_A = dt_A, dt_D = dt_D))
+}
+
+# tar_read(c_blag_MODIS, store = "_targets_wrangler")

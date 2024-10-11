@@ -2,6 +2,8 @@ library(targets)
 library(tarchetypes) # for tar_knitr_deps_expr()
 library(here) # construct file paths relative to project root
 library(fs) # file system operations
+library(future)
+future::plan("multicore")
 
 source(here::here("R", "luc_track.R"))
 source(here::here("R", "luct.R"))
@@ -35,6 +37,20 @@ end_year <- 2020
 list(
 
   # CORE pipeline targets ----
+
+  # Path to historical UK AgCensus data file
+  tar_target(
+    fname_popcen,
+    fs::path_rel(here("data-raw/pre1950/POPCEN",
+      "dt_A_DevA_km2.qs")),
+    format = "file"
+  ),
+
+  # Wrangle POPCEN urban data
+  tar_target(
+    c_blag_popcen,
+    wrangle_popcen(fname_popcen)
+  ),
 
   # Path to historical UK AgCensus data file
   tar_target(
@@ -436,7 +452,8 @@ list(
   tar_target(
     c_obs_all,
     combine_blags(
-      l_blags = list(c_blag_AgCensus, c_blag_MODIS, c_blag_CS, c_blag_fc,
+      l_blags = list(c_blag_AgCensus, c_blag_popcen, c_blag_MODIS, c_blag_CS,
+      c_blag_fc,
       c_blag_corine_uk,
       c_blag_corine_en,
       c_blag_corine_sc,
@@ -488,7 +505,7 @@ list(
   # Read in the relative uncertainty for the data sources
   tar_target(
     c_fname_df_uncert,
-      fs::path_rel(here("data", "df_uncert.qs")),
+      fs::path_rel(here("data", "df_uncert.csv")),
     format = "file"
   ),
 
@@ -516,7 +533,10 @@ list(
     c_obs_en,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "en"),
+      regions_toInclude = "en",
+      data_sources_toInclude = c("AgCensus", "CORINE", "CROME", "CS", "FC",
+        "IACS", "popcen")),
+        # "IACS",     "LCC",    "LCM", "popcen", "MODIS")),
     cue = tar_cue(mode = "thorough")
   ),
 
@@ -525,7 +545,9 @@ list(
     c_obs_sc,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "sc"),
+      regions_toInclude = "sc",
+      data_sources_toInclude = c("AgCensus", "CORINE", "CROME", "CS", "FC",
+        "IACS", "popcen")),
     cue = tar_cue(mode = "thorough")
   ),
 
@@ -534,7 +556,9 @@ list(
     c_obs_wa,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "wa"),
+      regions_toInclude = "wa",
+      data_sources_toInclude = c("AgCensus", "CORINE", "CROME", "CS", "FC",
+        "IACS", "popcen")),
     cue = tar_cue(mode = "thorough")
   ),
 
@@ -543,7 +567,9 @@ list(
     c_obs_ni,
     set_exclusions(
       c_obs_unc,
-      regions_toInclude = "ni"),
+      regions_toInclude = "ni",
+      data_sources_toInclude = c("AgCensus", "CORINE", "CROME", "CS", "FC",
+        "IACS", "popcen")),
     cue = tar_cue(mode = "thorough")
   ),
 

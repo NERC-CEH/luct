@@ -5,4 +5,4 @@
 #SBATCH -o output/output_wa/postU_%A_%a.err
 #SBATCH --job-name=postU_wa_1000m
 #SBATCH --array=1-4
-R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 1000 wa " slurm/postU.R "output/output_wa/console_postU_100m_${SLURM_ARRAY_TASK_ID}.Rout"
+R CMD BATCH --no-restore --no-save "--args ${SLURM_ARRAY_TASK_ID} 1000 wa " slurm/postU.R "output/output_wa/console_postU_1000m_${SLURM_ARRAY_TASK_ID}.Rout"

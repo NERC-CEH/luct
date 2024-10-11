@@ -22,7 +22,7 @@ tar_option_set(
     "rgdal", "grid", "spCEH", "scico", "stars", "BayesianTools", "scales"),
   format = "qs",
   cue = tar_cue(
-      mode = "thorough", #c("thorough", "always", "never"),
+      mode = "always", #c("thorough", "always", "never"),
       command   = TRUE,
       depend    = TRUE,
       format    = TRUE,

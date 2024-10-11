@@ -1420,7 +1420,7 @@ get_uncert_scaling <- function(obs,
 add_uncert <- function(obs, fname_df_uncert){
 
   #df_uncert$data_source <- rownames(df_uncert)
-  df_uncert <- qread(fname_df_uncert)
+  df_uncert <- fread(fname_df_uncert)
   df_uncert <- df_uncert[, c("data_source", "apply_correction", "sigma", "sigma_D", "start_year_source", "Fp", "Fn")]
   obs$dt_B <- merge(obs$dt_B, df_uncert, all.x = TRUE, by = "data_source")
   obs$dt_G <- merge(obs$dt_G, df_uncert, all.x = TRUE, by = "data_source")
@@ -1751,13 +1751,13 @@ get_post_plots <- function(
   df_D_post_long$time <- df_D_post_long$v_times
   df_D_post_long$v_times <- NULL
 
-  #show_col(hue_pal()(10))
-  # "#F8766D" "#7CAE00" "#00BFC4" "#C77CFF"
-  v_col <- hue_pal()(10) # number of data sources plus MAP
-  v_col[10] <- "#000000"
+  # should be length(v_data_source) + 1 # number of data sources plus MAP
+  n_data_sources <- 11 # seems to evaluate to 9!
+  v_col <- hue_pal()(n_data_sources) # number of data sources plus MAP
+  v_col[n_data_sources] <- "#000000"
 
   colour_scale <- scale_colour_manual(name="",
-    values=c("Maximum a posterior" = v_col[10],
+    values=c("Maximum a posterior" = v_col[n_data_sources],
     "AgCensus"            = v_col[1],
     "CORINE"              = v_col[2],
     "CROME"               = v_col[3],
@@ -1766,9 +1766,10 @@ get_post_plots <- function(
     "IACS"                = v_col[6],
     "LCC"                 = v_col[7],
     "LCM"                 = v_col[8],
-    "MODIS"               = v_col[9]))
+    "popcen"              = v_col[9],
+    "MODIS"               = v_col[10]))
   fill_scale <- scale_fill_manual(name="",
-    values=c("95% CI"              = v_col[10],
+    values=c("95% CI"              = v_col[n_data_sources],
     "AgCensus"            = v_col[1],
     "CORINE"              = v_col[2],
     "CROME"               = v_col[3],
@@ -1777,7 +1778,8 @@ get_post_plots <- function(
     "IACS"                = v_col[6],
     "LCC"                 = v_col[7],
     "LCM"                 = v_col[8],
-    "MODIS"               = v_col[9]))
+    "popcen"              = v_col[9],
+    "MODIS"               = v_col[10]))
 
   # plot D
   p <- ggplot(subset(df_D_post_long, time >= fig_start_year & time < fig_end_year),
@@ -1981,7 +1983,7 @@ get_post_plots <- function(
   p <- p + geom_line(aes(time, area_q50, colour = "Maximum a posterior"))
   p <- p + ylab(expression(paste(Area~km^2)))
   p <- p + ggtitle("Beta matrix")
-  p <- p + facet_grid(u_from ~ u_to, scales = "free_y")
+  p <- p + facet_grid(u_from ~ u_to, scales = "free")
   p
   p_B <- p
 
@@ -2245,11 +2247,13 @@ get_obs_plots <- function(
   obs_exc$dt_L <- obs_exc$dt_L[data_source %in% v_data_source]
   obs_exc$dt_D <- obs_exc$dt_D[data_source %in% v_data_source]
 
-  v_col <- hue_pal()(10) # number of data sources plus MAP
-  v_col[10] <- "#000000"
+  # should be length(v_data_source) + 1 # number of data sources plus MAP
+  n_data_sources <- 11 # seems to evaluate to 9!
+  v_col <- hue_pal()(n_data_sources) # number of data sources plus MAP
+  v_col[n_data_sources] <- "#000000"
 
   colour_scale <- scale_colour_manual(name="",
-    values=c("Maximum a posterior" = v_col[10],
+    values=c("Maximum a posterior" = v_col[n_data_sources],
     "AgCensus"            = v_col[1],
     "CORINE"              = v_col[2],
     "CROME"               = v_col[3],
@@ -2258,9 +2262,10 @@ get_obs_plots <- function(
     "IACS"                = v_col[6],
     "LCC"                 = v_col[7],
     "LCM"                 = v_col[8],
-    "MODIS"               = v_col[9]))
+    "popcen"              = v_col[9],
+    "MODIS"               = v_col[10]))
   fill_scale <- scale_fill_manual(name="",
-    values=c("95% CI"              = v_col[10],
+    values=c("95% CI"              = v_col[n_data_sources],
     "AgCensus"            = v_col[1],
     "CORINE"              = v_col[2],
     "CROME"               = v_col[3],
@@ -2269,7 +2274,8 @@ get_obs_plots <- function(
     "IACS"                = v_col[6],
     "LCC"                 = v_col[7],
     "LCM"                 = v_col[8],
-    "MODIS"               = v_col[9]))
+    "popcen"              = v_col[9],
+    "MODIS"               = v_col[10]))
 
   # plot D
   p <- ggplot(data = obs_unc$dt_D[time >= fig_start_year & time < fig_end_year],
