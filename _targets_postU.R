@@ -27,7 +27,7 @@ tar_option_set(
       file      = TRUE)
 )
 
-res <- 1000
+res <- 10000
 n_samples <- 4
 
 rerun <- TRUE

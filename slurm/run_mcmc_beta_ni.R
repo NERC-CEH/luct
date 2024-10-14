@@ -63,33 +63,46 @@ sd_prior    <- rep(500, n_u^2)
 upper_prior <- rep(5000, n_u^2)
 
 # restrict the range for change from woods, which averages 13.75 km2/yr Levy & Milne 2004
-ind_from_woods <- 1:6
+ind_from_woods <- c(1, 7, 13, 19, 25, 31)
 sd_prior[ind_from_woods] <- 10
 upper_prior[ind_from_woods] <- 20
 
-# restrict the range for change from crops to woods and rough, which is unlikely
-ind_from_crops <- c(7, 10) # _to_woods and rough
-sd_prior[ind_from_crops] <- 50
-upper_prior[ind_from_crops] <- 100
+# restrict the range for change from crops to woods, which is unlikely
+ind_from_crops <- 2
+sd_prior[ind_from_crops] <- 2
+upper_prior[ind_from_crops] <- 5
+
+# restrict the range for change from urban land, which shouldn't happen
+ind_from_urban <- c(5, 11, 17, 23, 29, 35)
+sd_prior[ind_from_urban] <- 1
+upper_prior[ind_from_urban] <- 2
+
+# restrict the range for change to rough land, which shouldn't happen ...
+ind_to_rough <- 19:24
+sd_prior[ind_to_rough] <- 1
+upper_prior[ind_to_rough] <- 2
+# except for woods to rough is possible if deforested
+ind_to_rough <- 19
+sd_prior[ind_to_rough] <- 10
+upper_prior[ind_to_rough] <- 50
+# and grass to rough is ~possible post-war/rewilding
+ind_to_rough <- 21
+sd_prior[ind_to_rough] <- 2
+upper_prior[ind_to_rough] <- 5
+
+# restrict the range for change to urban land, which averages ~60 km2/yr in en
+ind_to_urban <- 25:30
+sd_prior[ind_to_urban] <- 100
+upper_prior[ind_to_urban] <- 200
 
 # restrict the range for "other" land, which shouldn't change
 ind_other <- c(6, 12, 18, 24, 30:36)
 sd_prior[ind_other] <- 1
-upper_prior[ind_other] <- 5
-
-# restrict the range for change from urban land, which shouldn't happen
-ind_from_urban <- 25:30
-sd_prior[ind_from_urban] <- 1
-upper_prior[ind_from_urban] <- 5
-
-# restrict the range for change to urban land, which averages ~25 km2/yr in en
-ind_to_urban <- c(5, 11, 17, 23, 29, 35)
-sd_prior[ind_to_urban] <- 10
-upper_prior[ind_to_urban] <- 40
+upper_prior[ind_other] <- 2
 
 # # for display
-# matrix(sd_prior, nrow = 6, byrow = TRUE)
-# matrix(upper_prior, nrow = 6, byrow = TRUE)
+# matrix(sd_prior, nrow = 6)
+# matrix(upper_prior, nrow = 6)
 
 prior <- createTruncatedNormalPrior(
    mean = rep(0, n_u^2),

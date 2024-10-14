@@ -2507,3 +2507,91 @@ plot_postU <- function(
     p_v2 = p_v2)
   )
 }
+
+plot_dt_u6_as_stack <- function(dt, res) {
+  r <- getRasterTemplate(res = res, crs = crs_OSGB)
+  names(dt) <- names_u
+  r1 <- setValues(r, dt[, get(names_u[1])])
+  r2 <- setValues(r, dt[, get(names_u[2])])
+  r3 <- setValues(r, dt[, get(names_u[3])])
+  r4 <- setValues(r, dt[, get(names_u[4])])
+  r5 <- setValues(r, dt[, get(names_u[5])])
+  r6 <- setValues(r, dt[, get(names_u[6])])
+  s <- stack(r1, r2, r3, r4, r5, r6)
+  names(s) <- names_u
+  plot(s)
+  dev.off()
+}
+
+plot_dt_u1_as_raster <- function(dt, res, name_var) {
+  r <- getRasterTemplate(res = res, crs = crs_OSGB)
+  r <- setValues(r, dt[, get(name_var)])
+  names(r) <- name_var
+  plot(r)
+  dev.off()
+}
+
+plot_likelihood <- function(region = "uk", res = 10000) {
+
+# region to restrict sampling to
+i_region <- match(region, v_region) # 1:4
+if (region == "uk") i_region <- 1:4
+dir_output <- paste0("output/output_", region)
+# create dir if it does not exist
+fs::dir_create(dir_output)
+
+  # 3. read current land use and age
+fname <- here("data/life_tables", paste0("dt_u_age_", res, "m.qs"))
+dt <- qread(fname)
+dim(dt)
+dt
+plot_dt_u1_as_raster(dt, res, name_var = "age_rev")
+
+# 4. mask dt to land and add region variable
+fname <- here("data-raw/mask", paste0("dt_land_", res, "m.qs"))
+dt_mask <- qread(fname)
+dim(dt_mask)
+dim(dt)
+dt <- data.table(region = dt_mask$country, dt)
+dt[region %!in% i_region, c("u", "age_rev") := NA]
+dt[, u_prev := u] # initialise to be the same
+dt[, u_ch   := u] # initialise to be the same
+
+  # 5. Read likelihood from inverse distance to u (Lid)
+  fname <- here("data/life_tables", paste0("dt_Lid_", res, "m.qs"))
+  dt_Lid <- qread(fname)
+  dt_Lid <- dt_Lid * res / 10
+  plot_as_stack(dt_Lid, res)
+
+  # 1. read L_static likelihoods
+  v_times <- 1900:2019
+  v_fnames <- here(paste0("../imp/data/", res, "m"), paste0("dt_L_", v_times, ".qs"))
+  i_t = 118
+  dt_L <- qread(v_fnames[(i_t)])
+  dt_L <- dt_L[, ..names_u] # drop extra columns to conform for "*" and "+"
+  plot_as_stack(dt_L, res)
+
+  # read life tables
+  a_lamda <- readRDS(here("data/life_tables", "IACS_LifeTables.rds"))
+
+  # 2. lookup life table
+  dt[, age_capped := age_rev]
+  dt[!(age_rev >= 1 & age_rev <= 10), age_capped := 10]
+  dt[, L_1 := a_lamda[cbind(age_capped, u, 1)]]
+  dt[, L_2 := a_lamda[cbind(age_capped, u, 2)]]
+  dt[, L_3 := a_lamda[cbind(age_capped, u, 3)]]
+  dt[, L_4 := a_lamda[cbind(age_capped, u, 4)]]
+  dt[, L_5 := a_lamda[cbind(age_capped, u, 5)]]
+  dt[, L_6 := a_lamda[cbind(age_capped, u, 6)]]
+  plot_as_stack(dt[, .(L_1, L_2, L_3, L_4, L_5, L_6)], res)
+
+  # 3. update L1-6 = L_stat * L_dyn
+  dt_L <- dt[, .(L_1, L_2, L_3, L_4, L_5, L_6)] *  dt_L
+  plot_as_stack(dt_L, res)
+
+  # 4. add inverse-distance likelihood, so min is always > 0
+  # apply(dt_L, 2, summary)
+  dt_L <- dt_L + dt_Lid
+  plot_as_stack(dt_L, res)
+
+}

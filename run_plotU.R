@@ -13,22 +13,44 @@ system.time(tar_make(script = "_targets_plotU.R", store = "_targets_plotU"))
 system.time(tar_make_future(workers = 4L, script = "_targets_plotU.R", store = "_targets_plotU"))
 
 # write graphics to file
-for (region in v_region[1:4]) {
-    target_name <- paste0("l_p_plotU_", region)
-    l_p <- tar_read(eval(target_name), store = "_targets_plotU")
-    fname <- here(paste0("output/output_", region), "r_uu_smp1_1000m.pdf")
-    print(fname)
-}
+# this doesnt work with eval(target_name)
+# for (region in v_region[1:4]) {
+#     target_name <- paste0("l_p_plotU_", region)
+#     l_p <- tar_read(eval(target_name), store = "_targets_plotU")
+#     fname <- here(paste0("output/output_", region), "r_uu_smp1_1000m.pdf")
+#     print(fname)
+# }
 
+res <- 10000
 l_p <- tar_read(l_p_plotU_en, store = "_targets_plotU")
-fname <- here("output/output_en", "r_uu_smp1_10000m.pdf")
-l_p <- tar_read(l_p_plotU_sc, store = "_targets_plotU")
-fname <- here("output/output_sc", "r_uu_smp1_10000m.pdf")
-l_p <- tar_read(l_p_plotU_wa, store = "_targets_plotU")
-fname <- here("output/output_wa", "r_uu_smp1_10000m.pdf")
-l_p <- tar_read(l_p_plotU_ni, store = "_targets_plotU")
-fname <- here("output/output_ni", "r_uu_smp1_10000m.pdf")
+fname <- here("output/output_en", paste0("r_uu_smp1_", res, "m.pdf"))
+    pdf(fname)
+        l_p$p_u_t
+        l_p$p_u_d
+        l_p$p_v1
+        l_p$p_v2
+    dev.off()
 
+l_p <- tar_read(l_p_plotU_sc, store = "_targets_plotU")
+fname <- here("output/output_sc", paste0("r_uu_smp1_", res, "m.pdf"))
+    pdf(fname)
+        l_p$p_u_t
+        l_p$p_u_d
+        l_p$p_v1
+        l_p$p_v2
+    dev.off()
+
+l_p <- tar_read(l_p_plotU_wa, store = "_targets_plotU")
+fname <- here("output/output_wa", paste0("r_uu_smp1_", res, "m.pdf"))
+    pdf(fname)
+        l_p$p_u_t
+        l_p$p_u_d
+        l_p$p_v1
+        l_p$p_v2
+    dev.off()
+
+l_p <- tar_read(l_p_plotU_ni, store = "_targets_plotU")
+fname <- here("output/output_ni", paste0("r_uu_smp1_", res, "m.pdf"))
     pdf(fname)
         l_p$p_u_t
         l_p$p_u_d
